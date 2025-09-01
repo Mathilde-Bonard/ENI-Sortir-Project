@@ -55,7 +55,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $prenom = null;
 
     #[Assert\Assert\Regex('^\d+$')]
-    #[ORM\Column(length: 10)]
+    #[ORM\Column(length: 50)]
     private ?string $telephone = null;
 
     #[ORM\Column]
