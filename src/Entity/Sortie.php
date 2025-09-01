@@ -63,19 +63,21 @@ class Sortie
     private ?Campus $campus = null;
 
     /**
-     * @var Collection<int, Participant>
+     * @var Collection<int, User>
      */
-    #[ORM\ManyToMany(targetEntity: Participant::class, inversedBy: 'sorties')]
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'sorties')]
     private Collection $participants;
 
-    #[ORM\ManyToOne(inversedBy: 'sorties')]
+    #[ORM\ManyToOne(inversedBy: 'sortiesOrganisees')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Participant $organisateur = null;
+    private ?User $organisateur = null;
+
 
     public function __construct()
     {
         $this->participants = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
@@ -191,38 +193,47 @@ class Sortie
     }
 
     /**
-     * @return Collection<int, Participant>
+     * @return Collection<int, User>
      */
     public function getParticipants(): Collection
     {
         return $this->participants;
     }
 
-    public function addParticipant(Participant $participant): static
+    public function addParticipant(User $participant): static
     {
         if (!$this->participants->contains($participant)) {
             $this->participants->add($participant);
+            $participant->addSorty($this);
         }
 
         return $this;
     }
 
-    public function removeParticipant(Participant $participant): static
+    public function removeParticipant(User $participant): static
     {
-        $this->participants->removeElement($participant);
+        if ($this->participants->removeElement($participant)) {
+            $participant->removeSorty($this);
+        }
 
         return $this;
     }
 
-    public function getOrganisateur(): ?Participant
+    public function getOrganisateur(): ?User
     {
         return $this->organisateur;
     }
 
-    public function setOrganisateur(?Participant $organisateur): static
+    public function setOrganisateur(?User $organisateur): static
     {
         $this->organisateur = $organisateur;
 
         return $this;
     }
+
+
+
+
+
+
 }
