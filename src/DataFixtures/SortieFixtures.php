@@ -20,14 +20,15 @@ class SortieFixtures extends Fixture implements DependentFixtureInterface
     {
         $faker = Factory::create('fr_FR');
 
-        for($i = 0; $i < 10; $i++) {
+        for($i = 0; $i < 30; $i++) {
             $sortie = new Sortie();
 
             $sortie->setNom($faker->word)
                 ->setDuree($faker->numberBetween(1, 48))
                 ->setDateHeureDebut($faker->dateTimeBetween('+7 days', '+1 months'));
 
-            $sortie->setDateLimiteInscription($faker->dateTime($sortie->getDateHeureDebut()->modify('-12 hours')))
+            $dateLimite = (clone $sortie->getDateHeureDebut())->modify('-1 day');
+            $sortie->setDateLimiteInscription($dateLimite)
                 ->setNbInscriptionMax($faker->numberBetween(20, 100))
                 ->setInfosSortie($faker->paragraph());
 
@@ -39,21 +40,27 @@ class SortieFixtures extends Fixture implements DependentFixtureInterface
             $etat = $this->getReference($etatName, Etat::class);
             $sortie->setEtat($etat);
 
-            $lieuName = LieuFixtures::LIEU_REFERENCE . $faker->numberBetween(0, 9);
+            $lieuName = LieuFixtures::LIEU_REFERENCE . $faker->numberBetween(0, 19);
             $lieu = $this->getReference($lieuName, Lieu::class);
             $sortie->setLieu($lieu);
 
-            $organisateurName = UserFixtures::USER_REFERENCE . $faker->numberBetween(0, 9);
+            $organisateurName = UserFixtures::USER_REFERENCE . $faker->numberBetween(0, 49);
             $organisateur = $this->getReference($organisateurName, User::class);
             $sortie->setOrganisateur($organisateur);
 
-            $index = $faker->numberBetween(0, 5);
+            $participantsAdded = [$organisateurName];
+
+            $index = $faker->numberBetween(0, 40);
 
             for ($j = 0; $j < $index; $j++) {
-                $participantName = UserFixtures::USER_REFERENCE . $faker->numberBetween(0, 9);
-                $participant = $this->getReference($participantName, User::class);
+                do {
+                    $participantName = UserFixtures::USER_REFERENCE . $faker->numberBetween(0, 49);
+                } while (in_array($participantName, $participantsAdded)); // On boucle tant qu’on tombe sur un doublon
 
+                $participant = $this->getReference($participantName, User::class);
                 $sortie->addParticipant($participant);
+
+                $participantsAdded[] = $participantName; // On ajoute pour éviter un doublon futur
             }
             $manager->persist($sortie);
         }

@@ -59,7 +59,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $telephone = null;
 
     #[ORM\Column]
-    private ?bool $actif = true;
+    private ?bool $actif;
 
 
     #[ORM\ManyToOne(inversedBy: 'users')]
@@ -83,6 +83,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->sorties = new ArrayCollection();
         $this->sortiesOrganisees = new ArrayCollection();
+        $this->roles = ["ROLE_USER"];
+        $this->actif = true;
     }
 
     public function getId(): ?int

@@ -21,10 +21,23 @@ class UserFixtures extends Fixture  implements DependentFixtureInterface
     {
         $faker = Factory::create('fr_FR');
 
-        for($i = 0; $i < 10; $i++) {
+        $admin = new User();
+        $admin->setNom('Doe')
+            ->setPrenom('John')
+            ->setTelephone('07 14 57 84 77')
+            ->setEmail('john.doe@gmail.com')
+            ->setPassword($this->userPasswordHasher->hashPassword($admin, 'password'))
+            ->setRoles(['ROLE_ADMIN']);
+
+        $campus = $this->getReference(CampusFixtures::CAMPUS_REFERENCE . '1', Campus::class);
+        $admin->setCampus($campus);
+
+        $manager->persist($admin);
+
+        for($i = 0; $i < 50; $i++) {
             $user = new User();
-            $user->setNom($faker->firstName())
-                ->setPrenom($faker->lastName())
+            $user->setNom($faker->lastName())
+                ->setPrenom($faker->firstName())
                 ->setTelephone($faker->phoneNumber())
                 ->setEmail($faker->email())
                 ->setPassword($this->userPasswordHasher->hashPassword($user, $faker->password()));
