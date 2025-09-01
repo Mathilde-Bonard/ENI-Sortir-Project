@@ -4,6 +4,6 @@ namespace App\Entity;
 
 class Test
 {
-    test
+    public $name;
 
 }
