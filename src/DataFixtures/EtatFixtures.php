@@ -10,10 +10,9 @@ class EtatFixtures extends Fixture
 {
     const ETATS = [
         "CREEE",
-        "OUVERTE",
-        "CLOTUREE",
-        "ACTIVE",
-        "EN COURS",
+        "INSC_OUVERTE",
+        "INSC_CLOTUREE",
+        "ACTIVITE_EN_COURS",
         "PASSEE",
         "ANNULEE"
     ];

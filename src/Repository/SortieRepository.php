@@ -16,6 +16,23 @@ class SortieRepository extends ServiceEntityRepository
         parent::__construct($registry, Sortie::class);
     }
 
+
+    public function readAllDateDesc() {
+        $qb = $this->createQueryBuilder('s');
+        $qb->leftJoin('s.organisateur', 'o')
+            ->leftJoin('s.participants', 'p')
+            ->leftJoin('s.etat', 'e')
+            ->addSelect('o')
+            ->addSelect('p')
+            ->addSelect('e')
+            ->addOrderBy('s.dateHeureDebut', 'DESC')
+            ->where("e.libelle != 'ANNULEE'")
+            ->andWhere("e.libelle != 'PASSEE'");
+
+        $query = $qb->getQuery();
+        return $query->getResult();
+    }
+
     //    /**
     //     * @return Sortie[] Returns an array of Sortie objects
     //     */

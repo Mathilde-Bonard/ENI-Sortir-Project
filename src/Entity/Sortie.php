@@ -65,6 +65,7 @@ class Sortie
     /**
      * @var Collection<int, User>
      */
+    #[Assert\Length()]
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'sorties')]
     private Collection $participants;
 
@@ -202,7 +203,7 @@ class Sortie
 
     public function addParticipant(User $participant): static
     {
-        if (!$this->participants->contains($participant)) {
+        if (count($this->participants) < $this->nbInscriptionMax && !$this->participants->contains($participant)) {
             $this->participants->add($participant);
             $participant->addSorty($this);
         }
@@ -230,10 +231,6 @@ class Sortie
 
         return $this;
     }
-
-
-
-
 
 
 }
