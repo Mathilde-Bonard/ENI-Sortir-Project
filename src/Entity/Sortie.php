@@ -18,22 +18,22 @@ class Sortie
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Assert\NotBlank('Ce champ est obligatoire')]
+    #[Assert\NotBlank(message:'Ce champ est obligatoire')]
     #[Assert\Length(min: 1, max: 255)]
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
 
-    #[Assert\NotBlank('Ce champ est obligatoire')]
+    #[Assert\NotBlank(message:'Ce champ est obligatoire')]
     #[Assert\GreaterThan('today')]
     #[ORM\Column]
     private ?\DateTime $dateHeureDebut = null;
 
-    #[Assert\NotBlank('Ce champ est obligatoire')]
+    #[Assert\NotBlank(message:'Ce champ est obligatoire')]
     #[Assert\GreaterThan(0)]
     #[ORM\Column]
     private ?int $duree = null;
 
-    #[Assert\NotBlank('Ce champ est obligatoire')]
+    #[Assert\NotBlank(message:'Ce champ est obligatoire')]
     #[Assert\Range(
         min: 'today',
         maxPropertyPath: 'dateHeureDebut',
@@ -42,7 +42,7 @@ class Sortie
     #[ORM\Column]
     private ?\DateTime $dateLimiteInscription = null;
 
-    #[Assert\NotBlank('Ce champ est obligatoire')]
+    #[Assert\NotBlank(message:'Ce champ est obligatoire')]
     #[Assert\Range(min: 1, minMessage: 'Au moins une personne doit participer à cet événement')]
     #[ORM\Column]
     private ?int $nbInscriptionMax = null;

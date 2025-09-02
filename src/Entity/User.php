@@ -18,7 +18,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Assert\NotBlank('Ce champ est obligatoire')]
+    #[Assert\NotBlank(message:'Ce champ est obligatoire')]
     #[Assert\Regex(
         '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
     )]
@@ -37,7 +37,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[Assert\NotBlank('Ce champ est obligatoire')]
+    #[Assert\NotBlank(message:'Ce champ est obligatoire')]
     #[Assert\Length(min: 1, max: 50)]
     #[Assert\Assert\Regex(
         '^[\p{L}]+$',
@@ -46,7 +46,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 50)]
     private ?string $nom = null;
 
-    #[Assert\NotBlank('Ce champ est obligatoire')]
+    #[Assert\NotBlank(message:'Ce champ est obligatoire')]
     #[Assert\Assert\Regex(
         '^[\p{L}]+$',
         match: false,
