@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Form\FilterType;
 use App\Repository\SortieRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +17,10 @@ final class SortieController extends AbstractController
 
         $sorties = $sortieRepository->readAllDateDesc();
 
+        $filterForm = $this->createForm(FilterType::class);
+
         return $this->render('sortie/index.html.twig', [
+            'filterForm' => $filterForm->createView(),
             'sorties' => $sorties,
         ]);
     }

@@ -3,42 +3,100 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
-    <main class="w-full p-5">
+    <main class="w-full p-3">
         <section>
-            <h1>Sorties</h1>
+            <div class="p-3 bg-[#BEE564]/50 rounded-xl text-neutral-800">
+                <h1 class="text-xl font-medium text-neutral-900 mb-3">Filtrer les sorties</h1>
+
+                {% form_theme filterForm 'views/form/form-theme.html.twig' %}
+
+                <div class="w-full text-sm">
+                    {{ form_start(filterForm) }}
+                            {{ form_row(filterForm.campus) }}
+                            {{ form_row(filterForm.nom) }}
+                    <p class="text-sm font-medium text-neutral-900">Date comprise entre</p>
+                    <div class="grid grid-cols-2 gap-2 mt-1">
+                        {{ form_row(filterForm.dateIntervalDebut) }}
+                        {{ form_row(filterForm.dateIntervalFin) }}
+                    </div>
+                    <p class="text-sm font-medium text-neutral-900 mb-1">Filtres supplémentaires</p>
+                    {{ form_row(filterForm.genres) }}
+                    <button class="transition w-full text-white bg-neutral-800 pt-2 pb-1 rounded-full text-smg">
+                        Rechercher
+                    </button>
+                    {{ form_end(filterForm) }}
+                </div>
+            </div>
+        </section>
+        <section class="mt-5">
             {% for sortie in sorties %}
-                <article class="bg-neutral-200 rounded-xl p-5 mb-2">
-                    <div class="text-xs bg-neutral-500 w-fit px-3 rounded-full text-neutral-100 py-1 mb-1 lowercase">
-                        {{ sortie.etat.libelle }}
-                    </div>
-                    <h1 class="uppercase">{{ sortie.nom }}</h1>
+                {% set bg_class = sortie.etat == 'ACTIVITE_EN_COURS'
+                    ? 'bg-[#F29D73]'
+                    : 'bg-neutral-50' %}
 
-                    <div class="grid grid-cols-7">
-                        <div class="col-span-3">
-                            {{ (sortie.participants | length) }} / {{  sortie.nbInscriptionMax }}
-                        </div>
-                        <p class="opacity-70">{{ sortie.duree }} h.</p>
-                        <div class="col-span-3 text-end">
-                            <h3>{{ sortie.dateHeureDebut | date('d/m/y h:m') }}</h3>
-                        </div>
-                    </div>
-                    <div class="flex gap-2 ">
-                        <img src="https:\\placehold.co\30x30" alt="placeholder organistaur" class="rounded-full">
-                        <div>
-                            {{ sortie.organisateur }}
-                        </div>
-                    </div>
-                    <div class="flex gap-2 mt-2 justify-end">
-                        {% if sortie.etat.libelle == 'INSC_OUVERTE' %}
-                            <button class="bg-green-200 px-2 py-1 rounded-lg text-sm">S'inscrire</button>
-                        {% endif %}
-                        <button class="bg-blue-200 px-2 py-1 rounded-lg text-sm">Details</button>
+                {% set opacity_class = sortie.etat == 'ANNULEE'
+                    ? 'opacity-50 border border-neutral-400'
+                    : '' %}
 
-                    </div>
+                {% set button = {
+                    'INSC_CLOTUREE': { 'label': 'Clôturée', 'class': 'text-neutral-500 bg-[#D1EB99]' },
+                    'CREEE': { 'label': "S'inscrire", 'class': 'text-neutral-800 bg-[#BEE564]' },
+                    'INSC_OUVERTE': { 'label': "S'inscrire", 'class': 'text-neutral-800 bg-[#BEE564]' },
+                    'ACTIVITE_EN_COURS': { 'label': "En cours", 'class': 'text-neutral-700 bg-[#f0f0e6]' },
+                    'ANNULEE': { 'label': "Annulée", 'class': 'text-neutral-700 bg-[#ea9c9c]' }
+                }[sortie.etat.libelle] %}
 
-{#                    <p>{{ sortie.infosSortie }}</p>#}
+                {% set color = {
+                    'INSC_CLOTUREE': {'code': '[#D1EB99]' },
+                    'CREEE': { 'code' : '[#BEE564]' },
+                    'INSC_OUVERTE': { 'code': '[#BEE564]' },
+                    'ACTIVITE_EN_COURS': { 'code': '[#f0f0e6]' },
+                    'ANNULEE': { 'code': '[#ea9c9c]' }
+                }[sortie.etat.libelle] %}
+
+                <article class="rounded-xl p-3 mb-2 {{ opacity_class }} {{ bg_class }}">
+                    <div class="flex items-center font-medium text-neutral-700">
+                        <span class="text-sm">{{ sortie.dateHeureDebut | date('F d Y • g a')}}</span>
+                    </div>
+                    <h1 class="font-medium text-xl/6 text-neutral-800">{{ sortie.nom }}</h1>
+                    <div class="w-full flex text-xs sortie-info">
+                        <div class="flex gap-1 {{ sortie.etat == "ACTIVITE_EN_COURS" ? 'text-neutral-700' : 'text-gray-500'}} items-center">
+                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 mb-0.5">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path>
+                            </svg>
+                            <span>{{ sortie.duree }} heure(s)</span>
+                        </div>
+                        <div class=" ms-5 flex gap-1 {{ sortie.etat == "ACTIVITE_EN_COURS" ? 'text-neutral-700' : 'text-gray-500'}}  items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 mb-0.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z"></path>
+                            </svg>
+                            <span>{{ sortie.participants | length }} / {{ sortie.nbInscriptionMax }}  participant(s)</span>
+                        </div>
+                    </div>
+                    <div class="flex text-sm mt-3">
+                        <div class="flex items-center me-auto">
+                            <div class="me-1">
+                                <img src="{{ asset("/img/user/pexels-emilygarland-1499327.jpg")}}" alt="placeholder"
+                                     class="rounded-full border-2 border-{{ color.code }}  w-9 h-9">
+                            </div>
+                            <div class="flex items-center rounded-full bg-{{ color.code }}">
+                                <div class="flex *:me-[-15px] relative">
+                                    {% for participant in sortie.participants[:3] %}
+                                        <div class="rounded-full">
+                                            <img src="{{ asset('/img/user/pexels-joaojesusdesign-1080213.jpg') }}" alt="placeholder"
+                                                 class="participant-img rounded-full border-2  border-{{ color.code }} w-9 h-9">
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <button class="flex-none font-medium pe-3 ms-6 py-1.5 pb-0.5 rounded-full h-full {{ button.class }}">
+                                    {{ button.label }}
+                                </button>
+                            </div>
+
+                        </div>
+                        <button class="bg-neutral-800 px-3 py-1.5 pb-0.5 rounded-full text-neutral-200">Details</button>
+                    </div>
                 </article>
-
             {% endfor %}
         </section>
     </main>

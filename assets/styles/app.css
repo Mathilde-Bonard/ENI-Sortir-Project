@@ -1,0 +1,13 @@
+@font-face {
+    src: url("../font/Nohemi-VF.ttf");
+    font-family: "Nohemi", sans-serif;
+}
+
+body{
+    font-family: Nohemi, sans-serif;
+}
+
+
+input[type="checkbox"] {
+    background: transparent;
+}

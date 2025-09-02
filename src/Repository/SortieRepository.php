@@ -26,7 +26,6 @@ class SortieRepository extends ServiceEntityRepository
             ->addSelect('p')
             ->addSelect('e')
             ->addOrderBy('s.dateHeureDebut', 'DESC')
-            ->where("e.libelle != 'ANNULEE'")
             ->andWhere("e.libelle != 'PASSEE'");
 
         $query = $qb->getQuery();
