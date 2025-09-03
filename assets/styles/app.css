@@ -3,11 +3,73 @@
     font-family: "Nohemi", sans-serif;
 }
 
-body{
+body {
     font-family: Nohemi, sans-serif;
 }
 
 
 input[type="checkbox"] {
     background: transparent;
+}
+
+
+.sortie {
+    color: oklch(26.9% 0 0);
+    background-color: #f8f8f8;
+
+    a {
+        color: #e8e8e8;
+        background-color: oklch(26.9% 0 0);
+    }
+
+    .sortie__users img {
+        border-color: #BEE564;
+    }
+
+    .sortie__btn {
+        background-color: #BEE564;
+        color: oklch(26.9% 0 0);
+    }
+}
+
+.sortie.insc_cloturee {
+    .sortie__users img {
+        border-color: #D1EB99;
+    }
+
+    .sortie__btn {
+        background-color: #D1EB99;
+    }
+}
+
+.sortie.activite_en_cours {
+    background-color: #F29D73;
+
+    .sortie__users img {
+        border-color: #f0f0e6;
+    }
+
+    .sortie__btn {
+        background-color: #f0f0e6;
+    }
+}
+
+.sortie.annulee {
+    background-color: oklch(26.9% 0 0);
+    color: #f0f0e6;
+
+    a {
+        background-color: #f0f0e6;
+        color: oklch(26.9% 0 0);
+        font-weight: 500;
+    }
+
+    .sortie__users img {
+        border-color: #ea9c9c;
+    }
+
+    .sortie__btn {
+        background-color: #ea9c9c;
+
+    }
 }
