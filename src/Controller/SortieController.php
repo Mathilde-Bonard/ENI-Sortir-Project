@@ -2,8 +2,15 @@
 
 namespace App\Controller;
 
+
+use App\Entity\Sortie;
+use App\Form\SortieCreationType;
+use App\Form\FilterType;
 use App\Repository\SortieRepository;
+
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -16,9 +23,38 @@ final class SortieController extends AbstractController
 
         $sorties = $sortieRepository->readAllDateDesc();
 
+        $filterForm = $this->createForm(FilterType::class);
+
         return $this->render('sortie/index.html.twig', [
+            'filterForm' => $filterForm->createView(),
             'sorties' => $sorties,
+
         ]);
     }
+    #[Route('/add', name: 'sortie_add')]
+    public function add(
+        Request $request,
+        EntityManagerInterface $em,
+    ): Response
+    {
+        $sortie = new Sortie();
+        $sortieFormCreation = $this->createForm(SortieCreationType::class, $sortie);
 
+        $sortieFormCreation->handleRequest($request);
+
+        if ($sortieFormCreation->isSubmitted() && $sortieFormCreation->isValid()) {
+            $em->persist($sortie);
+            $em->flush();
+
+            $this->addFlash('success','Sortie ajoutée !');
+            return $this->redirectToRoute('app_sortie');
+        }
+
+        return $this->render('sortie/create.html.twig', [
+            'sortieFormCreation' => $sortieFormCreation->createView()
+            ]);
+    }
 }
+
+
+

@@ -3,43 +3,48 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
-    <main class="w-full p-5">
+    <main class="w-full p-3">
         <section>
-            <h1>Sorties</h1>
+            <div class="p-3 bg-[#BEE564]/50 rounded-xl text-neutral-800">
+                <h1 class="text-xl font-medium text-neutral-900 mb-3">Filtrer les sorties</h1>
+
+                {% form_theme filterForm 'views/form/form-theme.html.twig' %}
+
+                <div class="w-full text-sm">
+                    {{ form_start(filterForm) }}
+                            {{ form_row(filterForm.campus) }}
+                            {{ form_row(filterForm.nom) }}
+                    <p class="text-sm font-medium text-neutral-900">Date comprise entre</p>
+                    <div class="grid grid-cols-2 gap-2 mt-1">
+                        {{ form_row(filterForm.dateIntervalDebut) }}
+                        {{ form_row(filterForm.dateIntervalFin) }}
+                    </div>
+                    <p class="text-sm font-medium text-neutral-900 mb-1">Filtres supplémentaires</p>
+                    {{ form_row(filterForm.genres) }}
+
+                    {{ form_end(filterForm) }}
+                    <button id="filer__btn" class="transition w-full text-white bg-neutral-800 pt-2 pb-1 rounded-full text-smg">
+                        Rechercher
+                    </button>
+                </div>
+            </div>
+        </section>
+        <section class="mt-5">
             {% for sortie in sorties %}
-                <article class="bg-neutral-200 rounded-xl p-5 mb-2">
-                    <div class="text-xs bg-neutral-500 w-fit px-3 rounded-full text-neutral-100 py-1 mb-1 lowercase">
-                        {{ sortie.etat.libelle }}
-                    </div>
-                    <h1 class="uppercase">{{ sortie.nom }}</h1>
-
-                    <div class="grid grid-cols-7">
-                        <div class="col-span-3">
-                            {{ (sortie.participants | length) }} / {{  sortie.nbInscriptionMax }}
-                        </div>
-                        <p class="opacity-70">{{ sortie.duree }} h.</p>
-                        <div class="col-span-3 text-end">
-                            <h3>{{ sortie.dateHeureDebut | date('d/m/y h:m') }}</h3>
-                        </div>
-                    </div>
-                    <div class="flex gap-2 ">
-                        <img src="https:\\placehold.co\30x30" alt="placeholder organistaur" class="rounded-full">
-                        <div>
-                            {{ sortie.organisateur }}
-                        </div>
-                    </div>
-                    <div class="flex gap-2 mt-2 justify-end">
-                        {% if sortie.etat.libelle == 'INSC_OUVERTE' %}
-                            <button class="bg-green-200 px-2 py-1 rounded-lg text-sm">S'inscrire</button>
-                        {% endif %}
-                        <button class="bg-blue-200 px-2 py-1 rounded-lg text-sm">Details</button>
-
-                    </div>
-
-{#                    <p>{{ sortie.infosSortie }}</p>#}
-                </article>
-
+                    {% include 'views/sortie/sortie.html.twig' with { sortie: sortie } %}
             {% endfor %}
         </section>
     </main>
 {% endblock %}
+
+
+{#<script>#}
+{#    document.addEventListener('DOMLoadedContent', () => {#}
+
+{#        const $FILTER__BTN = document.getElementById('filer__btn');#}
+
+{#        $FILTER__BTN.addEventListener('click', () => {#}
+
+{#        })#}
+{#    })#}
+{#</script>#}

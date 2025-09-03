@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme sortieFormCreation 'views/form/Form-template.html.twig' %}
+
+{% block body %}
+    <h1>Creation page : Sortie</h1>
+
+    {{ form_start(sortieFormCreation) }}
+    {{ form_widget(sortieFormCreation) }}
+    {{ form_end(sortieFormCreation) }}
+
+{% endblock %}
+
+{% block title %}
+
+{% endblock %}
+

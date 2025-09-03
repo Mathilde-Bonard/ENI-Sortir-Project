@@ -23,7 +23,7 @@ class SortieFixtures extends Fixture implements DependentFixtureInterface
         for($i = 0; $i < 30; $i++) {
             $sortie = new Sortie();
 
-            $sortie->setNom($faker->title)
+            $sortie->setNom($faker->realText(30))
                 ->setDuree($faker->numberBetween(1, 48))
                 ->setDateHeureDebut($faker->dateTimeBetween('+7 days', '+1 months'));
 
