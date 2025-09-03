@@ -1,0 +1,118 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Authentification{% endblock %}
+
+{% block body %}
+
+    <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+        <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+            <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
+                 alt="Your Company" class="mx-auto h-10 w-auto dark:hidden"/>
+            <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
+                 alt="Your Company" class="mx-auto h-10 w-auto not-dark:hidden"/>
+            {% if app.user %}
+                <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900 dark:text-white">
+                    Vous êtes déjà connecté en tant que {{ app.user.userIdentifier }}
+                </h2>
+                <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+                    <div class="text-sm">
+                        <button
+                                type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5
+		text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2
+		focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500
+		dark:shadow-none dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500">
+                            <a href="{{ path('app_sortie_2') }}">
+                                Accéder à l'application Sortir
+                            </a>
+                        </button>
+                    </div>
+                    <div class="text-sm">
+                        <a href="{{ path('app_logout') }}"
+                           class="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400dark:hover:text-indigo-300">
+                            Se déconnecter
+                        </a>
+                    </div>
+                </div>
+            {% else %}
+                <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900 dark:text-white">
+                    Veuillez-vous connecter pour accéder à l'application Sortir
+                </h2>
+        </div>
+
+        <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+            <form method="post" class="space-y-6">
+                {% if error %}
+                    <div class="flex items-center p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300"
+                         role="alert">
+                        <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                             fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                        </svg>
+                        <span class="sr-only">Info</span>
+                        <div>
+                            <span class="font-medium">Adresse mail et/ou mot de passe incorrect.</span>
+                        </div>
+                    </div>
+                {% endif %}
+
+                    <div>
+                        <label for="inputEmail" class="block text-sm/6 font-medium text-gray-900 dark:text-gray-100">
+                            Adresse mail
+                        </label>
+                        <div class="mt-2">
+                            <input type="email" value="{{ last_username }}" name="email" id="inputEmail"
+                                   autocomplete="email" class="block w-full
+		  rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1
+		  outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2
+		  focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10
+		  dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" required autofocus>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <label for="inputPassword"
+                                   class="block text-sm/6 font-medium text-gray-900 dark:text-gray-100">
+                                Password
+                            </label>
+                            <div class="text-sm">
+                                <a href="#"
+                                   class="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400dark:hover:text-indigo-300">
+                                    Mot de passe oublié?
+                                </a>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <input type="password" name="password" id="inputPassword" autocomplete="current-password"
+                                   required
+                                   class="block w-full rounded-md bg-white px-3 py-1.5
+		  text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400
+		  focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5
+		  dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500
+		  dark:focus:outline-indigo-500">
+                            <input type="hidden" name="_csrf_token" data-controller="csrf-protection"
+                                   value="{{ csrf_token('authenticate') }}">
+                        </div>
+                    </div>
+
+                    <div class="checkbox mb-3">
+                        <label>
+                            <input type="checkbox" name="_remember_me"> Se souvenir de moi
+                        </label>
+                    </div>
+
+                    <div>
+                        <button
+                                type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5
+		text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2
+		focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500
+		dark:shadow-none dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500">
+                            Connexion
+                        </button>
+                    </div>
+
+                {% endif %}
+            </form>
+        </div>
+    </div>
+{% endblock %}
