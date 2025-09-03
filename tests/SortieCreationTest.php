@@ -23,30 +23,38 @@ class SortieCreationTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $user = static::getContainer()->get(UserRepository::class)->findOneBy(['email' => 'john.doe@gmail.com']);
-        $client->loginUser($user);
+        //$user = static::getContainer()->get(UserRepository::class)->findOneBy(['email' => 'john.doe@gmail.com']);
+        //$client->loginUser($user);
 
         $crawler = $client->request('GET', '/add');
 
+        // Récupération des éléments déjà défini en BDD pour remplir le formulaire
         $etat = static::getContainer()->get(EtatRepository::class)->findOneBy(['id' => 1]);
         $lieu = static::getContainer()->get(LieuRepository::class)->findOneBy(['id' => 1]);
         $campus= static::getContainer()->get(CampusRepository::class)->findOneBy(['id' => 1]);
         $organisateur = static::getContainer()->get(UserRepository::class)->findOneBy(['id' => 4]);
 
-        $form['sortie[nom]'] = 'Sortie escalade';
-        $form['sortie[dateDebut]'] = '2025-09-12T12:30';
-        $form['sortie[duree]'] = 4;
-        $form['sortie[dateLimiteInscription]'] = '2025-09-11T12:30';
-        $form['sortie[nbInscriptionMax]'] = 10;
-        $form['sortie[duree]'] = 4;
-        $form['sortie[infoSortie]'] = 'Sortie en plein air';
-        $form['sortie[etat]'] = $etat->getId();
-        $form['sortie[campus]'] = $campus->getId();
-        $form['sortie[lieu]'] = $lieu->getId();
-        $form['sortie[organisateur]'] = $organisateur->getId();
+        // Création du formulaire par détection du bouton submit nommé ici "Créer"
+        // Submit inclu
+        $form = $client->submitForm('Créer', [
+            'sortie_creation[nom]' => 'Sortie escalade',
+            'sortie_creation[dateHeureDebut]' => '2025-09-12T12:30',
+            'sortie_creation[duree]' => 4,
+            'sortie_creation[dateLimiteInscription]' => '2025-09-11T12:30',
+            'sortie_creation[nbInscriptionMax]' => 10,
+            'sortie_creation[duree]' => 4,
+            'sortie_creation[infosSortie]' => 'Sortie en plein air',
+            'sortie_creation[etat]' => $etat->getId(),
+            'sortie_creation[campus]' => $campus->getId(),
+            'sortie_creation[lieu]' => $lieu->getId(),
+            'sortie_creation[organisateur]' => $organisateur->getId()
+        ]);
 
-        $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h1', 'Creation page : Sortie');
+        // Vérifie que la redirection se fait après le submit
+        $this->assertResponseRedirects('/',302);
+        // Obligation de follow la route pour vérifier l'affichage du message qui ne peut se réaliser autrement
+        $client->followRedirect();
+        $this->assertSelectorTextContains('.flash-success', 'Sortie ajoutée !');
 
     }
 }

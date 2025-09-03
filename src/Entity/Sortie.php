@@ -65,7 +65,6 @@ class Sortie
     /**
      * @var Collection<int, User>
      */
-    #[Assert\Length()]
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'sorties')]
     private Collection $participants;
 

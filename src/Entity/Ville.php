@@ -16,7 +16,7 @@ class Ville
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Assert\NotBlank('Ce champ est obligatoire')]
+    #[Assert\NotBlank(message: 'Ce champ est obligatoire')]
     #[Assert\Length(min: 1, max: 255)]
     #[Assert\Assert\Regex(
         '^[\p{L}]+$',
@@ -25,7 +25,7 @@ class Ville
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
 
-    #[Assert\NotBlank('Ce champ est obligatoire')]
+    #[Assert\NotBlank(message: 'Ce champ est obligatoire')]
     #[Assert\Length(min: 1000, max: 99999)]
     #[ORM\Column]
     private ?int $cp = null;

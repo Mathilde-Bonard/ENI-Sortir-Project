@@ -8,6 +8,7 @@ use App\Form\SortieCreationType;
 use App\Form\FilterType;
 use App\Repository\SortieRepository;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,7 +33,8 @@ final class SortieController extends AbstractController
     }
     #[Route('/add', name: 'sortie_add')]
     public function add(
-        Request $request
+        Request $request,
+        EntityManagerInterface $em,
     ): Response
     {
         $sortie = new Sortie();
@@ -40,9 +42,18 @@ final class SortieController extends AbstractController
 
         $sortieFormCreation->handleRequest($request);
 
+        if ($sortieFormCreation->isSubmitted() && $sortieFormCreation->isValid()) {
+            $em->persist($sortie);
+            $em->flush();
+
+            $this->addFlash('success','Sortie ajoutée !');
+            return $this->redirectToRoute('app_sortie');
+        }
+
         return $this->render('sortie/create.html.twig', [
-            'sortieFormCreation' => $sortieFormCreation
-            }
+            'sortieFormCreation' => $sortieFormCreation->createView()
+            ]);
+    }
 }
 
 
