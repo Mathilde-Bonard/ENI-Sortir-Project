@@ -16,7 +16,7 @@ class Campus
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Assert\NotBlank('Ce champ est obligatoire')]
+    #[Assert\NotBlank(message: 'Ce champ est obligatoire')]
     #[Assert\Length(min: 3, max: 255)]
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
@@ -116,4 +116,10 @@ class Campus
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+        return $this->nom;
+    }
+
 }

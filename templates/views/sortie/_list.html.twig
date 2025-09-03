@@ -1,0 +1,8 @@
+{% for sortie in sorties %}
+    {% include 'views/sortie/sortie.html.twig' with { sortie: sortie } %}
+{% else %}
+    {% include 'views/empty/empty.html.twig' %}
+{% endfor %}
+
+
+
