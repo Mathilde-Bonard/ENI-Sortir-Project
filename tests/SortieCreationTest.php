@@ -5,6 +5,7 @@ namespace App\Tests;
 use App\Repository\CampusRepository;
 use App\Repository\EtatRepository;
 use App\Repository\LieuRepository;
+use App\Repository\SortieRepository;
 use App\Repository\UserRepository;
 use ContainerVJK8ZEY\getEtatFixturesService;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -19,12 +20,12 @@ class SortieCreationTest extends WebTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
 
-    public function testDisplayFormCreationSortir(): void
+    public function testFormCreationSortie(): void
     {
         $client = static::createClient();
 
-        //$user = static::getContainer()->get(UserRepository::class)->findOneBy(['email' => 'john.doe@gmail.com']);
-        //$client->loginUser($user);
+        $user = static::getContainer()->get(UserRepository::class)->findOneBy(['email' => 'john.doe@gmail.com']);
+        $client->loginUser($user);
 
         $crawler = $client->request('GET', '/add');
 
@@ -37,7 +38,7 @@ class SortieCreationTest extends WebTestCase
         // Création du formulaire par détection du bouton submit nommé ici "Créer"
         // Submit inclu
         $form = $client->submitForm('Créer', [
-            'sortie_creation[nom]' => 'Sortie escalade',
+            'sortie_creation[nom]' => 'Sortie test persiste',
             'sortie_creation[dateHeureDebut]' => '2025-09-12T12:30',
             'sortie_creation[duree]' => 4,
             'sortie_creation[dateLimiteInscription]' => '2025-09-11T12:30',
@@ -55,6 +56,10 @@ class SortieCreationTest extends WebTestCase
         // Obligation de follow la route pour vérifier l'affichage du message qui ne peut se réaliser autrement
         $client->followRedirect();
         $this->assertSelectorTextContains('.flash-success', 'Sortie ajoutée !');
+
+        // Vérification persistance des données
+        $sortie = static::getContainer()->get(SortieRepository::class)->findOneBy(['nom' => 'Sortie test persiste']);
+        $this->assertNotNull($sortie);
 
     }
 }
