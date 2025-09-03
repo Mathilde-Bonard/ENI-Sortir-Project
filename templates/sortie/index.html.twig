@@ -1,20 +1,50 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello SortieController!{% endblock %}
+{% block title %}Accueil{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <main class="w-full p-3">
+        <section>
+            <div class="p-3 bg-[#BEE564]/50 rounded-xl text-neutral-800">
+                <h1 class="text-xl font-medium text-neutral-900 mb-3">Filtrer les sorties</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+                {% form_theme filterForm 'views/form/form-theme.html.twig' %}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/wamp64/www/Sortir/src/Controller/SortieController.php</code></li>
-        <li>Your template at <code>C:/wamp64/www/Sortir/templates/sortie/index.html.twig</code></li>
-    </ul>
-</div>
+                <div class="w-full text-sm">
+                    {{ form_start(filterForm) }}
+                            {{ form_row(filterForm.campus) }}
+                            {{ form_row(filterForm.nom) }}
+                    <p class="text-sm font-medium text-neutral-900">Date comprise entre</p>
+                    <div class="grid grid-cols-2 gap-2 mt-1">
+                        {{ form_row(filterForm.dateIntervalDebut) }}
+                        {{ form_row(filterForm.dateIntervalFin) }}
+                    </div>
+                    <p class="text-sm font-medium text-neutral-900 mb-1">Filtres supplémentaires</p>
+                    {{ form_row(filterForm.genres) }}
+
+                    {{ form_end(filterForm) }}
+                    <button id="filer__btn" class="transition w-full text-white bg-neutral-800 pt-2 pb-1 rounded-full text-smg">
+                        Rechercher
+                    </button>
+                </div>
+            </div>
+        </section>
+        <section class="mt-5">
+            {% for sortie in sorties %}
+                    {% include 'views/sortie/sortie.html.twig' with { sortie: sortie } %}
+            {% endfor %}
+        </section>
+    </main>
 {% endblock %}
+
+
+{#<script>#}
+{#    document.addEventListener('DOMLoadedContent', () => {#}
+
+{#        const $FILTER__BTN = document.getElementById('filer__btn');#}
+
+{#        $FILTER__BTN.addEventListener('click', () => {#}
+
+{#        })#}
+{#    })#}
+{#</script>#}

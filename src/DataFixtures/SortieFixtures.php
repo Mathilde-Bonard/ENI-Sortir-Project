@@ -23,7 +23,7 @@ class SortieFixtures extends Fixture implements DependentFixtureInterface
         for($i = 0; $i < 30; $i++) {
             $sortie = new Sortie();
 
-            $sortie->setNom($faker->word)
+            $sortie->setNom($faker->realText(30))
                 ->setDuree($faker->numberBetween(1, 48))
                 ->setDateHeureDebut($faker->dateTimeBetween('+7 days', '+1 months'));
 
@@ -36,7 +36,7 @@ class SortieFixtures extends Fixture implements DependentFixtureInterface
             $campus = $this->getReference($campusName, Campus::class);
             $sortie->setCampus($campus);
 
-            $etatName = EtatFixtures::ETAT_REFERENCE . $faker->numberBetween(0, 6);
+            $etatName = EtatFixtures::ETAT_REFERENCE . $faker->numberBetween(0, 5);
             $etat = $this->getReference($etatName, Etat::class);
             $sortie->setEtat($etat);
 
