@@ -3,11 +3,65 @@
 {% form_theme sortieFormCreation 'views/form/Form-template.html.twig' %}
 
 {% block body %}
-    <h1>Creation page : Sortie</h1>
+<main class="w-full p-3">
+    <section>
+        <div class="p-3 bg-[#D7EAA5] rounded-xl text-neutral-800 shadow-xl">
+            <h1 class="text-xl font-medium text-neutral-900 mb-3">Création d'une Sortie</h1>
 
-    {{ form_start(sortieFormCreation) }}
-    {{ form_widget(sortieFormCreation) }}
-    {{ form_end(sortieFormCreation) }}
+            {% form_theme sortieFormCreation 'views/form/form-theme.html.twig' %}
+            <div class="w-full text-sm">
+
+                {{ form_start(sortieFormCreation) }}
+                {{ form_row(sortieFormCreation.nom) }}
+                {{ form_row(sortieFormCreation.dateHeureDebut) }}
+                {{ form_row(sortieFormCreation.duree) }}
+                {{ form_row(sortieFormCreation.dateLimiteInscription) }}
+                {{ form_row(sortieFormCreation.nbInscriptionMax) }}
+                {{ form_row(sortieFormCreation.infosSortie) }}
+                {{ form_row(sortieFormCreation.etat) }}
+
+                {{ form_row(sortieFormCreation.ville) }}
+
+                <div class="sortie-lieu">
+                {{ form_row(sortieFormCreation.lieu) }}
+                    <button id="addLieuButton" type="button">+</button>
+                </div>
+
+                {{ form_row(sortieFormCreation.campus) }}
+                {{ form_widget(sortieFormCreation.submit) }}
+                {{ form_end(sortieFormCreation) }}
+
+            </div>
+        </div>
+    </section>
+</main>
+
+{#    <div class="modal-lieu">#}
+{#        <div class="modal-content">#}
+{#            <h2>Nouveau lieu</h2>#}
+{#            {{ form_start(lieuFormCreation) }}#}
+{#            {{ form_widget(lieuFormCreation) }}#}
+{#            {{ form_end(lieuFormCreation) }}#}
+{#        </div>#}
+{#    </div>#}
+
+    {% block extraJs %}
+        <script>
+
+            let lieu = document.querySelector('.modal-lieu')
+
+            document.querySelector('#addLieuButton').addEventListener('click',function (){
+                lieu.style.display = 'flex';
+            })
+
+            lieu.addEventListener('click', function(event) {
+                if (event.target === lieu) {
+                    lieu.style.display = 'none';
+                }
+            });
+
+        </script>
+    {% endblock %}
 
 {% endblock %}
 
