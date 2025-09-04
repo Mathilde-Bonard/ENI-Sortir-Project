@@ -15,7 +15,10 @@ input[type="checkbox"] {
 
 .sortie {
     color: oklch(26.9% 0 0);
-    background-color: #f8f8f8;
+
+    .sortie__container{
+        background-color: #f8f8f8;
+    }
 
     a {
         color: #e8e8e8;
@@ -23,27 +26,29 @@ input[type="checkbox"] {
     }
 
     .sortie__users img {
-        border-color: #BEE564;
+        border-color: #D1EB99;
     }
 
     .sortie__btn {
-        background-color: #BEE564;
+        background-color: #D1EB99;
         color: oklch(26.9% 0 0);
     }
 }
 
 .sortie.insc_cloturee {
     .sortie__users img {
-        border-color: #D1EB99;
+        border-color: #F29D73;
     }
 
     .sortie__btn {
-        background-color: #D1EB99;
+        background-color: #F29D73;
     }
 }
 
 .sortie.activite_en_cours {
-    background-color: #F29D73;
+    .sortie__container{
+        background-color: #F29D73;
+    }
 
     .sortie__users img {
         border-color: #f0f0e6;
@@ -55,9 +60,11 @@ input[type="checkbox"] {
 }
 
 .sortie.annulee {
-    background-color: oklch(26.9% 0 0);
     color: #f0f0e6;
 
+    .sortie__container{
+        background-color: oklch(26.9% 0 0);
+    }
     a {
         background-color: #f0f0e6;
         color: oklch(26.9% 0 0);
@@ -65,11 +72,11 @@ input[type="checkbox"] {
     }
 
     .sortie__users img {
-        border-color: #ea9c9c;
+        border-color: #f57f7f;
     }
 
     .sortie__btn {
-        background-color: #ea9c9c;
+        background-color: #f57f7f;
 
     }
 }

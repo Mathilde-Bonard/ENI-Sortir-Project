@@ -22,8 +22,8 @@ class LieuFixtures extends Fixture  implements DependentFixtureInterface
 
             $lieu->setNom($faker->city())
                 ->setRue($faker->streetAddress())
-                ->setLatitude($faker->randomFloat(2, 10, 100))
-                ->setLongitude($faker->randomFloat(2, 10, 100));
+                ->setLatitude($faker->latitude(42.3, 51.1))
+                ->setLongitude($faker->longitude(-5.1, 9.6));
 
             $villeName = VilleFixtures::VILLE_REFERENCE . $faker->numberBetween(0, 3);
             $ville = $this->getReference($villeName, Ville::class);

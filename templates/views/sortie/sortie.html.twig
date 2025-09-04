@@ -6,51 +6,53 @@
     'ANNULEE': { 'label': "Annulée" }
 }[sortie.etat.libelle] %}
 
-<article class="rounded-xl p-3 mb-2 sortie {{ sortie.etat | lower }}">
-    <div class="flex items-center font-medium">
-        <span class="text-sm opacity-90">{{ sortie.dateHeureDebut | date('F d Y • g a') }}</span>
-    </div>
-    <h1 class="font-medium text-xl/6">{{ sortie.nom }}</h1>
-    <div class="w-full flex text-xs sortie-info">
-        <div class="flex gap-1 items-center opacity-80">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                 stroke="currentColor" class="size-5 mb-0.5">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path>
-            </svg>
-            <span>{{ sortie.duree }} heure(s)</span>
+<article class="mb-3 sortie {{ sortie.etat | lower }}">
+    <div class="sortie__container p-3 rounded-xl shadow-xl">
+        <div class="flex items-center font-medium">
+            <span class="text-sm opacity-90">{{ sortie.dateHeureDebut | date('F d Y • g a') }}</span>
         </div>
-        <div class=" ms-5 flex gap-1 items-center opacity-80">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                 stroke="currentColor" class="size-5 mb-0.5">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z"></path>
-            </svg>
-            <span>{{ sortie.participants | length }} / {{ sortie.nbInscriptionMax }}  participant(s)</span>
-        </div>
-    </div>
-    <div class="flex text-sm mt-3">
-        <div class="sortie__users flex items-center me-auto">
-            <div class="me-1">
-                <img src="{{ asset("/img/user/pexels-emilygarland-1499327.jpg") }}" alt="placeholder"
-                     class="rounded-full border-2 w-9 h-9">
+        <h1 class="font-medium text-xl/6">{{ sortie.nom }}</h1>
+        <div class="w-full flex text-xs sortie-info">
+            <div class="flex gap-1 items-center opacity-80">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                     stroke="currentColor" class="size-5 mb-0.5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path>
+                </svg>
+                <span>{{ sortie.duree }} heure(s)</span>
             </div>
-            <div class="sortie__btn flex items-center rounded-full">
-                <div class="flex *:me-[-15px] relative">
-                    {% for participant in sortie.participants[:3] %}
-                        <div class="rounded-full">
-                            <img src="{{ asset('/img/user/pexels-joaojesusdesign-1080213.jpg') }}" alt="placeholder"
-                                 class="participant-img rounded-full border-2 w-9 h-9">
-                        </div>
-                    {% endfor %}
+            <div class=" ms-5 flex gap-1 items-center opacity-80">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                     stroke="currentColor" class="size-5 mb-0.5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z"></path>
+                </svg>
+                <span>{{ sortie.participants | length }} / {{ sortie.nbInscriptionMax }}  participant(s)</span>
+            </div>
+        </div>
+        <div class="flex text-sm mt-3">
+            <div class="sortie__users flex items-center me-auto">
+                <div class="me-1">
+                    <img src="{{ asset("/img/user/pexels-emilygarland-1499327.jpg") }}" alt="placeholder"
+                         class="rounded-full border-2 w-9 h-9">
                 </div>
-                <button class="flex-none font-medium pe-3 ms-6 py-1.5 pb-0.5 rounded-full h-full">
-                    {{ button.label }}
-                </button>
+                <div class="sortie__btn flex items-center rounded-full">
+                    <div class="flex *:me-[-15px] relative">
+                        {% for participant in sortie.participants[:3] %}
+                            <div class="rounded-full">
+                                <img src="{{ asset('/img/user/pexels-joaojesusdesign-1080213.jpg') }}" alt="placeholder"
+                                     class="participant-img rounded-full border-2 w-9 h-9">
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <button class="flex-none font-medium pe-3 ms-6 py-1.5 pb-0.5 rounded-full h-full">
+                        {{ button.label }}
+                    </button>
+                </div>
             </div>
+            <a href="{{ path('sortie_detail', { 'id' : sortie.id }) }}" title="{{ sortie.nom }}"  class="rounded-full">
+                <div class="px-3 h-full py-1.5 pb-0.5 rounded-full flex items-center">Details</div>
+            </a>
         </div>
-        <a href="" class="rounded-full">
-            <div class="px-3 h-full py-1.5 pb-0.5 rounded-full flex items-center">Details</div>
-        </a>
     </div>
 </article>
