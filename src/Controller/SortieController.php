@@ -43,6 +43,9 @@ final class SortieController extends AbstractController
         $sortieFormCreation->handleRequest($request);
 
         if ($sortieFormCreation->isSubmitted() && $sortieFormCreation->isValid()) {
+
+            $sortie->setOrganisateur($this->getUser());
+
             $em->persist($sortie);
             $em->flush();
 
