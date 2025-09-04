@@ -25,6 +25,10 @@
                 <div class="sortie-lieu">
                 {{ form_row(sortieFormCreation.lieu) }}
                     <button id="addLieuButton" type="button">+</button>
+                    <section class="lieu_details">
+                        <p>Rue : </p>
+                        <p>Code Postal : </p>
+                    </section>
                 </div>
 
                 {{ form_row(sortieFormCreation.campus) }}
@@ -59,6 +63,8 @@
                     lieu.style.display = 'none';
                 }
             });
+
+
 
         </script>
     {% endblock %}

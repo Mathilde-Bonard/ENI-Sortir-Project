@@ -8,6 +8,7 @@ use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Entity\User;
 use App\Entity\Ville;
+use App\Repository\LieuRepository;
 use App\Repository\VilleRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -16,7 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SortieCreationType extends AbstractType
+class SortieType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -47,6 +48,7 @@ class SortieCreationType extends AbstractType
                 'class' => Lieu::class,
                 'choice_label' => 'nom',
             ])
+
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
                 'choice_label' => 'nom',
