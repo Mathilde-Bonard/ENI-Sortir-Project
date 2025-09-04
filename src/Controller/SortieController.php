@@ -62,7 +62,14 @@ final class SortieController extends AbstractController
 
             $em->persist($sortie);
             $em->flush();
+            $this->addFlash('success','Sortie ajoutée !');
+            return $this->redirectToRoute('app_sortie');
+        }
 
+        return $this->render('sortie/create.html.twig', [
+            'sortieFormCreation' => $sortieFormCreation->createView()
+        ]);
+    }
 
     #[Route('/sortie/{id}', name: 'detail', requirements: ['id' => '\d+'])]
     public function detail(Sortie $sortie): Response
@@ -70,14 +77,6 @@ final class SortieController extends AbstractController
         return $this->render('sortie/detail.html.twig', [
             'sortie' => $sortie
         ]);
-
-            $this->addFlash('success','Sortie ajoutée !');
-            return $this->redirectToRoute('app_sortie');
-        }
-
-        return $this->render('sortie/create.html.twig', [
-            'sortieFormCreation' => $sortieFormCreation->createView()
-            ]);
     }
 }
 
