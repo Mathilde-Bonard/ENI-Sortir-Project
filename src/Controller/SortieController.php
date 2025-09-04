@@ -4,7 +4,7 @@ namespace App\Controller;
 
 ;
 use App\Entity\Sortie;
-use App\Form\SortieCreationType;
+use App\Form\SortieType;
 use App\Form\FilterType;
 use App\Repository\SortieRepository;
 
@@ -52,7 +52,10 @@ final class SortieController extends AbstractController
     ): Response
     {
         $sortie = new Sortie();
-        $sortieFormCreation = $this->createForm(SortieCreationType::class, $sortie);
+        $user = $this->getUser();
+        $sortie->setCampus($user->getCampus());
+
+        $sortieFormCreation = $this->createForm(SortieType::class, $sortie);
 
         $sortieFormCreation->handleRequest($request);
 
@@ -62,12 +65,13 @@ final class SortieController extends AbstractController
 
             $em->persist($sortie);
             $em->flush();
+
             $this->addFlash('success','Sortie ajoutée !');
-            return $this->redirectToRoute('app_sortie');
+            return $this->redirectToRoute('sortie_list');
         }
 
         return $this->render('sortie/create.html.twig', [
-            'sortieFormCreation' => $sortieFormCreation->createView()
+            'sortieFormCreation' => $sortieFormCreation->createView(),
         ]);
     }
 
@@ -78,6 +82,36 @@ final class SortieController extends AbstractController
             'sortie' => $sortie
         ]);
     }
+
+    #[Route('/sortie/modification/{id}', name: 'update', requirements: ['id' => '\d+'])]
+    public function update(
+        int $id,
+        SortieRepository $sortieRepository,
+        Request $request,
+        EntityManagerInterface $em,
+    ): Response
+    {
+        $sortie = $sortieRepository->find($id);
+
+        $sortieForm = $this->createForm(SortieType::class, $sortie);
+        $sortieForm->handleRequest($request);
+
+        if (!$sortie) {
+            throw $this->createNotFoundException("Oooops ! l'événement n'a pas été trouvé !");
+        }
+        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
+
+            $em->persist($sortie);
+            $em->flush();
+
+            $this->addFlash('success','Sortie modifiée !');
+            return $this->redirectToRoute('sortie_detail', ['id' => $sortie->getId()]);
+        }
+
+        return $this->render('sortie/update.html.twig', [
+            'sortieForm' => $sortieForm->createView(),
+            ]);
+        }
 }
 
 
