@@ -34,10 +34,10 @@
             </div>
         </section>
         <section class="relative  mt-[-20px] z-2  sortie {{ sortie.etat | lower }}">
-            <div class="p-5 rounded-t-xl {{ sortie.etat == 'ACTIVITE_EN_COURS' ? 'sortie__container' : 'bg-[#f0f0e6]' }} ">
+            <div class="px-5 rounded-t-xl {{ sortie.etat == 'ACTIVITE_EN_COURS' ? 'sortie__container' : 'bg-[#f0f0e6]' }} ">
 
 
-                <div class="flex gap-3 mb-2">
+                <div class="flex gap-3 mb-2 pt-5">
                     <h1 class="font-medium text-3xl">{{ sortie.nom }}</h1>
                     <div class="flex-none ms-auto font-medium px-3 py-1.5 pb-0.5 rounded-lg h-full text-sm sortie__btn">
                         {{ sortie.etat | capitalize }}
@@ -115,12 +115,13 @@
                     </span>
                         </div>
                     </div>
-                    <div class="mt-5">
-                        <div class="font-medium px-3 py-2.5 pb-1.5 text-center rounded-lg h-full text-sm sortie__btn uppercase {{ sortie.etat == 'INSC_CLOTUREE' ? 'opacity-50' : '' }}">
-                            {{ button.label }}
-                        </div>
-                    </div>
 
+
+                </div>
+            </div>
+            <div class="sticky bottom-0 left-0 p-5 bg-linear-to-b from-transparent to-neutral-50">
+                <div class="font-medium px-3 py-2.5 pb-1.5 text-center rounded-lg h-full text-sm sortie__btn uppercase {{ sortie.etat == 'INSC_CLOTUREE' ? 'opacity-50' : '' }}">
+                    {{ button.label }}
                 </div>
             </div>
         </section>
