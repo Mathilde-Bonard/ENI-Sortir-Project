@@ -22,11 +22,11 @@
                         {{ form_row(filterForm.dateIntervalDebut) }}
                         {{ form_row(filterForm.dateIntervalFin) }}
                     </div>
-{#                    {{ form_row(filterForm.filters) }}#}
+                    <p class="text-sm text-neutral-50 mt-2">Filtres supplémentaires</p>
+                    {{ form_row(filterForm.filters) }}
                     <button class="transition w-full font-medium text-neutral-800 border-2 bg-yellow-100 pt-2 pb-1 mt-1 rounded-full text-smg">
                         Rechercher
                     </button>
-{#                    <p class="text-sm text-neutral-50 mt-2">Filtres supplémentaires</p>#}
                     {{ form_end(filterForm) }}
                 </div>
             </div>

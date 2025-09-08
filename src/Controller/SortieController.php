@@ -27,8 +27,12 @@ final class SortieController extends AbstractController
                           SortieRepository $sortieRepository,
                           SortieEtatUpdater $etatUpdater): Response
     {
-        $sorties = $sortieRepository->readAllDateDesc();
+        $sorties = $sortieRepository->readByFilter();
+        $user = $this->getUser();
 
+        if (!$user instanceof User) {
+            throw $this->createAccessDeniedException("Connexion obligatoire");
+        }
         $etatUpdater->updateAll($sorties);
 
         $filterForm = $this->createForm(FilterType::class, null, [
@@ -39,7 +43,7 @@ final class SortieController extends AbstractController
 
         $filterForm->handleRequest($request);
         if ($request->isXmlHttpRequest() || $request->headers->get('Turbo-Frame')) {
-            $sorties = $sortieRepository->readByFilter($filterForm->getData());
+            $sorties = $sortieRepository->readByFilter($filterForm->getData(), $user);
 
             return $this->render('views/sortie/_list.html.twig', [
                 'sorties' => $sorties,
@@ -53,20 +57,17 @@ final class SortieController extends AbstractController
     }
 
     #[Route('/add', name: 'sortie_add')]
-    public function add(
-        Request $request,
-        EntityManagerInterface $em,
-    ): Response
+    public function add(Request $request, EntityManagerInterface $em,): Response
     {
         $sortie = new Sortie();
         $user = $this->getUser();
         $sortie->setCampus($user->getCampus());
 
-        $sortieFormCreation = $this->createForm(SortieType::class, $sortie);
+        $sortieForm = $this->createForm(SortieType::class, $sortie);
 
-        $sortieFormCreation->handleRequest($request);
+        $sortieForm->handleRequest($request);
 
-        if ($sortieFormCreation->isSubmitted() && $sortieFormCreation->isValid()) {
+        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
 
             $sortie->setOrganisateur($this->getUser());
 
@@ -77,8 +78,8 @@ final class SortieController extends AbstractController
         }
 
         return $this->render('sortie/create.html.twig', [
-            'sortieFormCreation' => $sortieFormCreation->createView(),
-
+            'sortieForm' => $sortieForm->createView(),
+            'action' => "créer",
         ]);
     }
 
@@ -127,8 +128,9 @@ final class SortieController extends AbstractController
             return $this->redirectToRoute('sortie_detail', ['id' => $sortie->getId()]);
         }
 
-        return $this->render('sortie/update.html.twig', [
+        return $this->render('sortie/create.html.twig', [
             'sortieForm' => $sortieForm->createView(),
+            'action' => "modifier",
             ]);
         }
 

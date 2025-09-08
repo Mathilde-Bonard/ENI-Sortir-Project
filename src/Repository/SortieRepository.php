@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Sortie;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -45,7 +46,7 @@ class SortieRepository extends ServiceEntityRepository
     }
 
 
-    public function readByFilter(mixed $data)
+    public function readByFilter(mixed $data = null, User $user = null)
     {
         $qb = $this->createQueryBuilder('s')
             ->leftJoin('s.organisateur', 'o')
@@ -54,33 +55,65 @@ class SortieRepository extends ServiceEntityRepository
             ->addSelect('o')
             ->addSelect('p')
             ->addSelect('e')
-            ->andWhere("e.libelle NOT IN ('PASSEE', 'CREEE')")
+            ->andWhere("e.libelle NOT IN ('CREEE')")
             ->orderBy('s.dateHeureDebut', 'ASC');
 
-        if (!empty($data['campus'])) {
-            $qb->andWhere('s.campus = :campus')
-                ->setParameter('campus', $data['campus']);
-        }
-        if (!empty($data['nom'])) {
-            $qb->andWhere('s.nom LIKE :nom')
-                ->setParameter('nom', '%' . $data['nom'] . '%');
-        }
-
-        $dateDebut = $data['dateIntervalDebut'] ?? null;
-        $dateFin   = $data['dateIntervalFin'] ?? null;
-
-        if ($dateDebut || $dateFin) {
-            if ($dateDebut && $dateFin) {
-                $qb->andWhere('s.dateHeureDebut BETWEEN :dateDebut AND :dateFin')
-                    ->setParameter('dateDebut', $dateDebut)
-                    ->setParameter('dateFin', $dateFin);
-            } elseif ($dateDebut) {
-                $qb->andWhere('s.dateHeureDebut >= :dateDebut')
-                    ->setParameter('dateDebut', $dateDebut);
-            } else {
-                $qb->andWhere('s.dateHeureDebut <= :dateFin')
-                    ->setParameter('dateFin', $dateFin);
+        if($data) {
+            if (!empty($data['campus'])) {
+                $qb->andWhere('s.campus = :campus')
+                    ->setParameter('campus', $data['campus']);
             }
+            if (!empty($data['nom'])) {
+                $qb->andWhere('s.nom LIKE :nom')
+                    ->setParameter('nom', '%' . $data['nom'] . '%');
+            }
+
+            $dateDebut = $data['dateIntervalDebut'] ?? null;
+            $dateFin   = $data['dateIntervalFin'] ?? null;
+
+            if ($dateDebut || $dateFin) {
+                if ($dateDebut && $dateFin) {
+                    $qb->andWhere('s.dateHeureDebut BETWEEN :dateDebut AND :dateFin')
+                        ->setParameter('dateDebut', $dateDebut)
+                        ->setParameter('dateFin', $dateFin);
+                } elseif ($dateDebut) {
+                    $qb->andWhere('s.dateHeureDebut >= :dateDebut')
+                        ->setParameter('dateDebut', $dateDebut);
+                } else {
+                    $qb->andWhere('s.dateHeureDebut <= :dateFin')
+                        ->setParameter('dateFin', $dateFin);
+                }
+            }
+
+            if($data['filters']) {
+                foreach ($data['filters'] as $filter) {
+                    switch ($filter) {
+                        case "ORGA":
+                            $qb->andWhere('o = :user')
+                                ->setParameter('user', $user);
+                            break;
+
+                        case "INSC":
+                            $qb->andWhere(':user MEMBER OF s.participants')
+                                ->setParameter('user', $user);
+                            break;
+
+                        case "NOT_INSC":
+                            $qb->andWhere(':user NOT MEMBER OF s.participants')
+                                ->setParameter('user', $user);
+                            break;
+
+                        case "PASSEE":
+                            $qb->andWhere('s.dateHeureDebut < :now')
+                                ->setParameter('now', new \DateTime());
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        } else {
+            $qb->andWhere("e.libelle NOT IN ('PASSEE')");
         }
         return $qb->getQuery()->getResult();
     }

@@ -1,0 +1,16 @@
+{# templates/form/form.html.twig #}
+
+    {% block form_row %}
+        <div class="form-line relative w-full mb-3 flex gap-3">
+            <div class="form-label absolute top-0 left-0 px-8 -translate-2">
+                {{ form_label(form, null, { label_attr: { class: 'text-sm bg-[#f1edeb] px-1' } }) }}
+            </div>
+            {{ form_widget(form, { attr: { class: 'w-full rounded-full border-2 font-medium p-2 flex gap-3 px-4' } }) }}
+        </div>
+        <div class="form-error">
+            {{ form_errors(form) }}
+        </div>
+    {% endblock %}
+
+
+

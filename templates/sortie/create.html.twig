@@ -1,56 +1,90 @@
 {% extends 'base.html.twig' %}
 
-{% form_theme sortieFormCreation 'views/form/Form-template.html.twig' %}
+{% form_theme sortieForm 'views/form/Form-template.html.twig' %}
 
 {% block body %}
-<main class="w-full p-3">
-    <section>
-        <div class="p-3 bg-[#D7EAA5] rounded-xl text-neutral-800 shadow-xl">
-            <h1 class="text-xl font-medium text-neutral-900 mb-3">Création d'une Sortie</h1>
+    <main class="w-full">
+        <section>
+            <div class="flex text-neutral-200 mt-5 mb-3 gap-2 px-3">
+                {% if action == 'créer' %}
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                         stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M12 10.5v6m3-3H9m4.06-7.19-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z"></path>
+                    </svg>
+                    <h1 class="text-xl">
+                        Création d'une sortie
+                    </h1>
+                {% else %}
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"></path>
+                    </svg>
 
-            {% form_theme sortieFormCreation 'views/form/form-theme.html.twig' %}
-            <div class="w-full text-sm">
-
-                {{ form_start(sortieFormCreation) }}
-                {{ form_row(sortieFormCreation.nom) }}
-                {{ form_row(sortieFormCreation.dateHeureDebut) }}
-                {{ form_row(sortieFormCreation.duree) }}
-                {{ form_row(sortieFormCreation.dateLimiteInscription) }}
-                {{ form_row(sortieFormCreation.nbInscriptionMax) }}
-                {{ form_row(sortieFormCreation.infosSortie) }}
-                {{ form_row(sortieFormCreation.etat) }}
-
-                {{ form_row(sortieFormCreation.ville) }}
-
-                <div class="sortie-lieu">
-                {{ form_row(sortieFormCreation.lieu) }}
-                    <button id="addLieuButton" type="button">+</button>
-                    <section class="lieu_details">
-                        <p>Rue : </p>
-                        <p>Code Postal : </p>
-                    </section>
-                </div>
-
-                {{ form_row(sortieFormCreation.campus) }}
-                {{ form_widget(sortieFormCreation.submit) }}
-                {{ form_end(sortieFormCreation) }}
-
+                    <h1 class="text-xl">
+                        Modifier la sortie
+                    </h1>
+                {% endif %}
             </div>
-        </div>
-    </section>
-</main>
+            <div class="p-3 pt-8 bg-[#f1edeb] rounded-xl text-neutral-800 shadow-xl">
 
-{#    <div class="modal-lieu">#}
-{#        <div class="modal-content">#}
-{#            <h2>Nouveau lieu</h2>#}
-{#            {{ form_start(lieuFormCreation) }}#}
-{#            {{ form_widget(lieuFormCreation) }}#}
-{#            {{ form_end(lieuFormCreation) }}#}
-{#        </div>#}
-{#    </div>#}
+                {% form_theme sortieForm 'views/form/form-theme-sortie.html.twig' %}
+                <div class="w-full text-sm">
+
+                    {{ form_start(sortieForm) }}
+                    {{ form_row(sortieForm.nom) }}
+                    {{ form_row(sortieForm.dateHeureDebut) }}
+                    {{ form_row(sortieForm.duree) }}
+                    {{ form_row(sortieForm.dateLimiteInscription) }}
+                    {{ form_row(sortieForm.nbInscriptionMax) }}
+                    {{ form_row(sortieForm.infosSortie) }}
+                    {{ form_row(sortieForm.etat) }}
+                    {{ form_row(sortieForm.campus) }}
+                    {{ form_row(sortieForm.ville) }}
+
+                    <div class="sortie-lieu mb-3">
+                        {{ form_row(sortieForm.lieu) }}
+                        <button id="addLieuButton" type="button">+</button>
+                        <section class="lieu_details">
+                            <p>Rue : </p>
+                            <p>Code Postal : </p>
+                        </section>
+                    </div>
+
+
+                    <button class="transition w-full font-medium text-neutral-200 border-2 bg-neutral-800 pt-2 pb-1 mt-1 rounded-full text-smg">
+                        {{ action }}
+                    </button>
+                    {{ form_end(sortieForm) }}
+
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    {#    <div class="modal-lieu"> #}
+    {#        <div class="modal-content"> #}
+    {#            <h2>Nouveau lieu</h2> #}
+    {#            {{ form_start(lieuFormCreation) }} #}
+    {#            {{ form_widget(lieuFormCreation) }} #}
+    {#            {{ form_end(lieuFormCreation) }} #}
+    {#        </div> #}
+    {#    </div> #}
 
     {% block extraJs %}
         <script>
+
+            let lieu = document.querySelector('.modal-lieu')
+
+            document.querySelector('#addLieuButton').addEventListener('click', function () {
+                lieu.style.display = 'flex';
+            })
+
+            lieu.addEventListener('click', function (event) {
+                if (event.target === lieu) {
+                    lieu.style.display = 'none';
+                }
+            });
 
             // Affichage des lieux correspondant à la ville sélectionnée
             // Problème avec villeId
@@ -95,7 +129,6 @@
             //         lieu.style.display = 'none';
             //     }
             // });
-
 
 
         </script>

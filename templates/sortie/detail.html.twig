@@ -5,9 +5,10 @@
         {% include 'views/sortie/_details.html.twig' with { sortie: sortie } %}
     </main>
 
-    {% block extraJs %}
-        <script src="{{ asset('/js/subcription.js') }}"></script>
-    {% endblock %}
-{% endblock %}
 
+{% endblock %}
+{% block extraJs %}
+    <script src="{{ asset('/js/subcription.js') }}"></script>
+    <script src="{{ asset('/js/collapse.js') }}"></script>
+{% endblock %}
 {% block title %}{{ sortie.nom }}{% endblock %}
