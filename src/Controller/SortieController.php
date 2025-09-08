@@ -65,13 +65,13 @@ final class SortieController extends AbstractController
 
             $em->persist($sortie);
             $em->flush();
-
             $this->addFlash('success','Sortie ajoutée !');
-            return $this->redirectToRoute('sortie_list');
+            return $this->redirectToRoute('app_sortie');
         }
 
         return $this->render('sortie/create.html.twig', [
             'sortieFormCreation' => $sortieFormCreation->createView(),
+
         ]);
     }
 
@@ -112,6 +112,7 @@ final class SortieController extends AbstractController
             'sortieForm' => $sortieForm->createView(),
             ]);
         }
+
 }
 
 
