@@ -52,17 +52,49 @@
     {% block extraJs %}
         <script>
 
-            let lieu = document.querySelector('.modal-lieu')
+            // Affichage des lieux correspondant à la ville sélectionnée
+            // Problème avec villeId
 
-            document.querySelector('#addLieuButton').addEventListener('click',function (){
-                lieu.style.display = 'flex';
-            })
+            {#document.addEventListener('DOMContentLoaded', function() {#}
+            {#    const selectVille = document.getElementById('sortie_ville');#}
+            {#    const selectLieu = document.getElementById('sortie_lieu');#}
 
-            lieu.addEventListener('click', function(event) {
-                if (event.target === lieu) {
-                    lieu.style.display = 'none';
-                }
-            });
+            {#    selectVille.addEventListener('change', function() {#}
+            {#        const villeId = selectVille.value;#}
+            {#        console.log(villeId)#}
+
+            {#        // Vider le select lieu#}
+            {#        selectLieu.innerHTML = '<option value="">Choisissez un lieu...</option>';#}
+
+            {#        console.log('{{ path('lieux_par_ville') }}/' + villeId)#}
+
+            {#        if (villeId) { // Si une ville est sélectionnée#}
+            {#            fetch('{{ path('lieux_par_ville') }}/'+ villeId)#}
+            {#                .then(response => response.json())#}
+            {#                .then(data => {#}
+            {#                    // Affichage du nom du lieu dans le select#}
+            {#                    for (const lieu of data) {#}
+            {#                        const option = document.createElement('option');#}
+            {#                        option.value = lieu.id;#}
+            {#                        option.textContent = lieu.nom;#}
+            {#                        selectLieu.appendChild(option);#}
+            {#                    }#}
+            {#                });#}
+            {#        }#}
+            {#    });#}
+            {#});#}
+
+            // let lieu = document.querySelector('.modal-lieu')
+            //
+            // document.querySelector('#addLieuButton').addEventListener('click',function (){
+            //     lieu.style.display = 'flex';
+            // })
+            //
+            // lieu.addEventListener('click', function(event) {
+            //     if (event.target === lieu) {
+            //         lieu.style.display = 'none';
+            //     }
+            // });
 
 
 

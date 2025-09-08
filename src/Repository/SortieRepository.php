@@ -16,22 +16,34 @@ class SortieRepository extends ServiceEntityRepository
         parent::__construct($registry, Sortie::class);
     }
 
+    public function readById(int $id): ?Sortie
+    {
+        return $this->createQueryBuilder('s')
+            ->leftJoin('s.etat', 'e')->addSelect('e')
+            ->leftJoin('s.participants', 'p')->addSelect('p')
+            ->leftJoin('s.lieu', 'l')->addSelect('l')
+            ->leftJoin('l.ville', 'v')->addSelect('v') // si tu veux la ville
+            ->andWhere('s.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
 
     public function readAllDateDesc()
     {
-        $qb = $this->createQueryBuilder('s');
-        $qb->leftJoin('s.organisateur', 'o')
-            ->leftJoin('s.participants', 'p')
-            ->leftJoin('s.etat', 'e')
-            ->addSelect('o')
-            ->addSelect('p')
-            ->addSelect('e')
-            ->addOrderBy('s.dateHeureDebut', 'ASC')
-            ->andWhere("e.libelle != 'PASSEE'");
-
-        $query = $qb->getQuery();
-        return $query->getResult();
+        return $this->createQueryBuilder('s')
+            ->leftJoin('s.organisateur', 'o')->addSelect('o')
+            ->leftJoin('s.participants', 'p')->addSelect('p')
+            ->leftJoin('s.lieu', 'l')->addSelect('l')
+            ->leftJoin('s.etat', 'e')->addSelect('e')
+            ->leftJoin('l.ville', 'v')->addSelect('v')
+            ->andWhere("e.libelle NOT IN ('PASSEE', 'CREEE')")
+            ->orderBy('s.dateHeureDebut', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
+
 
     public function readByFilter(mixed $data)
     {
@@ -42,8 +54,7 @@ class SortieRepository extends ServiceEntityRepository
             ->addSelect('o')
             ->addSelect('p')
             ->addSelect('e')
-            ->andWhere('e.libelle != :passee')
-            ->setParameter('passee', 'PASSEE')
+            ->andWhere("e.libelle NOT IN ('PASSEE', 'CREEE')")
             ->orderBy('s.dateHeureDebut', 'ASC');
 
         if (!empty($data['campus'])) {
