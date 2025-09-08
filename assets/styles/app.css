@@ -87,6 +87,11 @@ input[type="checkbox"] {
     }
 }
 
+.sortie__collapse.active{
+
+    height: 100vh;
+}
+
 .modal-lieu {
     display: none;
     position: fixed;

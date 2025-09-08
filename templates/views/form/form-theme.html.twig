@@ -8,11 +8,11 @@
 
 {% block choice_widget_expanded %}
     {% if expanded and multiple %}
-    <div class="flex flex-col gap-1 justify-center">
+    <div class="flex flex-col gap-1 justify-center my-2">
         {% for child in form %}
             <div class="inline-flex items-center gap-3 text-xs">
                 {{ form_widget(child) }}
-                <div class="mt-1">
+                <div class="mt-1 text-neutral-400">
                     {{ form_label(child) }}
                 </div>
             </div>

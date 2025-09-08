@@ -44,18 +44,18 @@ class FilterType extends AbstractType
                 'label' =>  false,
                 'widget' => 'single_text',
             ])
-//            ->add('filters', ChoiceType::class, [
-//                "required" => false,
-//                'label' => false,
-//                'expanded' => true,
-//                'multiple' => true,
-//                'choices' => [
-//                    "Sorties dont je suis l'organisateur/trice" => 'ORGA',
-//                    'Sorties auxquelles je suis inscrit/e' => 'NOT_INSC',
-//                    'Sorties auxquelles je ne suis pas inscrit/e' => 'INSC',
-//                    'Sorties passées' => 'PASSEE',
-//                ]
-//            ])
+            ->add('filters', ChoiceType::class, [
+                "required" => false,
+                'label' => false,
+                'expanded' => true,
+                'multiple' => true,
+                'choices' => [
+                    "Sorties dont je suis l'organisateur/trice" => 'ORGA',
+                    'Sorties auxquelles je suis inscrit/e' => 'INSC',
+                    'Sorties auxquelles je ne suis pas inscrit/e' => 'NOT_INSC',
+                    'Sorties passées' => 'PASSEE',
+                ]
+            ])
         ;
     }
 

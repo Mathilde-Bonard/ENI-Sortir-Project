@@ -11,6 +11,6 @@ function subscription() {
         }
     })
 }
-document.addEventListener('turbo:load', () => {
+document.addEventListener('DOMContentLoaded', () => {
     subscription();
 })

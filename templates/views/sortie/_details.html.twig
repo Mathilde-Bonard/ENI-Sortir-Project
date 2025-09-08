@@ -6,14 +6,41 @@
             <div class="absolute top-0 left-0 p-3 bg-neutral-800/30 h-full w-full"></div>
         </div>
     </section>
-    <section class="relative mt-[-20px] z-2 overflow-hidden sortie {{ sortie.etat | lower }} {{ app.user in sortie.participants ? 'inscrit' : '' }}">
+    <section
+            class="relative mt-[-20px] z-2 overflow-hidden sortie {{ sortie.etat | lower }} {{ app.user in sortie.participants ? 'inscrit' : '' }}">
         <div class="rounded-t-xl sortie__container">
             <div class="p-3 pt-5">
-                <div class="flex gap-3 mb-5">
-                    <h1 class="font-medium text-3xl">{{ sortie.nom }}</h1>
-                    <div class="flex-none ms-auto font-semibold px-3 py-2 pb-1 rounded-full h-full text-sm sortie__btn">
-                        # {{ sortie.etat | capitalize }}
+                <div class="flex items-start gap-3 mb-5">
+                    <h1 class="font-medium text-3xl me-auto">{{ sortie.nom }}</h1>
+                    <div class="flex items-center gap-2">
+                        {# TODO: Voter ROLE_ORGANISATEUR #}
+                        {% if app.user == sortie.organisateur %}
+                            <div class="flex ms-auto items-center gap-2 text-neutral-200">
+                                {# TODO: sortie modify path #}
+                                <a href="{{ path('sortie_update', {'id': sortie.id}) }}"
+                                   class="bg-neutral-800 p-1.5 rounded-full">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                         class="size-3">
+                                        <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z"></path>
+                                    </svg>
+
+                                </a>
+
+                                {# TODO: sortie cancel path #}
+                                <a href="{{ path('sortie_cancel', {id: sortie.id}) }}"
+                                   class="bg-neutral-800 p-1 rounded-full">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                         class="size-4">
+                                        <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        {% endif %}
+                        <div class="font-semibold px-3 py-1.5 pb-1 rounded-full text-xs sortie__btn whitespace-nowrap">
+                            #{{ sortie.etat | capitalize }}
+                        </div>
                     </div>
+
                 </div>
                 <div class="w-full flex flex-col mb-5 text-sm sortie-info">
                     <div class=" flex gap-1 items-center">
@@ -45,9 +72,10 @@
                     <h3 class="font-semibold mb-2">A propos</h3>
                     <p class="text-sm">{{ sortie.infosSortie }}</p>
                 </div>
-                <div class="flex mb-5 items-center">
-                    <div class="orga">
-                        <h3 class="font-semibold mb-2">Organisateur</h3>
+                <div class="orga mb-5 w-fit">
+                    <h3 class="font-semibold mb-2">Organisateur</h3>
+                    {# TODO path Userprofil #}
+                    <a href="" class="w-fit">
                         <div class="orga flex items-center">
                             <div class="me-2">
                                 <img src="{{ asset("/img/user/pexels-emilygarland-1499327.jpg") }}" alt="placeholder"
@@ -55,42 +83,49 @@
                             </div>
                             <div>
                                 <p class="font-semibold text-sm">{{ sortie.organisateur }}</p>
-                                <div class="flex opacity-80 items-center text-xs"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"></path>
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"></path>
+                                <div class="flex opacity-80 items-center text-xs">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                         stroke-width="1.5" stroke="currentColor" class="size-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                              d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                              d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"></path>
                                     </svg>
-                                    <span class="pt-0.5">Campus {{ app.user.campus | capitalize }}</span></div>                            </div>
-                        </div>
-                    </div>
-                    <div class="participants ms-auto">
-                        <h3 class="font-medium mb-2 text-end">Participants</h3>
-                        <div class="flex items-center ms-[-2px]">
-                            <div class="flex *:me-[-15px] relative">
-                                {% for participant in sortie.participants[:3] %}
-                                    <div class="rounded-full">
-                                        <img src="{{ asset('/img/user/pexels-joaojesusdesign-1080213.jpg') }}"
-                                             alt="placeholder"
-                                             class="participant-img rounded-full border-2 w-11 h-11 border-[#f0f0e6]">
-                                    </div>
-                                {% endfor %}
+                                    <span class="pt-0.5">Campus {{ app.user.campus | capitalize }}</span></div>
                             </div>
-                            <div class="ms-5 bg-neutral-800 border-2 border-[#f0f0e6] h-11 w-11 rounded-full text-[#f0f0e6] flex items-center justify-center">
+                        </div>
+                    </a>
+
+                </div>
+                <div class="participants mb-5">
+                    <h3 class="font-medium mb-2">Participant(s) <span class="opacity-70 text-xs">• <span class="cursor-pointer hover:opacity-100 toggle__collapse">voir la liste</span> </span></h3>
+                    <div class="flex items-center ms-[-2px]">
+                        <div class="flex *:me-[-20px] relative">
+                            {% for participant in sortie.participants[:3] %}
+                                <div class="rounded-full">
+                                    <img src="{{ asset('/img/user/pexels-joaojesusdesign-1080213.jpg') }}"
+                                         alt="placeholder"
+                                         class="participant-img rounded-full border-2 w-11 h-11 border-[#f0f0e6]">
+                                </div>
+
+                            {% endfor %}
+                        </div>
+                        {% if (sortie.participants | length) > 4 %}
+                            <div class="toggle__collapse bg-neutral-800 border-2 border-[#f0f0e6] h-11 w-11 rounded-full text-[#f0f0e6] flex items-center justify-center z-5">
                                 <span class="text-sm font-medium mt-1">+{{ (sortie.participants | length) - 3 }}</span>
                             </div>
-                        </div>
-
+                        {% endif %}
                     </div>
                 </div>
                 <h3 class="font-semibold mb-2">Lieu du rendez-vous</h3>
             </div>
-
             <div class="relative border-t-2 border-dashed sortie__btn w-full">
                 <div class="absolute w-full flex">
                     <div class="aspect-square w-6 bg-neutral-800 rounded-full -translate-x-3 -translate-y-3.5"></div>
                     <div class="aspect-square w-6 bg-neutral-800 rounded-full ms-auto translate-x-3 -translate-y-3.5"></div>
 
                 </div>
-                {#                    <p class="text-center text-sm opacity-70 mb-1"></p>#}
+                {#                    <p class="text-center text-sm opacity-70 mb-1"></p> #}
                 <div class="font-bold py-7 uppercase text-2xl text-center sortie__btn">
 
                     {% if sortie.etat == "INSC_OUVERTE" %}
@@ -130,6 +165,62 @@
                     {% endif %}
                 </div>
             </div>
+        </div>
+        <div class="collapse_backdrop fixed bottom-0 pointer-events-none bg-black/50 w-full h-[100vh] z-20 transition duration-300 opacity-0"></div>
+        <div class="sortie__collapse fixed bottom-0 w-full h-[0vh] transition-all duration-600 z-50 ease-in-out">
+            <div class="flex flex-col w-full h-full">
+                <div class="rounded-t-xl sortie__container h-[70%] mt-auto px-3 overflow-scroll">
+                    <div class="flex items-start sticky top-0 sortie__container pt-5 z-10">
+                        <h3 class="font-semibold mb-5 text-2xl">Liste des participants ({{ sortie.participants | length }})</h3>
+                        <div class="cursor-pointer toggle__collapse ms-auto">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-7">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    {% for user in sortie.participants %}
+                        <div class="mb-2">
+                            <div class="grid grid-cols-12 items-center">
+                                <div class="text-xs font-medium">#{{ loop.index}}</div>
+                                <div class="col-span-7">
+                                    {# TODO path Userprofil #}
+                                    <a href="">
+                                        <div class="flex gap-2">
+                                            <img src="{{ asset("/img/user/pexels-emilygarland-1499327.jpg") }}" alt="placeholder"
+                                                 class="rounded-full w-11 h-11">
+                                            <div class="ms-2">
+                                                <p class="font-semibold text-sm">{{ user }}</p>
+                                                <div class="flex opacity-80 items-center text-xs">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                         stroke-width="1.5" stroke="currentColor" class="size-4">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                              d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"></path>
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                              d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"></path>
+                                                    </svg>
+                                                    <span class="pt-0.5">Campus {{ user.campus | capitalize }}</span></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-span-4 grid grid-cols-3 items-center">
+                                    <a href="tel:{{ user.telephone }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 me-auto">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 9.75v-4.5m0 4.5h4.5m-4.5 0 6-6m-3 18c-8.284 0-15-6.716-15-15V4.5A2.25 2.25 0 0 1 4.5 2.25h1.372c.516 0 .966.351 1.091.852l1.106 4.423c.11.44-.054.902-.417 1.173l-1.293.97a1.062 1.062 0 0 0-.38 1.21 12.035 12.035 0 0 0 7.143 7.143c.441.162.928-.004 1.21-.38l.97-1.293a1.125 1.125 0 0 1 1.173-.417l4.423 1.106c.5.125.852.575.852 1.091V19.5a2.25 2.25 0 0 1-2.25 2.25h-2.25Z"></path>
+                                        </svg>
+                                    </a>
+                                    <a href="mailto:{{ user.email }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
+                                            <path fill-rule="evenodd" d="M5.404 14.596A6.5 6.5 0 1 1 16.5 10a1.25 1.25 0 0 1-2.5 0 4 4 0 1 0-.571 2.06A2.75 2.75 0 0 0 18 10a8 8 0 1 0-2.343 5.657.75.75 0 0 0-1.06-1.06 6.5 6.5 0 0 1-9.193 0ZM10 7.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z" clip-rule="evenodd"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
         </div>
     </section>
 </div>

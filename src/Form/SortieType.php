@@ -13,7 +13,10 @@ use App\Repository\VilleRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -22,16 +25,33 @@ class SortieType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nom')
+            ->add('nom', TextType::class, [
+                'label' => 'Nom',
+                'attr' => [
+                    'placeholder' => 'Exemple : Lorem Ipsun',
+                ]
+            ])
             ->add('dateHeureDebut', DateType::class, [
                 'widget' => 'single_text'
             ])
-            ->add('duree')
+            ->add('duree', IntegerType::class, [
+                'label' => 'Duree (heure)',
+                'attr' => [
+                    'placeholder' => 'Exemple : 24 (heures)',
+                ]
+            ])
             ->add('dateLimiteInscription', DateType::class, [
                 'widget' => 'single_text'
             ])
-            ->add('nbInscriptionMax')
-            ->add('infosSortie')
+            ->add('nbInscriptionMax', IntegerType::class, [
+                "label" => "Nombre limite d'inscription",
+                'attr' => [
+                    'placeholder' => 'Exemple : 50',
+                ]
+            ])
+            ->add('infosSortie',TextareaType::class, [
+                'label' => "Description de l'évenement",
+            ])
             ->add('etat', EntityType::class, [
                 'class' => Etat::class,
                 'choice_label' => 'libelle',
@@ -52,11 +72,8 @@ class SortieType extends AbstractType
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
                 'choice_label' => 'nom',
-            ])
-            // Bouton submit qui apparaitra directement dans twig avec le form_widget
-            ->add('submit', SubmitType::class, [
-                'label' => 'Créer'
-                ]);
+            ]);
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void
