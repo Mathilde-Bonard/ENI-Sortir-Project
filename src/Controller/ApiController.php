@@ -2,7 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Ville;
+use App\Repository\LieuRepository;
+use App\Repository\VilleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -14,14 +18,9 @@ final class ApiController extends AbstractController
         int $ville_id,
         LieuRepository $repository,
         SerializerInterface $serializer,
-        ): Response
+        ): JsonResponse
     {
-        $lieux = $repository->createQueryBuilder('l')
-            ->where('l.ville = :ville_id')
-            ->setParameter('ville_id', $ville_id)
-            ->getQuery()
-            ->getResult();
-
+        $lieux = $repository->findBy(['ville' => $ville_id]);
         return $this->json($lieux, Response::HTTP_OK, [], ['groups' => ['lieux_par_ville']]);
     }
 }
