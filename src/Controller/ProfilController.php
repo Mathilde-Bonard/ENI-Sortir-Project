@@ -27,19 +27,19 @@ final class ProfilController extends AbstractController
     }
 
     //Route vers la page des détails du profil de l'utilisateur connecté
-    #[Route('/details/{id}', name: 'details', requirements: ['id' => '\d+'])]
-    public function myProfil(int $id, UserRepository $utilisateurRepository): Response
-    {
-        $utilisateur = $utilisateurRepository->find($id);
-
-        if (!$utilisateur) {
-            throw $this->createNotFoundException('Ooooops! Utilisateur introuvable :/');
-        }
-
-        return $this->render('profil/details.html.twig', [
-            'user' => $utilisateur,
-        ]);
-    }
+//    #[Route('/details/{id}', name: 'details', requirements: ['id' => '\d+'])]
+//    public function myProfil(int $id, UserRepository $utilisateurRepository): Response
+//    {
+//        $utilisateur = $utilisateurRepository->find($id);
+//
+//        if (!$utilisateur) {
+//            throw $this->createNotFoundException('Ooooops! Utilisateur introuvable :/');
+//        }
+//
+//        return $this->render('profil/details.html.twig', [
+//            'user' => $utilisateur,
+//        ]);
+//    }
 
 // ================================== Route modification d'un profil ==================================
 
