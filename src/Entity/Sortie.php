@@ -219,6 +219,17 @@ class Sortie
         return $this;
     }
 
+    public function toggleParticipant(User $participant): bool
+    {
+        if ($this->participants->contains($participant)) {
+            $this->removeParticipant($participant);
+            return false;
+        } else {
+            $this->addParticipant($participant);
+            return true;
+        }
+    }
+
     public function getOrganisateur(): ?User
     {
         return $this->organisateur;

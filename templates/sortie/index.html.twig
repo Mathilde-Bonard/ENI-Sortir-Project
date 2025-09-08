@@ -3,27 +3,30 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
-    <main class="w-full p-3">
+    <main class="w-full rounded-t-xl">
         <section>
-            <div class="p-3 bg-[#D7EAA5] rounded-xl text-neutral-800 shadow-xl">
-                <h1 class="text-xl font-medium text-neutral-900 mb-3">Filtrer les sorties</h1>
-
+            <div class="p-3 text-neutral-800">
+                <div class="flex gap-2 items-center text-neutral-50 mb-5">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
+                        <path d="M10 3.75a2 2 0 1 0-4 0 2 2 0 0 0 4 0ZM17.25 4.5a.75.75 0 0 0 0-1.5h-5.5a.75.75 0 0 0 0 1.5h5.5ZM5 3.75a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 .75.75ZM4.25 17a.75.75 0 0 0 0-1.5h-1.5a.75.75 0 0 0 0 1.5h1.5ZM17.25 17a.75.75 0 0 0 0-1.5h-5.5a.75.75 0 0 0 0 1.5h5.5ZM9 10a.75.75 0 0 1-.75.75h-5.5a.75.75 0 0 1 0-1.5h5.5A.75.75 0 0 1 9 10ZM17.25 10.75a.75.75 0 0 0 0-1.5h-1.5a.75.75 0 0 0 0 1.5h1.5ZM14 10a2 2 0 1 0-4 0 2 2 0 0 0 4 0ZM10 16.25a2 2 0 1 0-4 0 2 2 0 0 0 4 0Z"></path>
+                    </svg>
+                    <h3 class="text-lg/3 mt-0.5">Filtres</h3>
+                </div>
                 {% form_theme filterForm 'views/form/form-theme.html.twig' %}
 
                 <div class="w-full text-sm">
                     {{ form_start(filterForm, {attr: {id: 'filterForm'}}) }}
                     {{ form_row(filterForm.campus) }}
                     {{ form_row(filterForm.nom) }}
-                    <p class="text-sm font-medium text-neutral-900">Date comprise entre</p>
-                    <div class="grid grid-cols-2 gap-2 mt-1">
+                    <div class="grid grid-cols-2 gap-2">
                         {{ form_row(filterForm.dateIntervalDebut) }}
                         {{ form_row(filterForm.dateIntervalFin) }}
                     </div>
-{#                    <p class="text-sm font-medium text-neutral-900 mb-1">Filtres supplémentaires</p>#}
 {#                    {{ form_row(filterForm.filters) }}#}
-                    <button class="transition w-full text-white bg-neutral-800 pt-2 pb-1 rounded-full text-smg">
+                    <button class="transition w-full font-medium text-neutral-800 border-2 bg-yellow-100 pt-2 pb-1 mt-1 rounded-full text-smg">
                         Rechercher
                     </button>
+{#                    <p class="text-sm text-neutral-50 mt-2">Filtres supplémentaires</p>#}
                     {{ form_end(filterForm) }}
                 </div>
             </div>
@@ -33,48 +36,15 @@
 
 {#            </div>#}
 {#        </section>#}
-        <section class="mt-3" id="listContainer">
-            {% include 'views/sortie/_list.html.twig' with { sorties: sorties } %}
+        <section >
+            <div id="listContainer">
+                {% include 'views/sortie/_list.html.twig' with { sorties: sorties } %}
+            </div>
         </section>
     </main>
 {% endblock %}
 
 {% block extraJs %}
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-
-            const $FILTER_FORM = document.getElementById('filterForm');
-            const $LIST_CONTAINER = document.getElementById('listContainer');
-            const $FILTER_CONTAINER = document.getElementById('filterContainer');
-
-            $FILTER_FORM.addEventListener('submit', (e) => {
-                e.preventDefault();
-
-                const formData = new FormData($FILTER_FORM);
-                const params = new URLSearchParams(formData);
-
-                // Affiche les filtres actifs
-                // $FILTER_CONTAINER.innerHTML = '';
-                // params.forEach((value, key) => {
-                //     if (value) {
-                //         const cleanKey = key.replace(/^filter\[(.*)]$/, '$1');
-                //         const filter = `<div class="bg-slate-800/20 px-3 pt-2 pb-1.5 rounded-full text-xs text-neutral-700">${cleanKey}: ${value}</div>`;
-                //         $FILTER_CONTAINER.innerHTML += filter;
-                //     }
-                // });
-
-                // Requête AJAX
-                const url = $FILTER_FORM.getAttribute('action') + '?' + params.toString();
-                fetch(url, {
-                    method: 'GET',
-                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
-                })
-                    .then(response => response.text())
-                    .then(html => {
-                        $LIST_CONTAINER.innerHTML = html;
-                    })
-                    .catch(err => console.error('Erreur Ajax:', err));
-            });
-        });
-    </script>
+    <script src="{{ asset('/js/subcription.js') }}"></script>
+    <script src="{{ asset('/js/filterRequest.js') }}"></script>
 {% endblock %}

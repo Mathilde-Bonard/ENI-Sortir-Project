@@ -1,24 +1,33 @@
 {# templates/form/form.html.twig #}
 
 {% block form_row %}
-    <div class="form-line relative w-full mb-3 gap-3">
-        <div class="form-label absolute top-0 left-3 px-5 -translate-2.5">
-            {{ form_label(form, null, { label_attr: { class: 'text-xs bg-[#D7EAA5] px-1' } }) }}
-        </div>
-        {{ form_widget(form, { attr: { class: 'w-full rounded-full gap-3 border py-1.5 px-3 text-xs' } }) }}
+    <div class="form-line relative w-full mb-2 gap-3">
+        {{ form_widget(form, { attr: { class: 'w-full rounded-full bg-neutral-800 text-neutral-200 border-neutral-50 border-2 py-1.5 pt-2 px-3 text-xs' } }) }}
     </div>
 {% endblock %}
 
 {% block choice_widget_expanded %}
+    {% if expanded and multiple %}
     <div class="flex flex-col gap-1 justify-center">
         {% for child in form %}
             <div class="inline-flex items-center gap-3 text-xs">
                 {{ form_widget(child) }}
                 <div class="mt-1">
                     {{ form_label(child) }}
-
                 </div>
             </div>
         {% endfor %}
     </div>
+    {% else %}
+        <div class="flex flex-wrap gap-1">
+            {% for child in form %}
+                <label class="transition radio-btn cursor-pointer text-xs px-3 py-1 pt-1.5  text-neutral-300 bg-neutral-800 border-2 font-medium border-neutral-50 rounded-full
+                      ">
+                    {{ form_widget(child, {attr: {class: "hidden"}}) }}
+                    {{ child.vars.label|capitalize }}
+                </label>
+            {% endfor %}
+        </div>
+    {% endif %}
 {% endblock %}
+
