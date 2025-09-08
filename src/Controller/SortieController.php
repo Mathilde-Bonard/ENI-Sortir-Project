@@ -73,7 +73,7 @@ final class SortieController extends AbstractController
             $em->persist($sortie);
             $em->flush();
             $this->addFlash('success','Sortie ajoutée !');
-            return $this->redirectToRoute('app_sortie');
+            return $this->redirectToRoute('sortie_detail', ['id' => $sortie->getId()]);
         }
 
         return $this->render('sortie/create.html.twig', [
