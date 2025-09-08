@@ -1,0 +1,135 @@
+<div class="w-full sortie_listener">
+    <section class="overflow-hidden">
+        <div class="w-full relative rounded-t-xl overflow-hidden">
+            <img src="{{ asset('/img/sortie/pexels-harrisonhaines-3536274.jpg') }}" alt=""
+                 class="aspect-5/3 object-cover">
+            <div class="absolute top-0 left-0 p-3 bg-neutral-800/30 h-full w-full"></div>
+        </div>
+    </section>
+    <section class="relative mt-[-20px] z-2 overflow-hidden sortie {{ sortie.etat | lower }} {{ app.user in sortie.participants ? 'inscrit' : '' }}">
+        <div class="rounded-t-xl sortie__container">
+            <div class="p-3 pt-5">
+                <div class="flex gap-3 mb-5">
+                    <h1 class="font-medium text-3xl">{{ sortie.nom }}</h1>
+                    <div class="flex-none ms-auto font-semibold px-3 py-2 pb-1 rounded-full h-full text-sm sortie__btn">
+                        # {{ sortie.etat | capitalize }}
+                    </div>
+                </div>
+                <div class="w-full flex flex-col mb-5 text-sm sortie-info">
+                    <div class=" flex gap-1 items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                             stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z"></path>
+                        </svg>
+                        <span class="mt-1">{{ sortie.dateHeureDebut | date('F d Y • g a') }}</span>
+                    </div>
+                    <div class="flex gap-1 items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                             stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0Z"></path>
+                        </svg>
+                        <span class="mt-1">{{ sortie.lieu }}, {{ sortie.lieu.ville }}</span>
+                    </div>
+                    <div class="flex gap-1 items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                             stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path>
+                        </svg>
+                        <span class="mt-1">{{ sortie.duree }} heure(s)</span>
+                    </div>
+                </div>
+                <div class="info mb-5">
+                    <h3 class="font-semibold mb-2">A propos</h3>
+                    <p class="text-sm">{{ sortie.infosSortie }}</p>
+                </div>
+                <div class="flex mb-5 items-center">
+                    <div class="orga">
+                        <h3 class="font-semibold mb-2">Organisateur</h3>
+                        <div class="orga flex items-center">
+                            <div class="me-2">
+                                <img src="{{ asset("/img/user/pexels-emilygarland-1499327.jpg") }}" alt="placeholder"
+                                     class="rounded-full w-11 h-11">
+                            </div>
+                            <div>
+                                <p class="font-semibold text-sm">{{ sortie.organisateur }}</p>
+                                <div class="flex opacity-80 items-center text-xs"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"></path>
+                                    </svg>
+                                    <span class="pt-0.5">Campus {{ app.user.campus | capitalize }}</span></div>                            </div>
+                        </div>
+                    </div>
+                    <div class="participants ms-auto">
+                        <h3 class="font-medium mb-2 text-end">Participants</h3>
+                        <div class="flex items-center ms-[-2px]">
+                            <div class="flex *:me-[-15px] relative">
+                                {% for participant in sortie.participants[:3] %}
+                                    <div class="rounded-full">
+                                        <img src="{{ asset('/img/user/pexels-joaojesusdesign-1080213.jpg') }}"
+                                             alt="placeholder"
+                                             class="participant-img rounded-full border-2 w-11 h-11 border-[#f0f0e6]">
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="ms-5 bg-neutral-800 border-2 border-[#f0f0e6] h-11 w-11 rounded-full text-[#f0f0e6] flex items-center justify-center">
+                                <span class="text-sm font-medium mt-1">+{{ (sortie.participants | length) - 3 }}</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <h3 class="font-semibold mb-2">Lieu du rendez-vous</h3>
+            </div>
+
+            <div class="relative border-t-2 border-dashed sortie__btn w-full">
+                <div class="absolute w-full flex">
+                    <div class="aspect-square w-6 bg-neutral-800 rounded-full -translate-x-3 -translate-y-3.5"></div>
+                    <div class="aspect-square w-6 bg-neutral-800 rounded-full ms-auto translate-x-3 -translate-y-3.5"></div>
+
+                </div>
+                {#                    <p class="text-center text-sm opacity-70 mb-1"></p>#}
+                <div class="font-bold py-7 uppercase text-2xl text-center sortie__btn">
+
+                    {% if sortie.etat == "INSC_OUVERTE" %}
+                        {% if app.user == sortie.organisateur %}
+                            <div class="flex-none pe-5 ms-7 py-1.5 pb-0.5 rounded-full">
+                                Inscription en cours
+                            </div>
+                        {% else %}
+                            <div class="sub_btn flex-none pe-5 ms-7 py-1.5 pb-0.5 rounded-full cursor-pointer"
+                                 data-url="{{ path('sortie_subscribe', {id: sortie.id}) }}">
+                                {% if app.user in sortie.participants %}
+                                    Se désinscrire
+                                {% else %}
+                                    S'inscrire
+                                {% endif %}
+                            </div>
+                        {% endif %}
+
+                    {% elseif  sortie.etat == "INSC_CLOTUREE" %}
+                        <div class="flex-none pe-5 ms-7 py-1.5 pb-0.5 rounded-full">
+                            Clôturée
+                        </div>
+                    {% elseif  sortie.etat == "ANNULEE" %}
+                        <div class="flex-none pe-5 ms-7 py-1.5 pb-0.5 rounded-full">
+                            Annulée
+                        </div>
+                    {% elseif  sortie.etat == "ACTIVITE_EN_COURS" %}
+                        <div class="flex-none pe-5 ms-7 py-1.5 pb-0.5 rounded-full">
+                            En cours
+                        </div>
+                    {% elseif  sortie.etat == "CREEE" %}
+                        {% if app.user == sortie.organisateur %}
+                            <div class="flex-none pe-5 ms-7 py-1.5 pb-0.5 rounded-full">
+                                Publier
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

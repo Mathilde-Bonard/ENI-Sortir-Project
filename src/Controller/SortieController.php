@@ -4,10 +4,14 @@ namespace App\Controller;
 
 ;
 use App\Entity\Sortie;
+use App\Entity\User;
 use App\Form\SortieType;
 use App\Form\FilterType;
 use App\Repository\SortieRepository;
 
+use App\Services\SortieCanceler;
+use App\Services\SortieEtatUpdater;
+use App\Services\SortieSubscriber;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,10 +23,13 @@ final class SortieController extends AbstractController
 {
     #[Route('', name: 'list', methods: ['GET'])]
     #[Route('/accueil', name: 'list_2', methods: ['GET'])]
-    public function index(Request $request, SortieRepository $sortieRepository): Response
+    public function index(Request $request,
+                          SortieRepository $sortieRepository,
+                          SortieEtatUpdater $etatUpdater): Response
     {
-
         $sorties = $sortieRepository->readAllDateDesc();
+
+        $etatUpdater->updateAll($sorties);
 
         $filterForm = $this->createForm(FilterType::class, null, [
             'method' => 'GET',
@@ -42,9 +49,9 @@ final class SortieController extends AbstractController
         return $this->render('sortie/index.html.twig', [
             'filterForm' => $filterForm->createView(),
             'sorties' => $sorties,
-
         ]);
     }
+
     #[Route('/add', name: 'sortie_add')]
     public function add(
         Request $request,
@@ -66,7 +73,7 @@ final class SortieController extends AbstractController
             $em->persist($sortie);
             $em->flush();
             $this->addFlash('success','Sortie ajoutée !');
-            return $this->redirectToRoute('app_sortie');
+            return $this->redirectToRoute('sortie_detail', ['id' => $sortie->getId()]);
         }
 
         return $this->render('sortie/create.html.twig', [
@@ -76,8 +83,20 @@ final class SortieController extends AbstractController
     }
 
     #[Route('/sortie/{id}', name: 'detail', requirements: ['id' => '\d+'])]
-    public function detail(Sortie $sortie): Response
+    public function detail(SortieRepository $sortieRepository, int $id, SortieEtatUpdater $etatUpdater): Response
     {
+        try {
+            $sortie = $sortieRepository->readById($id);
+
+            $etatUpdater->update($sortie);
+        } catch (\Exception $e) {
+            throw $this->createNotFoundException("Sortie incconnue");
+        }
+
+        if (!$sortie) {
+            throw $this->createNotFoundException('Sortie non trouvée');
+        }
+
         return $this->render('sortie/detail.html.twig', [
             'sortie' => $sortie
         ]);
@@ -113,6 +132,45 @@ final class SortieController extends AbstractController
             ]);
         }
 
+
+    #[Route('/sortie/{id}/sub', name: 'subscribe', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function subscribe(Sortie $sortie,
+                              Request $request,
+                              SortieEtatUpdater $etatUpdater,
+                              SortieSubscriber $sortieSubscriber): Response
+    {
+        //TODO: redirect 404 -> sinon le templete error/errorSystem s'affiche à la place de la sortie;
+        $etatUpdater->update($sortie);
+        $user = $this->getUser();
+
+        if (!$user instanceof User) {
+            throw $this->createAccessDeniedException("Connexion obligatoire");
+        }
+
+        $result = $sortieSubscriber->subscription($sortie, $user);
+
+        $referer = $request->headers->get('referer');
+        $template = str_contains($referer, "/sortie") ? 'sortie/detail.html.twig' : 'views/sortie/_sortie.html.twig';
+
+        return $this->render($template, [
+            'sortie' => $sortie,
+            'result' => $result,
+        ]);
+    }
+
+    #[Route('/sortie/{id}/cancel', name: 'cancel', requirements: ['id' => '\d+'])]
+    public function cancel(Sortie $sortie, SortieCanceler $canceler): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user instanceof User || $user !== $sortie->getOrganisateur()) {
+            throw $this->createAccessDeniedException("Acces refusé");
+        }
+
+        $canceler->cancel($sortie);
+
+        return $this->redirectToRoute('sortie_detail', ['id' => $sortie->getId()]);
+    }
 }
 
 

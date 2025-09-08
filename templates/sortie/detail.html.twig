@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <main>
+        {% include 'views/sortie/_details.html.twig' with { sortie: sortie } %}
+    </main>
+
+    {% block extraJs %}
+        <script src="{{ asset('/js/subcription.js') }}"></script>
+    {% endblock %}
+{% endblock %}
+
+{% block title %}{{ sortie.nom }}{% endblock %}

@@ -25,9 +25,14 @@ class FilterType extends AbstractType
                     return $campusRepository->createQueryBuilder('c');
                 },
                 'placeholder' => 'Tous les campus',
+                'expanded' => true, // rend le select en boutons radio
+                'multiple' => false, // un seul choix possible (radio)
             ])
             ->add('nom', TextType::class, [
                 "required" => false,
+                'attr' => [
+                    'placeholder' => 'Recherche par nom',
+                ],
             ])
             ->add('dateIntervalDebut', DateType::class, [
                 "required" => false,
