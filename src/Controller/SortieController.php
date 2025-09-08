@@ -3,9 +3,15 @@
 namespace App\Controller;
 
 ;
+
+use App\Entity\Etat;
+use App\Entity\Lieu;
 use App\Entity\Sortie;
+use App\Form\LieuType;
 use App\Form\SortieType;
 use App\Form\FilterType;
+use App\Repository\EtatRepository;
+use App\Repository\LieuRepository;
 use App\Repository\SortieRepository;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -49,19 +55,24 @@ final class SortieController extends AbstractController
     public function add(
         Request $request,
         EntityManagerInterface $em,
+        EtatRepository $etatRepository,
+        LieuRepository $lieuRepository,
     ): Response
     {
         $sortie = new Sortie();
         $user = $this->getUser();
+        $etatCreee = $etatRepository->findOneBy(['libelle' => 'CREEE']);
+
+        // Pré-selection du campus -> campus du user connecté
         $sortie->setCampus($user->getCampus());
 
         $sortieFormCreation = $this->createForm(SortieType::class, $sortie);
-
         $sortieFormCreation->handleRequest($request);
 
         if ($sortieFormCreation->isSubmitted() && $sortieFormCreation->isValid()) {
-
+            // Non rempli par le user -> organisateur = user, état = CREEE
             $sortie->setOrganisateur($this->getUser());
+            $sortie->setEtat($etatCreee);
 
             $em->persist($sortie);
             $em->flush();
@@ -69,9 +80,23 @@ final class SortieController extends AbstractController
             $this->addFlash('success','Sortie ajoutée !');
             return $this->redirectToRoute('sortie_list');
         }
+        // Formulaire d'ajout de lieu dans la modale
+        $lieu = new Lieu();
+        $lieuFormCreation = $this->createForm(LieuType::class, $lieu);
+
+        $lieuFormCreation->handleRequest($request);
+        if ($lieuFormCreation->isSubmitted() && $lieuFormCreation->isValid()) {
+            $em->persist($lieu);
+            $em->flush();
+
+            $this->addFlash('success', 'Nouveau lieu ajouté !');
+        }
+
+    //TODO render lieu.rue et lieu.cp pour la vue
 
         return $this->render('sortie/create.html.twig', [
             'sortieFormCreation' => $sortieFormCreation->createView(),
+            'lieuFormCreation' => $lieuFormCreation->createView(),
         ]);
     }
 

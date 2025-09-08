@@ -32,10 +32,6 @@ class SortieType extends AbstractType
             ])
             ->add('nbInscriptionMax')
             ->add('infosSortie')
-            ->add('etat', EntityType::class, [
-                'class' => Etat::class,
-                'choice_label' => 'libelle',
-            ])
             ->add('ville', EntityType::class, [
                 'class' => Ville::class,
                 'choice_label' => 'nom',

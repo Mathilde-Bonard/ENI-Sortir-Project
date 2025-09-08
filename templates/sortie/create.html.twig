@@ -18,7 +18,6 @@
                 {{ form_row(sortieFormCreation.dateLimiteInscription) }}
                 {{ form_row(sortieFormCreation.nbInscriptionMax) }}
                 {{ form_row(sortieFormCreation.infosSortie) }}
-                {{ form_row(sortieFormCreation.etat) }}
 
                 {{ form_row(sortieFormCreation.ville) }}
 
@@ -26,6 +25,7 @@
                 {{ form_row(sortieFormCreation.lieu) }}
                     <button id="addLieuButton" type="button">+</button>
                     <section class="lieu_details">
+                        //TODO renvoyer dans l'appel API la rue, code postal, latitude, longitude ?
                         <p>Rue : </p>
                         <p>Code Postal : </p>
                     </section>
@@ -40,20 +40,26 @@
     </section>
 </main>
 
-{#    <div class="modal-lieu">#}
-{#        <div class="modal-content">#}
-{#            <h2>Nouveau lieu</h2>#}
-{#            {{ form_start(lieuFormCreation) }}#}
-{#            {{ form_widget(lieuFormCreation) }}#}
-{#            {{ form_end(lieuFormCreation) }}#}
-{#        </div>#}
-{#    </div>#}
+    <div class="modal-lieu">
+        <div class="modal-content">
+            <h2>Nouveau lieu</h2>
+            <section id="lieu_form" class="form">
+                {{ form_start(lieuFormCreation) }}
+                {{ form_row(lieuFormCreation.nom) }}
+                {{ form_row(lieuFormCreation.rue) }}
+                {{ form_row(lieuFormCreation.latitude) }}
+                {{ form_row(lieuFormCreation.longitude) }}
+                {{ form_row(lieuFormCreation.ville) }}
+                {{ form_widget(lieuFormCreation.submit) }}
+                {{ form_end(lieuFormCreation) }}
+            </section>
+        </div>
+    </div>
 
     {% block extraJs %}
         <script>
 
             // Affichage des lieux correspondant à la ville sélectionnée
-            // Problème avec villeId
 
             document.addEventListener('DOMContentLoaded', function() {
                 const selectVille = document.getElementById('sortie_ville');
@@ -71,7 +77,6 @@
                         fetch(apiBaseUrl + 'api/lieux/' + villeId)
                             .then(response => response.json())
                             .then(data => {
-                                console.log(data)
                                 // Affichage du nom du lieu dans le select
                                 for (const lieu of data) {
                                     const option = document.createElement('option');
@@ -82,19 +87,41 @@
                             });
                     }
                 });
+                // Affichage de la rue et du cp quand le lieu est renseigné
+                const lieuDetails = document.querySelector('.lieu_details');
+                selectLieu.addEventListener('input', function (){
+                    lieuDetails.style.display = 'flex';
+                })
             });
 
-            // let lieu = document.querySelector('.modal-lieu')
-            //
-            // document.querySelector('#addLieuButton').addEventListener('click',function (){
-            //     lieu.style.display = 'flex';
-            // })
-            //
-            // lieu.addEventListener('click', function(event) {
-            //     if (event.target === lieu) {
-            //         lieu.style.display = 'none';
-            //     }
-            // });
+            // Ouverture de la modal au click du +
+            let lieu = document.querySelector('.modal-lieu')
+
+            document.querySelector('#addLieuButton').addEventListener('click',function (){
+                lieu.style.display = 'flex';
+            })
+
+            lieu.addEventListener('click', function(event) {
+                if (event.target === lieu) {
+                    lieu.style.display = 'none';
+                }
+            });
+
+            // Traitement du formulaire d'un nouveau lieu dans la modale
+
+            const lieuForm = document.querySelector('#lieu_form');
+
+            lieuForm.addEventListener('submit', function (event){
+
+                event.preventDefault();
+
+                const formData = new formData(lieuForm);
+                const data = {
+                    nom: formData.get(lieu['nom']),
+                    rue: formData.get(lieu['lieu']),
+
+                }
+            })
 
 
 
