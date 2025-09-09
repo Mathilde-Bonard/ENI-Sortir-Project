@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% form_theme userUpdateForm 'views/form/Form-template.html.twig' %}
+{#{% form_theme userUpdateForm 'views/form/Form-template.html.twig' %}#}
 
 {% block body %}
     <main class="w-full p-3">
@@ -8,7 +8,7 @@
             <div class="p-3 bg-[#D7EAA5] rounded-xl text-neutral-800 shadow-xl">
                 <h1 class="text-xl font-medium text-neutral-900 mb-3">Modification du profil</h1>
 
-                {% form_theme userUpdateForm 'views/form/form-theme.html.twig' %}
+                {% form_theme userUpdateForm 'views/form/form-theme-profil.html.twig' %}
                 <div class="w-full text-sm">
                     {{ form_start(userUpdateForm) }}
                     {{ form_widget(userUpdateForm) }}
