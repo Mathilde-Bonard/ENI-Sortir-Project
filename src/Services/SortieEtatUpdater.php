@@ -18,6 +18,7 @@ class SortieEtatUpdater
     {
         $now = new \DateTime('now');
         $etat = $sortie->getEtat();
+        $finSortie = (clone $sortie->getDateHeureDebut())->modify("+{$sortie->getDuree()} hours");
 
         switch ($etat) {
             case "CREEE":
@@ -25,8 +26,11 @@ class SortieEtatUpdater
             case "ARCHIVEE":
                 break;
 
+            case "PASSEE":
+                if ($now >= (clone $finSortie)->modify("+1 month")) { $etatUpdated = "HISTORISEE"; }
+                break;
+
             default:
-                $finSortie = (clone $sortie->getDateHeureDebut())->modify("+{$sortie->getDuree()} hours");
 
                 if ($now >= $sortie->getDateHeureDebut() && $now < $finSortie) {
                     $etatUpdated = 'ACTIVITE_EN_COURS';
@@ -39,13 +43,11 @@ class SortieEtatUpdater
                 }
 
                 if ($etat->getLibelle() !== $etatUpdated) {
-                    dump($etat, $etatUpdated);
-
                     $etatEntity = $this->entityManager->getRepository(Etat::class)->findOneBy(['libelle' => $etatUpdated]);
                     $sortie->setEtat($etatEntity);
                     $this->entityManager->persist($sortie);
+                    $this->entityManager->flush();
                 }
-                $this->entityManager->flush();
                 break;
         }
     }
