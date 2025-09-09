@@ -20,10 +20,9 @@
                 {{ form_row(sortieFormCreation.ville) }}
 
                 <div class="sortie-lieu">
-                {{ form_row(sortieFormCreation.lieu) }}
-                    <button id="addLieuButton" type="button">+</button>
+                    <button id="addLieuButton" type="button" class="transition w-10 font-medium text-neutral-800 border-2 bg-yellow-100 pt-2 pb-1 mt-1 rounded-full text-smg">+</button>
+                    {{ form_row(sortieFormCreation.lieu) }}
                     <section class="lieu_details">
-                        //TODO renvoyer dans l'appel API la rue, code postal, latitude, longitude ?
                         <p>Rue : </p>
                         <p>Code Postal : </p>
                     </section>
@@ -39,6 +38,7 @@
     </main>
 
     <div class="modal-lieu">
+        {% form_theme lieuFormCreation 'views/form/form-theme-sortie.html.twig' %}
         <div class="modal-content">
             <h2>Nouveau lieu</h2>
                 {{ form_start(lieuFormCreation) }}
@@ -58,6 +58,7 @@
 ////////////// CONSTANTES
 
             const selectVille = document.getElementById('sortie_ville');
+            const selectLieuVille = document.getElementById('lieu_ville');
             const selectLieu = document.getElementById('sortie_lieu');
             const lieuModal = document.querySelector('.modal-lieu');
             const lieuForm = document.querySelector('#lieu_form');
@@ -80,6 +81,19 @@
                             selectLieu.appendChild(option);
                         }
                     });
+            }
+
+            function refreshVille(villeId) {
+                const apiBaseUrl = '{{ path('sortie_list') }}';
+                fetch(apiBaseUrl + 'api/ville/' + villeId)
+                    .then(response=>response.json())
+                    .then(data => {
+                        const option = document.createElement('option');
+                        option.value = data.id;
+                        option.textContent = data.nom;
+                        option.selected = true;
+                        selectLieuVille.appendChild(option);
+                    })
             }
 
             // Affichage des lieux correspondant à la ville sélectionnée
@@ -108,11 +122,11 @@
                 // Ouverture de la modal au click du +
 
                 // Présélection de la ville
-                const selectLieuVille = document.getElementById('lieu_ville');
-                refreshLieux();
+                refreshVille(selectVille);
                 selectLieuVille.value = selectVille.value;
 
                 buttonAddLieu.addEventListener('click',function (){
+                    refreshLieux(selectLieuVille);
                     lieuModal.style.display = 'flex';
                 })
                 // Sortie de la modale quand click en dehors

@@ -18,6 +18,21 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 #[Route('/api', name: 'api_')]
 final class ApiController extends AbstractController
 {
+    #[Route('/ville/{villeId}', name: 'ville_id', methods: ['GET'])]
+    public function getVilleById(
+        int $villeId,
+        VilleRepository $villeRepository,
+        SerializerInterface $serializer
+    ): JsonResponse
+    {
+        $ville = $villeRepository->find($villeId);
+        if (!$ville) {
+            throw $this->createNotFoundException('Ville non trouvée');
+        }
+        return $this->json($serializer->serialize($ville, 'json'));
+
+    }
+
     #[Route(path: '/lieux/{ville_id}', name: 'lieux_par_ville', methods: 'GET')]
     public function getLieuxParVille(
         int $ville_id,
