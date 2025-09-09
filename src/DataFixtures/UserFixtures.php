@@ -28,7 +28,8 @@ class UserFixtures extends Fixture  implements DependentFixtureInterface
             ->setTelephone('07 14 57 84 77')
             ->setEmail('john.doe@gmail.com')
             ->setPassword($this->userPasswordHasher->hashPassword($admin, 'password'))
-            ->setRoles(['ROLE_ADMIN']);
+            ->setRoles(['ROLE_ADMIN'])
+            ->setImageFileName('userNoImage.png');
 
         $campus = $this->getReference(CampusFixtures::CAMPUS_REFERENCE . '1', Campus::class);
         $admin->setCampus($campus);
@@ -42,7 +43,8 @@ class UserFixtures extends Fixture  implements DependentFixtureInterface
                 ->setPseudo($faker->userName())
                 ->setTelephone($faker->phoneNumber())
                 ->setEmail($faker->email())
-                ->setPassword($this->userPasswordHasher->hashPassword($user, $faker->password()));
+                ->setPassword($this->userPasswordHasher->hashPassword($user, $faker->password()))
+                ->setImageFileName('userNoImage.png');;
 
             $categoryName = CampusFixtures::CAMPUS_REFERENCE . $faker->numberBetween(0, 2);
             $campus = $this->getReference($categoryName, Campus::class);

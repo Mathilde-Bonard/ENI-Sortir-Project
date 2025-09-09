@@ -6,6 +6,7 @@ use App\Form\UserType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -38,7 +39,8 @@ final class ProfilController extends AbstractController
     #[Route('/update', name: 'update')]
     public function update(
         Request $request,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        #[Autowire('%photo_dir%')] string $photoDir
     ): Response
     {
         $user = $this->getUser();
@@ -50,7 +52,11 @@ final class ProfilController extends AbstractController
             throw $this->createNotFoundException('Oooops ! Utilisateur inexistant.');
         }
         if ($userForm->isSubmitted() && $userForm->isValid()) {
-
+            if ($photo = $userForm['photo']->getData()) {
+                $fileName = uniqid() . '.' . $photo->guessExtension();
+                $photo->move($photoDir, $fileName);
+                $user->setImageFileName($fileName);
+            }
             $entityManager->persist($user);
             $entityManager->flush();
 

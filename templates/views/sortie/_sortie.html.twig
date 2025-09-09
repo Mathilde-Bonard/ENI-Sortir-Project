@@ -59,10 +59,9 @@
             </div>
             <div class="flex text-sm mt-3 w-full">
                 <div class="sortie__users flex items-center w-full font-semibold">
-                    {# TODO path Userprofil #}
-                    <a href="">
+                    <a href="{{ path('app_profil_details', { 'id' : sortie.organisateur.id }) }}">
                         <div class="me-1 flex-none rounded-full">
-                            <img src="{{ asset("/img/user/pexels-emilygarland-1499327.jpg") }}" alt="placeholder"
+                            <img src="{{ asset("/img/user/" ~ sortie.organisateur.imageFileName) }}" alt="placeholder"
                                  class="participant rounded-full border-2 w-9 h-9">
                         </div>
                     </a>
@@ -70,7 +69,7 @@
                         <div class="flex *:me-[-18px] relative">
                             {% for participant in sortie.participants[:3] %}
                                 <div class="rounded-full">
-                                    <img src="{{ asset('/img/user/pexels-joaojesusdesign-1080213.jpg') }}"
+                                    <img src="{{ asset('/img/user/' ~ participant.imageFileName) }}"
                                          alt="placeholder"
                                          class="participant rounded-full border-2 w-9 h-9">
                                 </div>

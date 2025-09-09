@@ -6,8 +6,7 @@
             <div class="absolute top-0 left-0 p-3 bg-neutral-800/30 h-full w-full"></div>
         </div>
     </section>
-    <section
-            class="relative mt-[-20px] z-2 overflow-hidden sortie {{ sortie.etat | lower }} {{ app.user in sortie.participants ? 'inscrit' : '' }}">
+    <section class="relative mt-[-20px] z-2 overflow-hidden sortie {{ sortie.etat | lower }} {{ app.user in sortie.participants ? 'inscrit' : '' }}">
         <div class="rounded-t-xl sortie__container">
             <div class="p-3 pt-5">
                 <div class="flex items-start gap-3 mb-5">
@@ -74,11 +73,10 @@
                 </div>
                 <div class="orga mb-5 w-fit">
                     <h3 class="font-semibold mb-2">Organisateur</h3>
-                    {# TODO path Userprofil #}
-                    <a href="" class="w-fit">
+                    <a href="{{ path('app_profil_details', { 'id' : sortie.organisateur.id }) }}" class="w-fit">
                         <div class="orga flex items-center">
                             <div class="me-2">
-                                <img src="{{ asset("/img/user/pexels-emilygarland-1499327.jpg") }}" alt="placeholder"
+                                <img src="{{ asset("/img/user/" ~ sortie.organisateur.imageFileName ) }}" alt="placeholder"
                                      class="rounded-full w-11 h-11">
                             </div>
                             <div>
@@ -103,7 +101,7 @@
                         <div class="flex *:me-[-20px] relative">
                             {% for participant in sortie.participants[:3] %}
                                 <div class="rounded-full">
-                                    <img src="{{ asset('/img/user/pexels-joaojesusdesign-1080213.jpg') }}"
+                                    <img src="{{ asset('/img/user/' ~ participant.imageFileName) }}"
                                          alt="placeholder"
                                          class="participant-img rounded-full border-2 w-11 h-11 border-[#f0f0e6]">
                                 </div>
@@ -184,9 +182,9 @@
                                 <div class="text-xs font-medium">#{{ loop.index}}</div>
                                 <div class="col-span-7">
                                     {# TODO path Userprofil #}
-                                    <a href="">
+                                    <a href="{{ path('app_profil_details', { 'id' : user.id }) }}">
                                         <div class="flex gap-2">
-                                            <img src="{{ asset("/img/user/pexels-emilygarland-1499327.jpg") }}" alt="placeholder"
+                                            <img src="{{ asset("/img/user/" ~ user.imageFileName) }}" alt="placeholder"
                                                  class="rounded-full w-11 h-11">
                                             <div class="ms-2">
                                                 <p class="font-semibold text-sm">{{ user }}</p>
