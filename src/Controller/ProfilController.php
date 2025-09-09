@@ -18,46 +18,34 @@ final class ProfilController extends AbstractController
 
 // ================================== Route affichage d'un profil ==================================
 
-    #[Route('/details', name: 'details')]
-    public function index(): Response
+    //Route vers la page des détails du profil d'un utilisateur selon l'id donné en paramètre
+    #[Route('/details/{id}', name: 'details', requirements: ['id' => '\d+'])]
+    public function myProfil(int $id, UserRepository $utilisateurRepository): Response
     {
+        $utilisateur = $utilisateurRepository->find($id);
+
+        if (!$utilisateur) {
+            throw $this->createNotFoundException('Ooooops! Utilisateur introuvable :/');
+        }
+
         return $this->render('profil/details.html.twig', [
-            'controller_name' => 'ProfilController',
+            'user' => $utilisateur,
         ]);
     }
 
-    //Route vers la page des détails du profil de l'utilisateur connecté
-//    #[Route('/details/{id}', name: 'details', requirements: ['id' => '\d+'])]
-//    public function myProfil(int $id, UserRepository $utilisateurRepository): Response
-//    {
-//        $utilisateur = $utilisateurRepository->find($id);
-//
-//        if (!$utilisateur) {
-//            throw $this->createNotFoundException('Ooooops! Utilisateur introuvable :/');
-//        }
-//
-//        return $this->render('profil/details.html.twig', [
-//            'user' => $utilisateur,
-//        ]);
-//    }
-
 // ================================== Route modification d'un profil ==================================
 
-    #[Route('/update/{id}', name: 'update', requirements: ['id' => '\d+'])]
+    #[Route('/update', name: 'update')]
     public function update(
-        int $id,
-        UserRepository $userRepository,
         Request $request,
         EntityManagerInterface $entityManager
     ): Response
     {
-        $user = $userRepository->find($id);
-
+        $user = $this->getUser();
         $userForm = $this->createForm(UserType::class, $user, [
-            'submit_label' => 'Modifier'
+            'submit_label' => 'Enregistrer'
         ]);
         $userForm->handleRequest($request);
-
         if (!$user) {
             throw $this->createNotFoundException('Oooops ! Utilisateur inexistant.');
         }
@@ -69,7 +57,6 @@ final class ProfilController extends AbstractController
             $this->addFlash('success', 'Profil mis à jour!');
             return $this->redirectToRoute('app_profil_details', ['id' => $user->getId()]);
         }
-
         return $this->render('profil/update.html.twig', [
             'userUpdateForm' => $userForm->createView(),
         ]);
