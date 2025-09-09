@@ -1,11 +1,7 @@
 <article
         class="border-b-2 border-neutral-800 sortie {{ sortie.etat | lower }} relative overflow-hidden {{ app.user in sortie.participants ? 'inscrit' : '' }}">
-    <div class="sortie__container grid grid-cols-12">
-        <div class="col-span-9 p-3 border-e-2 border-dashed border-neutral-800 relative">
-            <div class="absolute pointer-events-none top-0 left-0 h-full flex flex-col">
-                <div class="aspect-square w-5 bg-neutral-800 rounded-full -translate-x-2.5 -translate-y-3"></div>
-                <div class="aspect-square w-5 bg-neutral-800 rounded-full -translate-x-2.5 translate-y-3 mt-auto"></div>
-            </div>
+    <div class="sortie__container grid grid-cols-12 rounded-xl">
+        <div class="col-span-9 p-3 relative border-e-2 border-dashed">
             <div class="flex items-center font-medium">
                 <span class="text-base/4 opacity-80">
                     <small>
@@ -13,27 +9,25 @@
                     </small>
                 </span>
                 <div class="flex items-start gap-2 ms-auto">
-                    {# TODO: Voter ROLE_ORGANISATEUR #}
-                    {% if app.user == sortie.organisateur %}
+                    {% if sortie.etat != "ANNULEE" and sortie.etat != "PASSEE" %}
                         <div class="flex ms-auto items-center gap-2 text-neutral-200">
-                            {# TODO: sortie modify path #}
-                            <a href="{{ path('sortie_update', {'id': sortie.id}) }}"
-                               class="bg-neutral-800 p-1.5 rounded-full">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                     class="size-3">
-                                    <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z"></path>
-                                </svg>
-
-                            </a>
-
-                            {# TODO: sortie cancel path #}
-                            <a href="{{ path('sortie_cancel', {id: sortie.id}) }}"
-                               class="bg-neutral-800 p-1 rounded-full">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                     class="size-4">
-                                    <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z"></path>
-                                </svg>
-                            </a>
+                            {% if is_granted('SORTIE_EDIT', sortie) %}
+                                <a href="{{ path('sortie_update', {'id': sortie.id}) }}"
+                                   class="bg-neutral-800 p-1.5 rounded-full">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                         class="size-3">
+                                        <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z"></path>
+                                    </svg>
+                                </a>
+                            {% endif %}
+                            {% if is_granted('SORTIE_CANCEL', sortie) %}
+                                <div class="cursor-pointer bg-neutral-800 p-1 rounded-full toggle__collapse" data-target="sortie__cancel" data-sortie="{{ sortie.id }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                         class="size-4">
+                                        <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z"></path>
+                                    </svg>
+                                </div>
+                            {% endif %}
                         </div>
                     {% endif %}
                 </div>
@@ -86,23 +80,26 @@
                         {% if sortie.etat == "INSC_OUVERTE" %}
                             {% if app.user == sortie.organisateur %}
                                 <div class="flex-none pe-5 ms-7 py-1.5 pb-0.5 rounded-full">
-                                    Inscription en cours
+                                    Inscription ouverte
                                 </div>
                             {% else %}
-                                <div class="sub_btn flex-none pe-5 ms-7 py-1.5 pb-0.5 rounded-full cursor-pointer"
-                                     data-url="{{ path('sortie_subscribe', {id: sortie.id}) }}">
-                                    {% if app.user in sortie.participants %}
+                                {% if is_granted('SORTIE_UNSUBSCRIBE', sortie) %}
+                                    <div class="sub_btn flex-none pe-5 ms-7 py-1.5 pb-0.5 rounded-full cursor-pointer"
+                                    data-url="{{ path('sortie_unsub', {id: sortie.id}) }}">
                                         Se désinscrire
-                                    {% else %}
+                                    </div>
+                                {% elseif is_granted('SORTIE_SUBSCRIBE', sortie) %}
+                                    <div class="sub_btn flex-none pe-5 ms-7 py-1.5 pb-0.5 rounded-full cursor-pointer"
+                                         data-url="{{ path('sortie_sub', {id: sortie.id}) }}">
                                         S'inscrire
-                                    {% endif %}
-                                </div>
+                                    </div>
+                                {% endif %}
                             {% endif %}
 
                         {% elseif  sortie.etat == "INSC_CLOTUREE" %}
-                            {% if app.user in sortie.participants %}
+                            {% if is_granted('SORTIE_UNSUBSCRIBE', sortie) %}
                                 <div class="sub_btn flex-none pe-5 ms-7 py-1.5 pb-0.5 rounded-full cursor-pointer"
-                                     data-url="{{ path('sortie_subscribe', {id: sortie.id}) }}">
+                                     data-url="{{ path('sortie_unsub', {id: sortie.id}) }}">
                                     Se désinscrire
                                 </div>
                             {% else %}
@@ -118,31 +115,24 @@
                             <div class="flex-none pe-5 ms-7 py-1.5 pb-0.5 rounded-full">
                                 En cours
                             </div>
+                        {% elseif  sortie.etat == "PASSEE" %}
+                            <div class="flex-none pe-5 ms-7 py-1.5 pb-0.5 rounded-full">
+                                Passée
+                            </div>
                         {% endif %}
                     </div>
                 </div>
-
             </div>
-
         </div>
-        <div class="col-span-3 p-3 flex flex-col relative">
+        <div class="col-span-3 p-3 flex flex-col relative rounded-xl">
             <div class="absolute pointer-events-none top-0 left-0 h-full w-full flex flex-col">
-                <div class="flex">
-                    <div class="aspect-square w-5 bg-neutral-800 rounded-full -translate-x-3 -translate-y-3"></div>
-                    <div class="aspect-square w-5 bg-neutral-800 rounded-full ms-auto translate-x-3 -translate-y-3"></div>
-                </div>
-                <div class="flex mt-auto">
-                    <div class="aspect-square w-5 bg-neutral-800 rounded-full -translate-x-3 translate-y-3"></div>
-                    <div class="aspect-square w-5 bg-neutral-800 rounded-full ms-auto translate-x-3 translate-y-3"></div>
-                </div>
+                 <div class="aspect-square w-5 bg-neutral-800 rounded-full -translate-x-2.5 -translate-y-2.5"></div>
+                 <div class="aspect-square w-5 bg-neutral-800 rounded-full -translate-x-2.5 translate-y-2.5 mt-auto"></div>
             </div>
-
             <div class="flex h-9 w-full mt-auto text-sm">
-
-
                 <a href="{{ path('sortie_detail', {'id' : sortie.id}) }}" title="{{ sortie.nom }}" data-turbo="true"
-                   class="rounded-full bg-neutral-800 text-neutral-50">
-                    <div class="px-3 h-full py-1.5 pb-0.5 w-full rounded-full flex items-center">Details</div>
+                   class="rounded-full bg-neutral-800 text-neutral-50 flex items-center justify-center w-full pt-1">
+                    Details
                 </a>
             </div>
         </div>

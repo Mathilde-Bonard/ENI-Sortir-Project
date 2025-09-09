@@ -11,6 +11,5 @@ function subscription() {
         }
     })
 }
-document.addEventListener('DOMContentLoaded', () => {
-    subscription();
-})
+
+document.addEventListener('DOMContentLoaded', subscription)

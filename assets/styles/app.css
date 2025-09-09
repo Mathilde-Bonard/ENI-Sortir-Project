@@ -87,7 +87,19 @@ input[type="checkbox"] {
     }
 }
 
-.sortie__collapse.active{
+.sortie.passee {
+
+    .sortie__users .participant {
+        border-color: #a2a1de;
+    }
+
+    .sortie__btn {
+        background-color: #a2a1de;
+
+    }
+}
+
+.custom__collapse.active{
 
     height: 100vh;
 }
