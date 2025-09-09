@@ -5,37 +5,48 @@ namespace App\Services;
 use App\Entity\Sortie;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class SortieSubscriber
 {
     private EntityManagerInterface $entityManager;
+    private Security $security;
 
-    public function __construct(EntityManagerInterface $entityManager)
+
+    public function __construct(EntityManagerInterface $entityManager, Security $security)
     {
         $this->entityManager = $entityManager;
+        $this->security = $security;
     }
 
-
-    public function subscription(Sortie $sortie, User $user): array
+    public function sub(Sortie $sortie): bool
     {
-        if ($sortie->getEtat()->getLibelle() !== "INSC_OUVERTE") {
-            return [
-                'success' => false,
-                'subscribed' => null,
-                'message' => "Les inscriptions ne sont pas ouvertes."
-            ];
+        $user = $this->security->getUser();
+
+        if(!$user instanceof User) {
+            return false;
         }
 
-        $subscribed = $sortie->toggleParticipant($user);
+        $sortie->addParticipant($user);
         $this->entityManager->persist($sortie);
         $this->entityManager->flush();
 
-        return [
-            'success' => true,
-            'subscribed' => $subscribed,
-            'message' => $subscribed
-                ? "Vous êtes inscrit à la sortie."
-                : "Vous êtes désinscrit de la sortie."
-        ];
+        return true;
+    }
+
+    public function unSub(Sortie $sortie): bool
+    {
+        $user = $this->security->getUser();
+
+        if(!$user instanceof User) {
+            return false;
+        }
+
+        $sortie->removeParticipant($user);
+        $this->entityManager->persist($sortie);
+        $this->entityManager->flush();
+
+        return true;
     }
 }
