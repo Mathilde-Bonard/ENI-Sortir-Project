@@ -12,6 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_PSEUDO', fields: ['pseudo'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -44,20 +45,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Regex(
         pattern: '/^[\p{L}]+$/u',
         message: 'Votre nom ne peut pas contenir de chiffres',
-        match: true
     )]
     #[ORM\Column(length: 50)]
     private ?string $nom = null;
 
     #[Assert\NotBlank(message:'Ce champ est obligatoire')]
     #[Assert\Regex(
-        '/^[A-Za-z]+$/',
-        message: 'Votre prénom ne peut pas contenir de chiffres',
-        match: false)]
+        pattern: '/^[\p{L}]+$/u',
+        message: 'Votre prénom ne peut contenir que des lettres'
+    )]
     #[ORM\Column(length: 50)]
     private ?string $prenom = null;
 
-    #[Assert\Regex('/^\d+$/')]
+    #[Assert\Regex('/^\+?[0-9 ]+$/')]
     #[ORM\Column(length: 50)]
     private ?string $telephone = null;
 
@@ -81,7 +81,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Sortie::class, mappedBy: 'organisateur')]
     private Collection $sortiesOrganisees;
 
-    #[Assert\Unique()]
     #[Assert\NotBlank(message:'Ce champ est obligatoire')]
     #[ORM\Column(length: 50)]
     private ?string $pseudo = null;
