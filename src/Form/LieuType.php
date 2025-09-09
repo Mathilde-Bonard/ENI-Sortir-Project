@@ -21,7 +21,8 @@ class LieuType extends AbstractType
             ->add('longitude')
             ->add('ville', EntityType::class, [
                 'class' => Ville::class,
-                'choice_label' => 'id',
+                'choice_label' => 'nom',
+
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Ajouter le lieu'
@@ -33,6 +34,7 @@ class LieuType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Lieu::class,
+            'attr' => ['id' => 'lieu_form'],
         ]);
     }
 }

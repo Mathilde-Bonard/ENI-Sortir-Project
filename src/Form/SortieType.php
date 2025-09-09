@@ -34,6 +34,7 @@ class SortieType extends AbstractType
             ->add('infosSortie')
             ->add('ville', EntityType::class, [
                 'class' => Ville::class,
+                'placeholder' => 'Choisissez une ville',
                 'choice_label' => 'nom',
                 'mapped' => false,
                 'query_builder' => function (VilleRepository $villeRepository) {
@@ -42,6 +43,7 @@ class SortieType extends AbstractType
             ])
             ->add('lieu', EntityType::class, [
                 'class' => Lieu::class,
+                'placeholder' => 'Choisissez un lieu',
                 'choice_label' => 'nom',
             ])
 
