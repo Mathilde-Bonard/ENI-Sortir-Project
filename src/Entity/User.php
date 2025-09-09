@@ -21,7 +21,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Assert\NotBlank(message:'Ce champ est obligatoire')]
     #[Assert\Regex(
-        '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
+        pattern: '/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/',
+        message: 'Adresse email invalide'
     )]
     #[ORM\Column(length: 180)]
     private ?string $email = null;
@@ -40,22 +41,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Assert\NotBlank(message:'Ce champ est obligatoire')]
     #[Assert\Length(min: 1, max: 50)]
-    #[Assert\Assert\Regex(
-        '^[\p{L}]+$',
-        match: false,
-        message: 'Votre nom ne peut pas contenir de chiffres')]
+    #[Assert\Regex(
+        pattern: '/^[\p{L}]+$/u',
+        message: 'Votre nom ne peut pas contenir de chiffres',
+        match: true
+    )]
     #[ORM\Column(length: 50)]
     private ?string $nom = null;
 
     #[Assert\NotBlank(message:'Ce champ est obligatoire')]
-    #[Assert\Assert\Regex(
-        '^[\p{L}]+$',
-        match: false,
-        message: 'Votre prénom ne peut pas contenir de chiffres')]
+    #[Assert\Regex(
+        '/^[A-Za-z]+$/',
+        message: 'Votre prénom ne peut pas contenir de chiffres',
+        match: false)]
     #[ORM\Column(length: 50)]
     private ?string $prenom = null;
 
-    #[Assert\Assert\Regex('^\d+$')]
+    #[Assert\Regex('/^\d+$/')]
     #[ORM\Column(length: 50)]
     private ?string $telephone = null;
 
