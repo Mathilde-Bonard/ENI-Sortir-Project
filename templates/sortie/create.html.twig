@@ -1,134 +1,187 @@
 {% extends 'base.html.twig' %}
 
-{% form_theme sortieForm 'views/form/Form-template.html.twig' %}
 
 {% block body %}
     <main class="w-full">
         <section>
-            <div class="flex text-neutral-200 mt-5 mb-3 gap-2 px-3">
-                {% if action == 'créer' %}
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                         stroke="currentColor" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                              d="M12 10.5v6m3-3H9m4.06-7.19-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z"></path>
-                    </svg>
-                    <h1 class="text-xl">
-                        Création d'une sortie
-                    </h1>
-                {% else %}
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"></path>
-                    </svg>
-
-                    <h1 class="text-xl">
-                        Modifier la sortie
-                    </h1>
-                {% endif %}
-            </div>
             <div class="p-3 pt-8 bg-[#f1edeb] rounded-xl text-neutral-800 shadow-xl">
 
-                {% form_theme sortieForm 'views/form/form-theme-sortie.html.twig' %}
+                {% form_theme sortieFormCreation 'views/form/form-theme-sortie.html.twig' %}
                 <div class="w-full text-sm">
 
-                    {{ form_start(sortieForm) }}
-                    {{ form_row(sortieForm.nom) }}
-                    {{ form_row(sortieForm.dateHeureDebut) }}
-                    {{ form_row(sortieForm.duree) }}
-                    {{ form_row(sortieForm.dateLimiteInscription) }}
-                    {{ form_row(sortieForm.nbInscriptionMax) }}
-                    {{ form_row(sortieForm.infosSortie) }}
-                    {{ form_row(sortieForm.etat) }}
-                    {{ form_row(sortieForm.campus) }}
-                    {{ form_row(sortieForm.ville) }}
+                {{ form_start(sortieFormCreation) }}
+                {{ form_row(sortieFormCreation.nom) }}
+                {{ form_row(sortieFormCreation.dateHeureDebut) }}
+                {{ form_row(sortieFormCreation.duree) }}
+                {{ form_row(sortieFormCreation.dateLimiteInscription) }}
+                {{ form_row(sortieFormCreation.nbInscriptionMax) }}
+                {{ form_row(sortieFormCreation.infosSortie) }}
 
-                    <div class="sortie-lieu mb-3">
-                        {{ form_row(sortieForm.lieu) }}
-                        <button id="addLieuButton" type="button">+</button>
-                        <section class="lieu_details">
-                            <p>Rue : </p>
-                            <p>Code Postal : </p>
-                        </section>
-                    </div>
+                {{ form_row(sortieFormCreation.ville) }}
 
+                <div class="sortie-lieu">
+                    <button id="addLieuButton" type="button" class="transition w-10 font-medium text-neutral-800 border-2 bg-yellow-100 pt-2 pb-1 mt-1 rounded-full text-smg">+</button>
+                    {{ form_row(sortieFormCreation.lieu) }}
+                    <section class="lieu_details">
+                        <p>Rue : </p>
+                        <p>Code Postal : </p>
+                    </section>
+                </div>
 
-                    <button class="transition w-full font-medium text-neutral-200 border-2 bg-neutral-800 pt-2 pb-1 mt-1 rounded-full text-smg">
-                        {{ action }}
-                    </button>
-                    {{ form_end(sortieForm) }}
-
+                {{ form_row(sortieFormCreation.campus) }}
+                {{ form_widget(sortieFormCreation.submit) }}
+                {{ form_end(sortieFormCreation) }}
 
                 </div>
             </div>
         </section>
     </main>
 
-    {#    <div class="modal-lieu"> #}
-    {#        <div class="modal-content"> #}
-    {#            <h2>Nouveau lieu</h2> #}
-    {#            {{ form_start(lieuFormCreation) }} #}
-    {#            {{ form_widget(lieuFormCreation) }} #}
-    {#            {{ form_end(lieuFormCreation) }} #}
-    {#        </div> #}
-    {#    </div> #}
+    <div class="modal-lieu">
+        {% form_theme lieuFormCreation 'views/form/form-theme-sortie.html.twig' %}
+        <div class="modal-content">
+            <h2>Nouveau lieu</h2>
+                {{ form_start(lieuFormCreation) }}
+                {{ form_row(lieuFormCreation.nom) }}
+                {{ form_row(lieuFormCreation.rue) }}
+                {{ form_row(lieuFormCreation.latitude) }}
+                {{ form_row(lieuFormCreation.longitude) }}
+                {{ form_row(lieuFormCreation.ville) }}
+                {{ form_widget(lieuFormCreation.submit) }}
+                {{ form_end(lieuFormCreation) }}
+        </div>
+    </div>
 
     {% block extraJs %}
         <script>
 
-            let lieu = document.querySelector('.modal-lieu')
+////////////// CONSTANTES
 
-            document.querySelector('#addLieuButton').addEventListener('click', function () {
-                lieu.style.display = 'flex';
-            })
+            const selectVille = document.getElementById('sortie_ville');
+            const selectLieuVille = document.getElementById('lieu_ville');
+            const selectLieu = document.getElementById('sortie_lieu');
+            const lieuModal = document.querySelector('.modal-lieu');
+            const lieuForm = document.querySelector('#lieu_form');
+            const buttonAddLieu = document.querySelector('#addLieuButton');
 
-            lieu.addEventListener('click', function (event) {
-                if (event.target === lieu) {
-                    lieu.style.display = 'none';
-                }
-            });
+
+  //////////// FONCTIONS
+
+            // Appel API pour renouvellement du select lieux
+            function refreshLieux(villeId) {
+                const apiBaseUrl = '{{ path('sortie_list') }}';
+                fetch(apiBaseUrl + 'api/lieux/' + villeId)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Affichage du nom du lieu dans le select
+                        for (const lieu of data) {
+                            const option = document.createElement('option');
+                            option.value = lieu.id;
+                            option.textContent = lieu.nom;
+                            selectLieu.appendChild(option);
+                        }
+                    });
+            }
+
+            function refreshVille(villeId) {
+                const apiBaseUrl = '{{ path('sortie_list') }}';
+                fetch(apiBaseUrl + 'api/ville/' + villeId)
+                    .then(response=>response.json())
+                    .then(data => {
+                        const option = document.createElement('option');
+                        option.value = data.id;
+                        option.textContent = data.nom;
+                        option.selected = true;
+                        selectLieuVille.appendChild(option);
+                    })
+            }
 
             // Affichage des lieux correspondant à la ville sélectionnée
-            // Problème avec villeId
 
-            {#document.addEventListener('DOMContentLoaded', function() {#}
-            {#    const selectVille = document.getElementById('sortie_ville');#}
-            {#    const selectLieu = document.getElementById('sortie_lieu');#}
+            document.addEventListener('DOMContentLoaded', function() {
 
-            {#    selectVille.addEventListener('change', function() {#}
-            {#        const villeId = selectVille.value;#}
-            {#        console.log(villeId)#}
+                // A la selection d'une ville
+                selectVille.addEventListener('input', function() {
+                    const villeId = selectVille.value;
+                    console.log(villeId)
 
-            {#        // Vider le select lieu#}
-            {#        selectLieu.innerHTML = '<option value="">Choisissez un lieu...</option>';#}
+                    // Vider le select lieu
+                    selectLieu.innerHTML = '<option value="">Choisissez un lieu...</option>';
 
-            {#        console.log('{{ path('lieux_par_ville') }}/' + villeId)#}
+                    if (villeId) { // Si une ville est sélectionnée
+                        refreshLieux(villeId)
+                    }
+                });
 
-            {#        if (villeId) { // Si une ville est sélectionnée#}
-            {#            fetch('{{ path('lieux_par_ville') }}/'+ villeId)#}
-            {#                .then(response => response.json())#}
-            {#                .then(data => {#}
-            {#                    // Affichage du nom du lieu dans le select#}
-            {#                    for (const lieu of data) {#}
-            {#                        const option = document.createElement('option');#}
-            {#                        option.value = lieu.id;#}
-            {#                        option.textContent = lieu.nom;#}
-            {#                        selectLieu.appendChild(option);#}
-            {#                    }#}
-            {#                });#}
-            {#        }#}
-            {#    });#}
-            {#});#}
+                // Affichage de la rue et du cp quand le lieu est renseigné
+                // const lieuDetails = document.querySelector('.lieu_details');
+                // selectLieu.addEventListener('input', function (){
+                //     lieuDetails.style.display = 'flex';
+                // })
 
-            // let lieu = document.querySelector('.modal-lieu')
-            //
-            // document.querySelector('#addLieuButton').addEventListener('click',function (){
-            //     lieu.style.display = 'flex';
-            // })
-            //
-            // lieu.addEventListener('click', function(event) {
-            //     if (event.target === lieu) {
-            //         lieu.style.display = 'none';
-            //     }
-            // });
+                // Ouverture de la modal au click du +
+
+                // Présélection de la ville
+                refreshVille(selectVille);
+                selectLieuVille.value = selectVille.value;
+
+                buttonAddLieu.addEventListener('click',function (){
+                    refreshLieux(selectLieuVille);
+                    lieuModal.style.display = 'flex';
+                })
+                // Sortie de la modale quand click en dehors
+                lieuModal.addEventListener('click', function(event) {
+                    if (event.target === lieuModal) {
+                        lieuModal.style.display = 'none';
+                    }
+                });
+            });
+
+            // Traitement du formulaire d'un nouveau lieu dans la modale
+
+
+            lieuForm.addEventListener('submit', function (event){
+
+                event.preventDefault();
+                // Récupération des données du formulaire
+                const formData = new FormData(lieuForm);
+                const data = {
+                    nom: formData.get('lieu[nom]'),
+                    rue: formData.get('lieu[rue]'),
+                    ville: formData.get('lieu[ville]'),
+                };
+                // Envoie les données en JSON
+                fetch('{{ path('api_create') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type':'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                    .then(response=>response.json())
+                    // Traitement après succès
+                    .then(data=>{
+                        // Fermeture de la modale
+                        const lieu = document.querySelector('.modal-lieu');
+                        lieu.style.display = 'none';
+
+                        // Création d'une nouvelle option avec le lieu créé
+                        const lieuCree = document.createElement('option');
+                        lieuCree.value = data.id;
+                        lieuCree.textContent = data.nom;
+                        const selectLieu = document.getElementById('sortie_lieu');
+                        selectLieu.appendChild(lieuCree);
+
+                        selectLieu.value = data.id;
+
+
+                    })
+                lieuForm.reset();
+                // Préselection nouveau lieu
+                refreshLieux();
+
+            })
+
 
 
         </script>

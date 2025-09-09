@@ -6,6 +6,7 @@ use App\Repository\LieuRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: LieuRepository::class)]
 class Lieu
@@ -18,6 +19,7 @@ class Lieu
     #[Assert\NotBlank(message:'Ce champ est obligatoire')]
     #[Assert\Length(min: 1, max: 255)]
     #[ORM\Column(length: 255)]
+    #[Groups('lieux_par_ville')]
     private ?string $nom = null;
 
     #[Assert\NotBlank(message: 'Ce champ est obligatoire')]

@@ -43,21 +43,11 @@ class SortieType extends AbstractType
             ->add('dateLimiteInscription', DateType::class, [
                 'widget' => 'single_text'
             ])
-            ->add('nbInscriptionMax', IntegerType::class, [
-                "label" => "Nombre limite d'inscription",
-                'attr' => [
-                    'placeholder' => 'Exemple : 50',
-                ]
-            ])
-            ->add('infosSortie',TextareaType::class, [
-                'label' => "Description de l'évenement",
-            ])
-            ->add('etat', EntityType::class, [
-                'class' => Etat::class,
-                'choice_label' => 'libelle',
-            ])
+            ->add('nbInscriptionMax')
+            ->add('infosSortie')
             ->add('ville', EntityType::class, [
                 'class' => Ville::class,
+                'placeholder' => 'Choisissez une ville',
                 'choice_label' => 'nom',
                 'mapped' => false,
                 'query_builder' => function (VilleRepository $villeRepository) {
@@ -66,14 +56,18 @@ class SortieType extends AbstractType
             ])
             ->add('lieu', EntityType::class, [
                 'class' => Lieu::class,
+                'placeholder' => 'Choisissez un lieu',
                 'choice_label' => 'nom',
             ])
 
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
                 'choice_label' => 'nom',
-            ]);
-
+            ])
+            // Bouton submit qui apparaitra directement dans twig avec le form_widget
+            ->add('submit', SubmitType::class, [
+                'label' => 'Créer'
+                ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -2,11 +2,17 @@
 
 namespace App\Controller;
 
+
+use App\Entity\Etat;
+use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Entity\SortieFilter;
 use App\Entity\User;
+use App\Form\LieuType;
 use App\Form\SortieType;
 use App\Form\FilterType;
+use App\Repository\EtatRepository;
+use App\Repository\LieuRepository;
 use App\Repository\SortieRepository;
 
 use App\Services\SortieCanceler;
@@ -61,34 +67,54 @@ final class SortieController extends AbstractController
 
     #[IsGranted("ROLE_USER")]
     #[Route('/add', name: 'sortie_add')]
-    public function add(Request $request, EntityManagerInterface $em): Response
-    {
+
+public function add(
+        Request $request,
+        EntityManagerInterface $em,
+        EtatRepository $etatRepository,
+        LieuRepository $lieuRepository,
+    ): Response
+
         $user = $this->getUser();
 
-        if (!$user instanceof User) {
-            throw $this->createAccessDeniedException("Connexion obligatoire");
-        }
+        $etatCreee = $etatRepository->findOneBy(['libelle' => 'CREEE']);
 
         $sortie = new Sortie();
         $sortie->setCampus($user->getCampus());
 
-        $sortieForm = $this->createForm(SortieType::class, $sortie);
+        // Pré-selection du campus -> campus du user connecté
+        $sortie->setCampus($user->getCampus());
 
-        $sortieForm->handleRequest($request);
+        $sortieFormCreation = $this->createForm(SortieType::class, $sortie);
+        $sortieFormCreation->handleRequest($request);
 
-        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
-
-            $sortie->setOrganisateur($this->getUser());
+        if ($sortieFormCreation->isSubmitted() && $sortieFormCreation->isValid()) {
+            // Non rempli par le user -> organisateur = user, état = CREEE
+            $sortie->setOrganisateur($user);
+            $sortie->setEtat($etatCreee);
 
             $em->persist($sortie);
             $em->flush();
             $this->addFlash('success', 'Sortie ajoutée !');
             return $this->redirectToRoute('sortie_detail', ['id' => $sortie->getId()]);
         }
+        // Formulaire d'ajout de lieu dans la modale
+        $lieu = new Lieu();
+        $lieuFormCreation = $this->createForm(LieuType::class, $lieu);
+
+        $lieuFormCreation->handleRequest($request);
+        if ($lieuFormCreation->isSubmitted() && $lieuFormCreation->isValid()) {
+            $em->persist($lieu);
+            $em->flush();
+
+            $this->addFlash('success', 'Nouveau lieu ajouté !');
+        }
+
+    //TODO render lieu.rue et lieu.cp pour la vue
 
         return $this->render('sortie/create.html.twig', [
-            'sortieForm' => $sortieForm->createView(),
-            'action' => "créer",
+            'sortieFormCreation' => $sortieFormCreation->createView(),
+            'lieuFormCreation' => $lieuFormCreation->createView(),
         ]);
     }
 
@@ -127,11 +153,12 @@ final class SortieController extends AbstractController
             $this->addFlash('success', 'Sortie modifiée !');
             return $this->redirectToRoute('sortie_detail', ['id' => $sortie->getId()]);
         }
-        return $this->render('sortie/create.html.twig', [
+
+        return $this->render('sortie/update.html.twig', [
             'sortieForm' => $sortieForm->createView(),
-            'action' => "modifier",
-        ]);
-    }
+            ]);
+        }
+
 
     #[IsGranted("SORTIE_SUBSCRIBE", subject: "sortie")]
     #[Route('/sortie/{id}/sub', name: 'sub', requirements: ['id' => '\d+'], methods: ['POST'])]

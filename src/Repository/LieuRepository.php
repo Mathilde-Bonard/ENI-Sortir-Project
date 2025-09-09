@@ -31,13 +31,14 @@ class LieuRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Lieu
-    //    {
-    //        return $this->createQueryBuilder('l')
-    //            ->andWhere('l.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        public function findByVilleId($villeId): array
+        {
+            return $this->createQueryBuilder('l')
+                ->leftJoin('l.ville', 'v')
+                ->addSelect('v')
+                ->andWhere('v.id = :ville')
+                ->setParameter('ville', $villeId)
+                ->getQuery()
+                ->getResult();
+        }
 }
