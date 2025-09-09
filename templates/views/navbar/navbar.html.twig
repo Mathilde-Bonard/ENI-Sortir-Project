@@ -8,9 +8,11 @@
             {% if app.user %}
                 <div class="pt-1">
                     <p class="font-medium text-base/3">
-                        <small>
-                            {{ app.user }}
-                        </small>
+                        <a href="{{ path('app_profil_details', { 'id' : app.user.id }) }}">
+                            <small>
+                                {{ app.user }}
+                            </small>
+                        </a>
                     </p>
                     <div class="flex items-center opacity-70 text-xs"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"></path>
@@ -19,7 +21,6 @@
                         <span class="pt-0.5">Campus {{ app.user.campus | capitalize }}</span></div>
                 </div>
             {% endif %}
-
         </div>
 
         <div class="ms-auto flex gap-3 text-sm text-end">
