@@ -1,15 +1,15 @@
 <div class="w-full sortie_listener">
     <section class="overflow-hidden">
-        <div class="w-full relative rounded-t-xl overflow-hidden">
+        <div class="w-full relative overflow-hidden">
             <img src="{{ asset('/img/sortie/pexels-harrisonhaines-3536274.jpg') }}" alt=""
-                 class="aspect-5/3 object-cover">
-            <div class="absolute top-0 left-0 p-3 bg-neutral-800/30 h-full w-full"></div>
+                 class="aspect-5/3 object-cover contrast-80">
+            <div class="absolute top-0 left-0 p-3 bg-neutral-800/50 h-full w-full"></div>
         </div>
     </section>
 
-    <section class="relative mt-[-20px] z-2 overflow-hidden sortie {{ sortie.etat | lower }} {{ app.user in sortie.participants ? 'inscrit' : '' }}">
+    <section class="fixed bottom-0 mt-[-20px] min-h-[70vh] z-2 overflow-hidden sortie {{ sortie.etat | lower }} {{ app.user in sortie.participants ? 'inscrit' : '' }}">
 
-        <div class="rounded-t-xl sortie__container">
+        <div class="rounded-t-xl sortie__container h-full flex flex-col">
             <div class="p-3 pt-5">
                 <div class="flex items-start gap-3 mb-5">
                     <h1 class="font-medium text-3xl me-auto">{{ sortie.nom }}</h1>
@@ -135,7 +135,7 @@
                     </div>
                 </div>
             </div>
-            <div class="relative border-t-2 border-dashed sortie__btn w-full">
+            <div class=" mt-auto relative border-t-2 border-dashed sortie__btn w-full">
                 <div class="absolute w-full flex">
                     <div class="aspect-square w-6 bg-neutral-800 rounded-full -translate-x-3 -translate-y-3.5"></div>
                     <div class="aspect-square w-6 bg-neutral-800 rounded-full ms-auto translate-x-3 -translate-y-3.5"></div>

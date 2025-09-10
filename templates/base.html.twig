@@ -15,7 +15,7 @@
         {% block importmap %}{{ importmap('app') }}{% endblock %}
     {% endblock %}
 </head>
-<body class="bg-neutral-800">
+<body class="bg-neutral-800 min-h-[100vh]">
 {% if app.request.attributes.get('_route') != 'app_login' %}
     <header>
         {% include 'views/navbar/navbar.html.twig' %}
