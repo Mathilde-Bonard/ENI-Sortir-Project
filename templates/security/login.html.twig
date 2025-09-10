@@ -3,24 +3,28 @@
 {% block title %}Authentification{% endblock %}
 
 {% block body %}
-
-    <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-        <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-            <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-                 alt="Your Company" class="mx-auto h-10 w-auto dark:hidden"/>
-            <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-                 alt="Your Company" class="mx-auto h-10 w-auto not-dark:hidden"/>
-            {% if app.user %}
+    <section class="relative">
+        <img src="{{ asset('/img/pexels-pixabay-274192.jpg') }}" alt="">
+        <div class="absolute top-0 bg-black/30 w-full h-full flex flex-col">
+            <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=white&shade=200"
+                 alt="Your Company" class="m-auto h-30 w-auto dark:hidden invert opacity-80"/>
+            <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=white&shade=200"
+                 alt="Your Company" class="m-auto h-30 w-auto not-dark:hidden invert opacity-80"/>
+        </div>
+    </section>
+    <section class="fixed bottom-0 h-[70vh] bg-[#f1edeb] text-sm rounded-t-3xl">
+        <div class="flex flex-col justify-center px-6 pb-12 lg:px-8">
+            <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+                {% if app.user %}
                 <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
                     Vous êtes déjà connecté en tant que {{ app.user.userIdentifier }}
                 </h2>
-                <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-                    <div class="text-sm">
+                <div class="flex flex-col justify-center px-6 py-12 lg:px-8">
+                    <div class="text-sm mb-5">
                         <button
-                                type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5
-		text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2
-		focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500
-		dark:shadow-none dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500">
+                                type="submit" class="flex w-full justify-center rounded-full bg-neutral-800 px-3 py-1.5
+		text-sm/6 font-semibold shadow-xs hover:bg-neutral-800/70 focus-visible:outline-2 text-neutral-200
+		focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                             <a href="{{ path('sortie_list_2') }}">
                                 Accéder à l'application Sortir
                             </a>
@@ -28,72 +32,63 @@
                     </div>
                     <div class="text-sm">
                         <a href="{{ path('app_logout') }}"
-                           class="font-semibold text-indigo-600 hover:text-indigo-500">
+                           class="font-semibold ">
                             Se déconnecter
                         </a>
                     </div>
                 </div>
-            {% else %}
+                {% else %}
                 <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
                     Veuillez-vous connecter pour accéder à l'application Sortir
                 </h2>
-        </div>
+            </div>
 
-        <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form method="post" class="space-y-6">
-                {% if error %}
-                    <div class="flex items-center p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50"
-                         role="alert">
-                        <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                             fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-                        </svg>
-                        <span class="sr-only">Info</span>
-                        <div>
-                            <span class="font-medium">Adresse mail et/ou mot de passe incorrect.</span>
-                        </div>
-                    </div>
-                {% endif %}
-
-                    <div>
-                        <label for="inputEmail" class="block text-sm/6 font-medium text-gray-900">
-                            Adresse mail
-                        </label>
-                        <div class="mt-2">
-                            <input type="email" value="{{ last_username }}" name="email" id="inputEmail"
-                                   autocomplete="email" class="block w-full
-		  rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1
-		  outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2
-		  focus:outline-indigo-600 sm:text-sm/6
-		  " required autofocus>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="flex items-center justify-between">
-                            <label for="inputPassword"
-                                   class="block text-sm/6 font-medium text-gray-900 ">
-                                Password
-                            </label>
-                            <div class="text-sm">
-                                <a href="#"
-                                   class="font-semibold text-indigo-600 hover:text-indigo-500 ">
-                                    Mot de passe oublié?
-                                </a>
+            <div class="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
+                <form method="post">
+                    {% if error %}
+                        <div class="flex items-center px-4 mb-5 text-sm text-red-400 rounded-full"
+                             role="alert">
+                            <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
+                                 xmlns="http://www.w3.org/2000/svg"
+                                 fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                            </svg>
+                            <span class="sr-only">Info</span>
+                            <div>
+                                <span class="font-medium">Adresse mail et/ou mot de passe incorrect.</span>
                             </div>
                         </div>
-                        <div class="mt-2">
-                            <input type="password" name="password" id="inputPassword" autocomplete="current-password"
-                                   required
-                                   class="block w-full rounded-md bg-white px-3 py-1.5
-		  text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400
-		  focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 ">
-                            <input type="hidden" name="_csrf_token" data-controller="csrf-protection"
-                                   value="{{ csrf_token('authenticate') }}">
+                    {% endif %}
+                    <div class="form-line relative w-full mb-5 flex gap-3">
+                        <div class="form-label absolute top-0 left-0 px-8 -translate-3">
+                            <label for="inputEmail"
+                                   class="block text-sm/6 font-medium text-gray-900 text-sm bg-[#f1edeb] px-1">
+                                Adresse mail
+                            </label>
                         </div>
+                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail"
+                               autocomplete="email" class="w-full rounded-full border-2 font-semibold p-2 flex gap-3 px-4" required autofocus>
                     </div>
+                    <div class="form-line relative w-full flex gap-3 mb-2">
+                        <div class="form-label absolute top-0 left-0 px-8 -translate-3">
+                            <label for="inputPassword"
+                                   class="block text-sm/6 font-medium text-gray-900 text-sm bg-[#f1edeb] px-1">
+                                Mot de passe
+                            </label>
+                        </div>
+                        <input type="password" name="password" id="inputPassword" autocomplete="current-password"
+                                class="w-full rounded-full border-2 font-semibold p-2 flex gap-3 px-4" required autofocus>
+                    </div>
+                    <div class="text-sm text-end mb-5">
+                        <a href="#"
+                           class="font-semibold text-neutral-500 hover:text-neutral-800 ">
+                            Mot de passe oublié?
+                        </a>
+                    </div>
+                    <input type="hidden" name="_csrf_token" data-controller="csrf-protection"
+                           value="{{ csrf_token('authenticate') }}">
 
-                    <div class="checkbox mb-3">
+                    <div class="checkbox mb-3 text-sm font-medium">
                         <label>
                             <input type="checkbox" name="_remember_me"> Se souvenir de moi
                         </label>
@@ -101,15 +96,17 @@
 
                     <div>
                         <button
-                                type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5
-		text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2
+                                type="submit" class="flex w-full justify-center rounded-full bg-neutral-800 px-3 py-1.5
+		text-sm/6 font-semibold shadow-xs hover:bg-neutral-800/70 focus-visible:outline-2 text-neutral-200
 		focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                             Connexion
                         </button>
                     </div>
 
-                {% endif %}
-            </form>
+                    {% endif %}
+                </form>
+            </div>
         </div>
-    </div>
+
+    </section>
 {% endblock %}
