@@ -5,104 +5,72 @@
 
 
 {% block body %}
-    <section class="container mx-auto px-8 py-10">
+    <section class="overflow-hidden">
+        <div class="w-full relative overflow-hidden">
+            <img src="{{ asset('/img/campus/campus3.jpg') }}" alt="Campus placeholder"
+                 class="aspect-6/3 object-cover contrast-80">
+            <div class="absolute top-0 left-0 p-3 bg-neutral-800/30 h-full w-full"></div>
+        </div>
+    </section>
+<section class="fixed bottom-0 h-[80vh] w-full mt-[-20px] z-2">
+    <div class="absolute top-0 -translate-y-10 translate-x-2">
+        <img class="shrink-0 size-20 rounded-full mx-auto border-[#f1edeb] border-3"
+             src="{{ asset('/img/user/' ~ user.imageFileName) }}"
+             alt="Avatar">
+    </div>
+    <div class="rounded-tr-xl bg-[#f1edeb] h-full flex flex-col">
+        <div class="pt-12 p-3">
 
+            <h1 class="font-semibold text-3xl text-neutral-800">{{ user }}</h1>
+            <p class="text-sm font-medium opacity-70 mb-5">{{ user.prenom }} {{ user.nom }}</p>
+            <div class="w-full flex flex-col mb-5 text-sm gap-1 opacity-70 sortie-info">
+                <div class="flex gap-1 items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                         stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"></path>
+                    </svg>
+                    <span class="mt-1">Campus {{ user.campus }} </span>
+                </div>
+                <div class=" flex gap-1 items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                         class="size-5">
+                        <path fill-rule="evenodd"
+                              d="M5.404 14.596A6.5 6.5 0 1 1 16.5 10a1.25 1.25 0 0 1-2.5 0 4 4 0 1 0-.571 2.06A2.75 2.75 0 0 0 18 10a8 8 0 1 0-2.343 5.657.75.75 0 0 0-1.06-1.06 6.5 6.5 0 0 1-9.193 0ZM10 7.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z"
+                              clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="mt-1">{{ user.email }}</span>
+                </div>
+                <div class="flex gap-1 items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                         stroke-width="1.5" stroke="currentColor" class="size-5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M14.25 9.75v-4.5m0 4.5h4.5m-4.5 0 6-6m-3 18c-8.284 0-15-6.716-15-15V4.5A2.25 2.25 0 0 1 4.5 2.25h1.372c.516 0 .966.351 1.091.852l1.106 4.423c.11.44-.054.902-.417 1.173l-1.293.97a1.062 1.062 0 0 0-.38 1.21 12.035 12.035 0 0 0 7.143 7.143c.441.162.928-.004 1.21-.38l.97-1.293a1.125 1.125 0 0 1 1.173-.417l4.423 1.106c.5.125.852.575.852 1.091V19.5a2.25 2.25 0 0 1-2.25 2.25h-2.25Z"></path>
+                    </svg>
+                    <span class="mt-1">{{ user.telephone }}</span>
+                </div>
 
-
-        <div class="p-5 relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700
-        border border-gray-300 rounded-2xl">
-            <div class="w-full relative rounded-t-xl overflow-hidden">
-                <img src="{{ asset('/img/campus/campus1.jpg') }}"
-                     class="object-cover"
-                     alt="bgCampus"
-                     decoding="async"
-                     data-nimg="1"
-                     loading="lazy">
             </div>
-
-<!-- =========================================== Profil ========================================== -->
-
-            <div class="p-6">
-                <div class="flex lg:gap-0 gap-6 flex-wrap justify-between items-center">
-                    <div>
-                        <div class="shrink-0">
-                            <img class="shrink-0 size-16 rounded-full"
-                                 src="{{ asset('/img/user/' ~ user.imageFileName) }}"
-{#                                 src="https://images.unsplash.com/photo-1510706019500-d23a509eecd4?q=80&w=2667&auto=format&fit=facearea&facepad=3&w=320&h=320&q=80&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"#}
-                                 alt="Avatar">
-                        </div>
-                        <div>
-                            <h6 class="block antialiased tracking-normal font-sans text-base font-semibold leading-relaxed text-blue-gray-900">
-                                {{ user.pseudo }}
-                            </h6>
-                            <p class="block antialiased font-sans text-sm font-light leading-normal text-inherit font-normal text-gray-600">
-                                Student of : {{ user.campus.nom }}
-                            </p>
-                        </div>
+        </div>
+        {% if app.user.id == user.id %}
+        <div class="relative border-t-2 mt-auto border-dashed bg-[#D1EB99] text-neutral-800  w-full">
+            <div class="absolute w-full flex">
+                <div class="aspect-square w-6 bg-neutral-800 rounded-full -translate-x-3 -translate-y-3.5"></div>
+                <div class="aspect-square w-6 bg-neutral-800 rounded-full ms-auto translate-x-3 -translate-y-3.5"></div>
+            </div>
+            <a href="{{ path('app_profil_update', {'id': app.user.id }) }}">
+                <div class="font-bold py-7 uppercase text-2xl text-center sortie__btn">
+                    <div class="sub_btn flex-none pe-5 ms-7 py-1.5 pb-0.5 rounded-full cursor-pointer">
+                        Modifier
                     </div>
                 </div>
-            </div>
-<!-- ======================================== End Profile ======================================== -->
-
-<!-- =========================================== About =========================================== -->
-            <div class="mt-8">
-
-                <ul class="mt-5 flex flex-col gap-y-3">
-                    <li class="flex items-center gap-x-2.5">
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                             width="24" height="24"
-                             viewBox="0 0 512 336.62">
-                            <path fill-rule="nonzero"
-                                  d="M23.09 0h465.82C501.58 0 512 10.42 512 23.09v290.44c0 12.67-10.42 23.09-23.09 23.09H23.09C10.42 336.62 0 326.2 0 313.53V23.09C0 10.42 10.42 0 23.09 0zm220.86 180.16c-13.75 0-13.75-25.1 0-25.1h206.92c13.75 0 13.73 25.1 0 25.1H243.95zm153.16 51.29c-13.74 0-13.74-25.1 0-25.1h53.76c13.74 0 13.74 25.1 0 25.1h-53.76zm-153.16 0c-13.75 0-13.75-25.1 0-25.1h113.27c13.74 0 13.74 25.1 0 25.1H243.95zm.01 51.39c-13.76 0-13.75-25.09 0-25.09h207.13c13.74 0 13.74 25.09 0 25.09H243.96zM56.9 50.03h308.78c4.43 0 8.06 3.64 8.06 8.07v42.81c0 4.42-3.64 8.06-8.06 8.06H56.9c-4.43 0-8.07-3.62-8.07-8.06V58.1c0-4.44 3.63-8.07 8.07-8.07zm351.76 0h46.44c4.44 0 8.07 3.64 8.07 8.07v42.81c0 4.42-3.64 8.06-8.07 8.06h-46.44c-4.43 0-8.07-3.62-8.07-8.06V58.1c0-4.44 3.63-8.07 8.07-8.07zM52.72 282.84c-2.41 0-2.44-2.45-2.01-4.16 3.62-28.69 14.71-27.68 30.62-31.78 7.65-1.97 25.12-9.64 23.27-19.53-3.85-3.57-7.68-8.5-8.35-15.87l-.46.01c-1.07-.02-2.1-.26-3.06-.81-2.13-1.21-3.29-3.52-3.86-6.17-.55-2.61-.69-7.7 0-10.31.74-2.07 1.66-3.19 2.83-3.68l.03-.01c-.53-9.96 1.15-20.56-9.07-23.66 20.19-24.95 43.46-38.52 60.94-16.32 19.47 1.02 28.15 24.55 16.06 39.99h-.51c1.62.68 2.52 2.56 2.96 4.17.34 2.5.58 6.48-.14 9.82-.55 2.65-1.72 4.96-3.85 6.17-.96.55-1.99.79-3.06.81l-.47-.01c-.66 7.37-4.5 12.3-8.35 15.87-1.85 9.9 15.64 17.56 23.29 19.53 15.92 4.09 27.02 3.09 30.64 31.78.42 1.71.39 4.16-2.02 4.16H52.72zM488.91 16.43H23.09c-3.69 0-6.66 2.97-6.66 6.66v290.44c0 3.69 2.97 6.66 6.66 6.66h465.82c3.69 0 6.66-2.97 6.66-6.66V23.09c0-3.69-2.97-6.66-6.66-6.66z"/>
-                        </svg>
-                        <p class="text-[13px] text-gray-500 hover:text-gray-800 hover:decoration-2 focus:outline-hidden focus:decoration-2 dark:text-neutral-500 dark:hover:text-neutral-400">
-                            <strong>Nom complet :</strong> {{ user.prenom }} {{ user.nom | upper }}
-                        </p>
-                    </li>
-
-                    <li class="flex items-center gap-x-2.5">
-                        <svg class="shrink-0 size-3.5 text-gray-800 dark:text-neutral-200"
-                             xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect width="20" height="16" x="2" y="4" rx="2"/>
-                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-                        </svg>
-                        <p class="text-[13px] text-gray-500  hover:text-gray-800 hover:decoration-2 focus:outline-hidden focus:decoration-2 dark:text-neutral-500 dark:hover:text-neutral-400">
-                            <strong>Adresse mail :</strong> {{ user.email }}
-                        </p>
-                    </li>
-
-                    <li class="flex items-center gap-x-2.5">
-                        <svg aria-hidden="true" focusable="false" class="icon" xmlns="http://www.w3.org/2000/svg"
-                             viewBox="0 0 512 512" width="14" height="14">
-                            <path d="M493.4 24.6l-104-24c-11.3-2.6-22.9 3.3-27.5 13.9l-48 112c-4.2 9.8-1.4 21.3 6.9 28l60.6 49.6c-36 76.7-98.9 140.5-177.2 177.2l-49.6-60.6c-6.8-8.3-18.2-11.1-28-6.9l-112 48C3.9 366.5-2 378.1.6 389.4l24 104C27.1 504.2 36.7 512 48 512c256.1 0 464-207.5 464-464 0-11.2-7.7-20.9-18.6-23.4z"/>
-                        </svg>
-                        <p class="text-[13px] text-gray-500 hover:text-gray-800 hover:decoration-2 focus:outline-hidden focus:decoration-2 dark:text-neutral-500 dark:hover:text-neutral-400">
-                            <strong>Téléphone :</strong> {{ user.telephone }}
-                        </p>
-                    </li>
-                </ul>
-            </div>
-
-<!-- ========================================= End About ========================================= -->
-
-            {# Boutons en bas de page du profil #}
-            {% if app.user.id == user.id %}
-                <div class="flex h-9 w-full mt-auto text-sm">
-                    <a href="{{ path('app_profil_update', {'id': app.user.id }) }}"
-                       class="rounded-full bg-neutral-800 text-neutral-50">
-                        <div class="px-3 h-full py-1.5 pb-0.5 w-full rounded-full flex items-center">Modifier</div>
-                    </a>
-                </div>
-            {% endif %}
-            <button onClick="window.history.back();" type="button">
-                Retour
-            </button>
+            </a>
 
         </div>
+        {% endif %}
 
-
-
-    </section>
-
+    </div>
+</section>
 {% endblock %}

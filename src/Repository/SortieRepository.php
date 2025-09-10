@@ -37,6 +37,8 @@ class SortieRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('s')->leftJoin('s.organisateur', 'o')->addSelect('o')
             ->leftJoin('s.participants', 'p')->addSelect('p')
             ->leftJoin('s.etat', 'e')->addSelect('e')
+            ->leftJoin('s.lieu', 'l')->addSelect('l')
+            ->leftJoin('l.ville', 'v')->addSelect('v')
             ->orderBy('s.dateHeureDebut', 'ASC');
 
         $hasPasseFilter = isset($data) && in_array('PASSEE', $data->getFilters());

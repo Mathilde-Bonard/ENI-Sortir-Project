@@ -3,7 +3,7 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
-    <main class="w-full rounded-t-xl">
+    <main class="w-full rounded-t-xl pt-15">
         <section>
             <div class="p-3 text-neutral-800">
                 <div class="flex gap-2 items-center text-neutral-50 mb-5">
@@ -24,7 +24,7 @@
                     </div>
                     <p class="text-sm text-neutral-50 mt-2">Filtres supplémentaires</p>
                     {{ form_row(filterForm.filters) }}
-                    <button class="transition w-full font-medium text-neutral-800 border-2 bg-yellow-100 pt-2 pb-1 mt-1 rounded-full text-smg">
+                    <button class="transition w-full font-semibold text-neutral-800 border-2 bg-yellow-100 pt-2 pb-1.5 mt-1 rounded-full text-smg">
                         Rechercher
                     </button>
                     {{ form_end(filterForm) }}

@@ -68,7 +68,7 @@ final class SortieController extends AbstractController
     #[IsGranted("ROLE_USER")]
     #[Route('/add', name: 'sortie_add')]
 
-public function add(
+    public function add(
         Request $request,
         EntityManagerInterface $em,
         EtatRepository $etatRepository,
