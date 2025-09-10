@@ -172,19 +172,20 @@
 
                         })
                     }
+                    function initEventListeners(){
+                        updateSelectLieu();
+                        submitLieu();
+                    }
+
+                    function initModal(){
+                        openLieuModal();
+                        closeModal();
+                    }
 
             // Affichage des lieux correspondant à la ville sélectionnée
 
             document.addEventListener('DOMContentLoaded', function() {
-                function initEventListeners(){
-                    updateSelectLieu();
-                    submitLieu();
-                }
 
-                function initModal(){
-                    openLieuModal();
-                    closeModal();
-                }
                 initEventListeners();
                 initModal();
 
