@@ -20,8 +20,10 @@
                 {{ form_row(sortieFormCreation.ville) }}
 
                 <div class="sortie-lieu">
-                    <button id="addLieuButton" type="button" class="transition w-10 font-medium text-neutral-800 border-2 bg-yellow-100 pt-2 pb-1 mt-1 rounded-full text-smg">+</button>
                     {{ form_row(sortieFormCreation.lieu) }}
+                    <button id="addLieuButton" type="button" class="transition w-full font-medium text-neutral-800 border-2 bg-yellow-100 pt-2 pb-1 mt-1 rounded-full text-smg">
+                        + Ajouter un nouveau lieu
+                    </button>
                     <section class="lieu_details">
                         <p>Rue : </p>
                         <p>Code Postal : </p>
