@@ -25,4 +25,22 @@ return [
     '@hotwired/turbo' => [
         'version' => '7.3.0',
     ],
-];
+
+    // === modules JS ===
+    'constantsSortie' => [
+        'path' => './assets/js/constantsSortie.js',
+    ],
+    'api' => [
+        'path' => './assets/js/api.js',
+    ],
+    'lieu-villeSelect' => [
+        'path' => './assets/js/lieu-villeSelect.js',
+    ],
+    'modalLieu' => [
+        'path' => './assets/js/modalLieu.js',
+    ],
+    'mainSortie' => [
+        'path' => './assets/js/mainSortie.js',
+        'entrypoint' => true,  // indique le point d’entrée principal
+   ],
+    ];
