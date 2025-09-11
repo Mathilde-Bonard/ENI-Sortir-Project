@@ -2,7 +2,7 @@
 
 
 {% block body %}
-    <main class="w-full">
+    <main class="w-full pt-15">
         <section>
             <div class="p-3 pt-8 bg-[#f1edeb] rounded-xl text-neutral-800 shadow-xl">
 
@@ -21,17 +21,19 @@
 
                 <div class="sortie-lieu">
                     {{ form_row(sortieFormCreation.lieu) }}
-                    <button id="addLieuButton" type="button" class="transition w-full font-medium text-neutral-800 border-2 bg-yellow-100 pt-2 pb-1 mt-1 rounded-full text-smg">
+                    <section class="lieu_details">
+                        <p id="rue">Rue : </p>
+                        <p id="cp">Code Postal : </p>
+                    </section>
+                    <button id="addLieuButton" type="button" class="transition w-full font-semibold text-neutral-800 border-2 bg-yellow-100 pt-2 pb-1.5 mt-1 rounded-full text-smg">
                         + Ajouter un nouveau lieu
                     </button>
-                    <section class="lieu_details">
-                        <p>Rue : </p>
-                        <p>Code Postal : </p>
-                    </section>
                 </div>
 
                 {{ form_row(sortieFormCreation.campus) }}
-                {{ form_widget(sortieFormCreation.submit) }}
+                    <button class="transition w-full font-semibold text-neutral-800 border-2 bg-yellow-100 pt-2 pb-1.5 mt-1 rounded-full text-smg">
+                        Créer
+                    </button>
                 {{ form_end(sortieFormCreation) }}
 
                 </div>
@@ -55,11 +57,6 @@
     </div>
 
     {% block extraJs %}
-{#        // Affichage de la rue et du cp quand le lieu est renseigné#}
-{#        // const lieuDetails = document.querySelector('.lieu_details');#}
-{#        // selectLieu.addEventListener('input', function (){#}
-{#        //     lieuDetails.style.display = 'flex';#}
-{#        // })#}
         <script>
             window.apiBaseUrl = '{{ path('sortie_list') }}';
             window.apiCreateBaseUrl = '{{ path('api_create') }}'

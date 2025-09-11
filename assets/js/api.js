@@ -1,4 +1,4 @@
-export {refreshVille, refreshLieux};
+export {refreshVille, refreshLieux, displayRueCp};
 import {Elements} from 'constantsSortie';
 
 
@@ -25,4 +25,16 @@ function refreshVille(villeId) {
         .then(data => {
             selectLieuVille.value = data.id
         })
+}
+
+// Appel API pour récupérer la rue et le CP
+
+function displayRueCp(lieuId) {
+    fetch(apiBaseUrl + 'api/lieu/' + lieuId +'/detail')
+        .then(response => response.json())
+        .then(data => {
+            document.querySelector('#rue').textContent = `Rue : ${data.rue}`;
+            document.querySelector('#cp').textContent = `Code Postal : ${data.codePostal}`;
+            document.querySelector('.lieu_details').style.display = 'flex';
+        });
 }
