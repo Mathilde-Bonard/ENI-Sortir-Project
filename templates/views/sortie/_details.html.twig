@@ -2,15 +2,16 @@
     <section class="overflow-hidden">
         <div class="w-full relative overflow-hidden">
             <img src="{{ asset('/img/sortie/pexels-harrisonhaines-3536274.jpg') }}" alt=""
-                 class="aspect-5/3 object-cover contrast-80">
+                 class="aspect-square object-cover contrast-80 lg:aspect-5/1 w-full object-cover">
             <div class="absolute top-0 left-0 p-3 bg-neutral-800/50 h-full w-full"></div>
         </div>
     </section>
 
-    <section class="fixed bottom-0 mt-[-20px] min-h-[70vh] z-2 overflow-hidden sortie {{ sortie.etat | lower }} {{ app.user in sortie.participants ? 'inscrit' : '' }}">
+    <section
+            class="fixed bottom-0 mt-[-20px] w-full z-2 overflow-hidden sortie {{ sortie.etat | lower }} {{ app.user in sortie.participants ? 'inscrit' : '' }}">
 
         <div class="rounded-t-xl sortie__container h-full flex flex-col">
-            <div class="p-3 pt-5">
+            <div class="p-3 pt-5 lg:container lg:mx-auto lg:px-60">
                 <div class="flex items-start gap-3 mb-5">
                     <h1 class="font-medium text-3xl me-auto">{{ sortie.nom }}</h1>
                     <div class="flex items-center gap-2">
@@ -25,14 +26,15 @@
 
                                 </a>
                             {% endif %}
-                            {% if is_granted('SORTIE_CANCEL', sortie) %}
-                                <a href="{{ path('sortie_cancel', {id: sortie.id}) }}"
-                                   class="bg-neutral-800 p-1 rounded-full">
+                            {% if is_granted('SORTIE_CANCEL', sortie) and sortie.etat != "ANNULEE" %}
+                                <div class="cursor-pointer bg-neutral-800 p-1 cancel_btn rounded-full toggle__collapse"
+                                     data-target="sortie__cancel" data-url="{{ path('sortie_cancel') }}"
+                                     data-sortie="{{ sortie.id }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                          class="size-4">
                                         <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z"></path>
                                     </svg>
-                                </a>
+                                </div>
                             {% endif %}
                         </div>
                         <div class="font-semibold px-3 py-1.5 pb-1 rounded-full text-xs sortie__btn whitespace-nowrap">
@@ -74,14 +76,15 @@
                     {% else %}
                         <h3 class="font-semibold mb-2">A propos</h3>
                     {% endif %}
-                    <p class="text-sm">{{ sortie.infosSortie }}</p>
+                    <p class="text-sm opacity-80">{{ sortie.infosSortie ? sortie.infosSortie : "Aucune informations disponibles" }}</p>
                 </div>
                 <div class="orga mb-5 w-fit">
                     <h3 class="font-semibold mb-2">Organisateur</h3>
                     <a href="{{ path('app_profil_details', { 'id' : sortie.organisateur.id }) }}" class="w-fit">
                         <div class="orga flex items-center">
                             <div class="me-2">
-                                <img src="{{ asset("/img/user/" ~ sortie.organisateur.imageFileName ) }}" alt="placeholder"
+                                <img src="{{ asset("/img/user/" ~ sortie.organisateur.imageFileName ) }}"
+                                     alt="placeholder"
                                      class="rounded-full w-11 h-11">
                             </div>
                             <div>
@@ -105,7 +108,8 @@
                         {% if is_granted('SORTIE_READ_PARTICIPANTS', sortie) %}
                             <div class="flex gap-2 items center text-sm">
                                 <span>•</span>
-                                <span data-target="user_list" class="cursor-pointer hover:opacity-100 toggle__collapse  opacity-70 hover:opacity-100 transition">voir la liste</span>
+                                <span data-target="user_list"
+                                      class="cursor-pointer hover:opacity-100 toggle__collapse  opacity-70 hover:opacity-100 transition">voir la liste</span>
                             </div>
                         {% endif %}
                     </div>
@@ -123,7 +127,8 @@
                         </div>
                         {% if (sortie.participants | length) >= 4 %}
                             {% if is_granted('SORTIE_READ_PARTICIPANTS', sortie) %}
-                                <div data-target="user_list" class="transition cursor-pointer toggle__collapse hover:bg-neutral-600 bg-neutral-800 border-2 border-[#f0f0e6] h-11 w-11 rounded-full text-[#f0f0e6] flex items-center justify-center z-5">
+                                <div data-target="user_list"
+                                     class="transition cursor-pointer toggle__collapse hover:bg-neutral-600 bg-neutral-800 border-2 border-[#f0f0e6] h-11 w-11 rounded-full text-[#f0f0e6] flex items-center justify-center z-5">
                                     <span class="text-sm font-medium mt-1">+{{ (sortie.participants | length) - 3 }}</span>
                                 </div>
                             {% else %}
@@ -171,19 +176,33 @@
                         <div class="flex-none pe-5 ms-7 py-1.5 pb-0.5 rounded-full">
                             En cours
                         </div>
+                    {% elseif  sortie.etat == "PASSEE" %}
+                        <div class="flex-none pe-5 ms-7 py-1.5 pb-0.5 rounded-full">
+                            Sortie terminée
+                        </div>
                     {% elseif  sortie.etat == "CREEE" %}
-                        {% if app.user == sortie.organisateur %}
-                            <div class="flex-none pe-5 ms-7 py-1.5 pb-0.5 rounded-full">
+                        {% if is_granted("SORTIE_PUBLISH", sortie) %}
+                            <a href="{{ path('sortie_publish',  {'id' : sortie.id}) }}"
+                               class="flex-none pe-5 ms-7 py-1.5 pb-0.5 rounded-full">
                                 Publier
+                            </a>
+                        {% else %}
+                            <div class="flex-none pe-5 ms-7 py-1.5 pb-0.5 rounded-full">
+                                En attente de publication
                             </div>
                         {% endif %}
                     {% endif %}
                 </div>
             </div>
         </div>
-{# TODO src image -> user_image #}
+        {% include 'views/offcanvas/__backdrop.html.twig' %}
 
         {% include 'views/offcanvas/_offcanvas-users.html.twig' with {sortie : sortie} %}
 
+        {% include 'views/offcanvas/_offcanvas_cancel.html.twig' %}
     </section>
 </div>
+
+{% block extraJs %}
+    <script src="{{ asset('/js/offcanvas.js') }}"></script>
+{% endblock %}

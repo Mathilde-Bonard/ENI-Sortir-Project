@@ -1,4 +1,19 @@
-document.addEventListener('DOMContentLoaded', () => {
+function cancel() {
+    let $cancel_btns = document.querySelectorAll('.cancel_btn');
+    let $container = document.getElementById('cancel_container');
 
-    let $cancel_btn = document.querySelectorAll('.can')
-})
+    $cancel_btns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            let url = btn.dataset.url + '?sortie=' + btn.dataset.sortie;
+
+            fetch(url)
+                .then(res => res.text())
+                .then(html => {
+                    $container.innerHTML = html;
+                })
+                .catch(err => console.error('Erreur AJAX :', err));
+        });
+    });
+}
+
+document.addEventListener('DOMContentLoaded', cancel);

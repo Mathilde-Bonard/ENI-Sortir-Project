@@ -8,6 +8,7 @@ use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Entity\SortieFilter;
 use App\Entity\User;
+use App\Form\CancelType;
 use App\Form\LieuType;
 use App\Form\SortieType;
 use App\Form\FilterType;
@@ -64,17 +65,17 @@ final class SortieController extends AbstractController
             'sorties' => $sorties,
         ]);
     }
-
+  
     // ================================== Route création d'une sortie ==================================
+
 
     #[IsGranted("ROLE_USER")]
     #[Route('/add', name: 'sortie_add')]
-
     public function add(
-        Request $request,
+        Request                $request,
         EntityManagerInterface $em,
-        EtatRepository $etatRepository,
-        LieuRepository $lieuRepository,
+        EtatRepository         $etatRepository,
+        LieuRepository         $lieuRepository,
     ): Response
     {
 
@@ -113,7 +114,7 @@ final class SortieController extends AbstractController
             $this->addFlash('success', 'Nouveau lieu ajouté !');
         }
 
-    //TODO render lieu.rue et lieu.cp pour la vue
+        //TODO render lieu.rue et lieu.cp pour la vue
 
         return $this->render('sortie/create.html.twig', [
             'sortieFormCreation' => $sortieFormCreation->createView(),
@@ -131,7 +132,7 @@ final class SortieController extends AbstractController
         SortieEtatUpdater $etatUpdater
     ): Response
     {
-         try {
+        try {
             $sortie = $sortieRepository->readById($id);
 
             $etatUpdater->update($sortie);
@@ -185,9 +186,9 @@ final class SortieController extends AbstractController
     // ================================== Route inscription d'une sortie ==================================
     #[IsGranted("SORTIE_SUBSCRIBE", subject: "sortie")]
     #[Route('/sortie/{id}/sub', name: 'sub', requirements: ['id' => '\d+'], methods: ['POST'])]
-    public function sub(Sortie            $sortie,
-                        Request           $request,
-                        SortieSubscriber  $sortieSubscriber): Response
+    public function sub(Sortie           $sortie,
+                        Request          $request,
+                        SortieSubscriber $sortieSubscriber): Response
     {
         $sortieSubscriber->sub($sortie);
 
@@ -217,21 +218,69 @@ final class SortieController extends AbstractController
         ]);
     }
 
-    // ================================== Route annulation d'une sortie ==================================
+   // ================================== Route de publication d'une sortie ==================================
 
-    #[IsGranted("SORTIE_CANCEL", subject: "sortie")]
-    #[Route('/sortie/{id}/cancel', name: 'cancel', requirements: ['id' => '\d+'], methods: ['GET'])]
-    public function cancel(Sortie $sortie, SortieCanceler $canceler): Response
+    #[IsGranted("SORTIE_PUBLISH", subject: "sortie")]
+    #[Route('/sortie/{id}/publish', name: 'publish', requirements: ['id' => '\d+'])]
+    public function publish(Sortie                 $sortie,
+                            EtatRepository         $etatRepository,
+                            EntityManagerInterface $entityManager): Response
+
     {
-        $this->denyAccessUnlessGranted("SORTIE_EDIT", $sortie);
-        $canceler->cancel($sortie);
+        $etat = $etatRepository->findOneBy(['libelle' => 'INSC_OUVERTE']);
+
+        $sortie->setEtat($etat);
+        $entityManager->persist($sortie);
+        $entityManager->flush();
 
         return $this->redirectToRoute('sortie_detail', ['id' => $sortie->getId()]);
     }
 
+     // ================================== Route annulation d'une sortie ==================================
 
+    #[Route('/sortie/cancel', name: 'cancel', methods: ['GET'])]
+    public function cancelRequest(SortieRepository $sortieRepository,
+                                  Request          $request): Response
+    {
+        $id = $request->query->get('sortie');
 
+        $sortie = $sortieRepository->readById($id);
+
+        $cancelForm = $this->createForm(CancelType::class, $sortie, [
+            'action' => $this->generateUrl('sortie_cancel_process', ['id' => $sortie->getId()]),
+            'method' => 'POST',
+        ]);
+
+        return $this->render('views/sortie/_cancel-form.html.twig', [
+            "cancelForm" => $cancelForm
+        ]);
+    }
+
+    #[IsGranted('SORTIE_CANCEL', subject: 'sortie')]
+    #[Route('/sortie/cancel/{id}', name: 'cancel_process', methods: ['POST'])]
+    public function cancelProcess(
+        Request        $request,
+        Sortie         $sortie,
+        SortieCanceler $canceler
+    ): Response
+    {
+        $form = $this->createForm(CancelType::class, $sortie);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $canceler->cancel($sortie);
+
+            return $this->redirectToRoute('sortie_detail', ['id' => $sortie->getId()]);
+        }
+
+        // Si pas valide, on réaffiche le formulaire
+        return $this->render('views/sortie/_cancel-form.html.twig', [
+            'cancelForm' => $form->createView()
+        ]);
+    }
+  
 }
+
 
 
 

@@ -1,6 +1,5 @@
-<div class="collapse_backdrop fixed bottom-0 pointer-events-none bg-black/50 w-full h-[100vh] z-20 transition duration-300 opacity-0"></div>
-<div id="sortie__cancel" class="custom__collapse fixed bottom-0 w-full h-[0vh] transition-all duration-600 z-50 ease-in-out">
-    <div class="flex flex-col w-full h-full">
+<div id="sortie__cancel" class="custom__collapse fixed bottom-0 w-full h-[0vh] transition-all duration-600 z-1000 ease-in-out">
+    <div class="flex flex-col w-full h-full collapse__cancel">
         <div class="rounded-t-xl sortie__container mt-auto px-3 bg-[#f1edeb] h-[70vh]">
             <div class="flex items-start sticky top-0 sortie__container pt-5 z-10">
                 <h3 class="font-semibold mb-5 text-2xl">Merci de préciser la raison <br> de l'annulation</h3>
@@ -12,23 +11,15 @@
                     </svg>
                 </div>
             </div>
-            <div class="pb-10">
-                <div class="form-line relative w-full mb-3 flex gap-3">
-                    <div class="form-label absolute top-0 left-0 px-8 -translate-2.5">
-                        <label for="infoSortie" class="text-sm bg-[#f1edeb] px-1">Motif d'annulation</label>
-                    </div>
-                    <textarea class="w-full rounded-xl border-2 font-medium p-2 flex gap-3 px-4 text-sm" name="infoSortie" id="infoSortie" ></textarea>
-                </div>
-                <button class="transition w-full font-medium text-neutral-200 bg-neutral-800 pt-2 pb-1 mt-1 rounded-full text-sm">
-                    Annuler la sortie
-                </button>
+            <div class="pb-10" id="cancel_container">
+
             </div>
         </div>
     </div>
 </div>
 
 {% block extraJs %}
-    <script src="{{ asset('/js/offcanvas.js') }}"></script>
+    <script src="{{ asset('/js/cancelSortie.js') }}"></script>
 {% endblock %}
 
 

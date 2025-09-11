@@ -20,6 +20,15 @@ class UserFixtures extends Fixture  implements DependentFixtureInterface
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
+        $faker->addProvider(new class($faker) extends \Faker\Provider\Base {
+            public function localImage($folder) {
+                $images = glob($folder . '/*.{jpg,png,gif}', GLOB_BRACE);
+                if (!$images) {
+                    return null;
+                }
+                return $images[array_rand($images)];
+            }
+        });
 
         $admin = new User();
         $admin->setNom('Doe')
@@ -33,10 +42,15 @@ class UserFixtures extends Fixture  implements DependentFixtureInterface
 
         $campus = $this->getReference(CampusFixtures::CAMPUS_REFERENCE . '1', Campus::class);
         $admin->setCampus($campus);
-
         $manager->persist($admin);
 
+        $folder = 'C:\wamp64\www\Sortir\assets\img\user';
+        $images = glob($folder . '/*.{jpg,png,gif}', GLOB_BRACE);
+
         for($i = 0; $i < 50; $i++) {
+            $image = basename($images[$i]);
+
+
             $user = new User();
             $user->setNom($faker->lastName())
                 ->setPrenom($faker->firstName())
@@ -44,7 +58,7 @@ class UserFixtures extends Fixture  implements DependentFixtureInterface
                 ->setTelephone($faker->phoneNumber())
                 ->setEmail($faker->email())
                 ->setPassword($this->userPasswordHasher->hashPassword($user, $faker->password()))
-                ->setImageFileName('userNoImage.png');;
+                ->setImageFileName($image);
 
             $categoryName = CampusFixtures::CAMPUS_REFERENCE . $faker->numberBetween(0, 2);
             $campus = $this->getReference($categoryName, Campus::class);
