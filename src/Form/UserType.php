@@ -32,12 +32,14 @@ class UserType extends AbstractType
             ->add('photo', FileType::class, [
                 'mapped' => false,
                 'required' => false,
+
                 'constraints' => [
                     new Image(['maxSize' => '5000k'])
                 ]
             ])
             // Bouton submit qui apparaitra directement dans twig avec le form_widget
             ->add('submit', SubmitType::class, [
+                'attr' => ['class' => 'transition w-full font-semibold text-neutral-800 border-2 bg-yellow-100 pt-2 pb-1.5 mt-1 rounded-full text-smg'],
                 'label' => $options['submit_label'] ?? 'Modifier'
             ]);
     }

@@ -55,7 +55,7 @@
             </div>
         </div>
         {% if app.user.id == user.id %}
-        <div class="relative border-t-2 mt-auto border-dashed bg-[#D1EB99] text-neutral-800  w-full">
+        <div class="border-t-2 mt-auto border-dashed bg-[#D1EB99] text-neutral-800  w-full">
             <div class="absolute w-full flex">
                 <div class="aspect-square w-6 bg-neutral-800 rounded-full -translate-x-3 -translate-y-3.5"></div>
                 <div class="aspect-square w-6 bg-neutral-800 rounded-full ms-auto translate-x-3 -translate-y-3.5"></div>
@@ -63,11 +63,23 @@
             <a href="{{ path('app_profil_update', {'id': app.user.id }) }}">
                 <div class="font-bold py-7 uppercase text-2xl text-center sortie__btn">
                     <div class="sub_btn flex-none pe-5 ms-7 py-1.5 pb-0.5 rounded-full cursor-pointer">
-                        Modifier
+                        Modifier le profil
                     </div>
                 </div>
             </a>
-
+            <div class="border-t-2 mt-auto border-dashed bg-[#D1EB99] text-neutral-800  w-full">
+                <div class="absolute w-full flex">
+                    <div class="aspect-square w-6 bg-neutral-800 rounded-full -translate-x-3 -translate-y-3.5"></div>
+                    <div class="aspect-square w-6 bg-neutral-800 rounded-full ms-auto translate-x-3 -translate-y-3.5"></div>
+                </div>
+                <a href="{{ path('app_profil_updatePwd', {'id': app.user.id }) }}">
+                    <div class="font-bold py-7 uppercase text-2xl text-center sortie__btn">
+                        <div class="sub_btn flex-none pe-5 ms-7 py-1.5 pb-0.5 rounded-full cursor-pointer">
+                            Modifier le mot de passe
+                        </div>
+                    </div>
+                </a>
+            </div>
         </div>
         {% endif %}
 
