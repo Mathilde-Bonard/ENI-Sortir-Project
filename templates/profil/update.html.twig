@@ -1,20 +1,30 @@
 {% extends 'base.html.twig' %}
 
-{#{% form_theme userUpdateForm 'views/form/Form-template.html.twig' %}#}
 
 {% block body %}
-    <main class="w-full ">
+
+    <main class="w-full pt-15">
+
         <section>
-            <div class="p-3 bg-[#D7EAA5] rounded-xl text-neutral-800 shadow-xl">
+            <div class="p-3 pt-8 bg-[#f1edeb] rounded-xl text-neutral-800 shadow-xl">
                 <h1 class="text-xl font-medium text-neutral-900 mb-3">Modification du profil</h1>
 
-                {% form_theme userUpdateForm 'views/form/form-theme-profil.html.twig' %}
+                {% form_theme userUpdateForm 'views/form/form-theme-update.html.twig' %}
                 <div class="w-full text-sm">
                     {{ form_start(userUpdateForm) }}
+                    {{ form_row(userUpdateForm.pseudo) }}
+                    {{ form_row(userUpdateForm.prenom) }}
+                    {{ form_row(userUpdateForm.nom) }}
+                    {{ form_row(userUpdateForm.telephone) }}
+                    {{ form_row(userUpdateForm.email) }}
+                    {{ form_row(userUpdateForm.campus) }}
+                    {{ form_row(userUpdateForm.photo) }}
                     {{ form_widget(userUpdateForm) }}
                     {{ form_end(userUpdateForm) }}
                 </div>
-                <a class="flex" href="{{ path('app_profil_details', { 'id' : app.user.id }) }}">
+
+                <a class="flex justify-center transition w-full font-semibold text-neutral-800 border-2 bg-red-300 pt-2 pb-1.5 mt-1 rounded-full text-sm" href="{{ path('app_profil_details', { 'id' : app.user.id }) }}">
+
                     Annuler
                 </a>
             </div>
