@@ -63,12 +63,8 @@ class SortieType extends AbstractType
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
                 'choice_label' => 'nom',
-            ])
-            // Bouton submit qui apparaitra directement dans twig avec le form_widget
-            ->add('submit', SubmitType::class, [
-                'attr'=>['class'=>''],
-                'label' => 'Créer',
-                ]);
+            ]);
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void

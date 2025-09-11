@@ -7,6 +7,7 @@ const Elements = {
     lieuModal: null,
     lieuForm: null,
     buttonAddLieu: null,
+    lieuDetails: null,
 }
 
 function initElements () {
@@ -16,4 +17,5 @@ function initElements () {
     Elements.lieuModal = document.querySelector('.modal-lieu');
     Elements.lieuForm = document.querySelector('#lieu_form');
     Elements.buttonAddLieu = document.querySelector('#addLieuButton');
+    Elements.lieuDetails = document.querySelector('.lieu_details');
 }

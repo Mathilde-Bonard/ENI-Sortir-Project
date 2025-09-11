@@ -1,10 +1,80 @@
 {% extends 'base.html.twig' %}
 
+
 {% block body %}
-    {{ form_start(sortieForm) }}
-    {{ form_widget(sortieForm) }}
-    {{ form_end(sortieForm) }}
+    <main class="w-full pt-15">
+        <section>
+            <div class="p-3 pt-8 bg-[#f1edeb] rounded-xl text-neutral-800 shadow-xl">
+
+                {% form_theme sortieForm 'views/form/form-theme-sortie.html.twig' %}
+                <div class="w-full text-sm">
+
+                    {{ form_start(sortieForm) }}
+                    {{ form_row(sortieForm.nom) }}
+                    {{ form_row(sortieForm.dateHeureDebut) }}
+                    {{ form_row(sortieForm.duree) }}
+                    {{ form_row(sortieForm.dateLimiteInscription) }}
+                    {{ form_row(sortieForm.nbInscriptionMax) }}
+                    {{ form_row(sortieForm.infosSortie) }}
+
+                    {{ form_row(sortieForm.ville) }}
+
+                    <div class="sortie-lieu">
+                        {{ form_row(sortieForm.lieu) }}
+                        <section class="lieu_details">
+                            <p id="rue">Rue : </p>
+                            <p id="cp">Code Postal : </p>
+                        </section>
+                        <button id="addLieuButton" type="button" class="transition w-full font-medium text-neutral-800 border-2 bg-yellow-100 pt-2 pb-1 mt-1 rounded-full text-smg">
+                            + Ajouter un nouveau lieu
+                        </button>
+                    </div>
+
+                    {{ form_row(sortieForm.campus) }}
+                    <button class="transition w-full font-semibold text-neutral-800 border-2 bg-yellow-100 pt-2 pb-1.5 mt-1 rounded-full text-smg">
+                        Enregistrer
+                    </button>
+                    {{ form_end(sortieForm) }}
+                    <a class="flex justify-center transition w-full font-semibold text-neutral-800 border-2 bg-red-300 pt-2 pb-1.5 mt-1 rounded-full text-sm" href="{{ path('sortie_list') }}">
+                        Annuler
+                    </a>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal-lieu">
+        {% form_theme lieuFormCreation 'views/form/form-theme-sortie.html.twig' %}
+        <div class="modal-content">
+            <h2>Nouveau lieu</h2>
+            {{ form_start(lieuFormCreation) }}
+            {{ form_row(lieuFormCreation.nom) }}
+            {{ form_row(lieuFormCreation.rue) }}
+            {{ form_row(lieuFormCreation.latitude) }}
+            {{ form_row(lieuFormCreation.longitude) }}
+            {{ form_row(lieuFormCreation.ville) }}
+            {{ form_widget(lieuFormCreation.submit) }}
+            {{ form_end(lieuFormCreation) }}
+        </div>
+    </div>
+
+    {% block extraJs %}
+        {#        // Affichage de la rue et du cp quand le lieu est renseigné#}
+        {#        // const lieuDetails = document.querySelector('.lieu_details');#}
+        {#        // selectLieu.addEventListener('input', function (){#}
+        {#        //     lieuDetails.style.display = 'flex';#}
+        {#        // })#}
+        <script>
+            window.apiBaseUrl = '{{ path('sortie_list') }}';
+            window.apiCreateBaseUrl = '{{ path('api_create') }}'
+        </script>
+        {{ importmap() }}
+        <script type="module" src="{{ asset('js/mainSortie.js') }}"></script>
+    {% endblock %}
+
 {% endblock %}
+
 
 {% block title %}
     {{ parent() }} | update

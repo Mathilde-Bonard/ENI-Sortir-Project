@@ -1,6 +1,7 @@
 import {Elements} from "constantsSortie";
 import {refreshLieux} from "api";
 import {submitLieu} from 'modalLieu'
+import {displayRueCp} from "api";
 
 export {updateSelectLieu}
 export {initEventListeners}
@@ -20,8 +21,19 @@ function updateSelectLieu() {
         }
     });
 }
+function displayLieuDetails() {
+    Elements.selectLieu.addEventListener('change', function () {
+        if (this.value) {
+            Elements.lieuDetails.style.display = 'flex';
+            displayRueCp(this.value);
+        } else {
+            Elements.lieuDetails.style.display = 'none';
+        }
+    });
+}
 
 function initEventListeners() {
-    updateSelectLieu();   // Écouteur changement sélection ville pour mettre à jour lieux
+    updateSelectLieu();   // Écoute changement sélection ville pour mettre à jour lieux
     submitLieu();        // Soumission du formulaire nouveau lieu dans la modale
+    displayLieuDetails()
 }
