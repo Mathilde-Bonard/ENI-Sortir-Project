@@ -1,6 +1,6 @@
 <nav class="w-full absolute top-0 z-50 text-neutral-200">
-    <div class="flex p-3 items-center">
-        <div class="orga flex items-center">
+    <div class="flex p-3 items-center lg:container lg:px-60 mx-auto">
+        <div class="flex items-center">
 {#            Infos user connecté (en haut à droite)#}
             {% if app.user %}
             <a class="flex" href="{{ path('app_profil_details', { 'id' : app.user.id }) }}">

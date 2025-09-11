@@ -20,8 +20,8 @@
                                     </svg>
                                 </a>
                             {% endif %}
-                            {% if is_granted('SORTIE_CANCEL', sortie) %}
-                                <div class="cursor-pointer bg-neutral-800 p-1 rounded-full toggle__collapse" data-target="sortie__cancel" data-sortie="{{ sortie.id }}">
+                            {% if is_granted('SORTIE_CANCEL', sortie) and sortie.etat != "ANNULEE" %}
+                                <div class="cursor-pointer bg-neutral-800 p-1 cancel_btn rounded-full toggle__collapse" data-target="sortie__cancel" data-url="{{ path('sortie_cancel') }}" data-sortie="{{ sortie.id }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                          class="size-4">
                                         <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z"></path>

@@ -9,6 +9,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 final class SortieVoter extends Voter
 {
+    public const PUBLISH = "SORTIE_PUBLISH";
     public const CANCEL = 'SORTIE_CANCEL';
     public const EDIT = 'SORTIE_EDIT';
     public const READ_PARTICIPANTS = 'SORTIE_READ_PARTICIPANTS';
@@ -31,6 +32,7 @@ final class SortieVoter extends Voter
                 self::UNSUBSCRIBE,
                 self::SUBSCRIBE,
                 self::REMOVE_PARTICIPANT,
+                self::PUBLISH,
             ])
             && $subject instanceof \App\Entity\Sortie;
     }
@@ -47,11 +49,14 @@ final class SortieVoter extends Voter
         $etat = $subject->getEtat()->getLibelle();
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
+            case self::PUBLISH:
+                return $user === $subject->getOrganisateur()
+                    && $subject->getDateLimiteInscription() > new \DateTime();
+
             case self::CANCEL:
                 return $user === $subject->getOrganisateur()
                     || $this->security->isGranted('ROLE_ADMIN')
-                    && $etat !== 'ANNULEE'
-                    && $etat !== 'PASSEE';
+                    && $etat == "INSC_OUVERTE";
 
             case self::EDIT:
             case self::REMOVE_PARTICIPANT:

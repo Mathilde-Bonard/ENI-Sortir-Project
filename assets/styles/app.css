@@ -17,6 +17,15 @@ input[type="checkbox"] {
     border-color: #f8f8f8;
 }
 
+.collapse_backdrop{
+    opacity: 0;
+    pointer-events: none;
+}
+
+.collapse_backdrop.active{
+    opacity: 1;
+    pointer-events: auto;
+}
 
 .sortie {
     color: oklch(26.9% 0 0);
