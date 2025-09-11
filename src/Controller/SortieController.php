@@ -65,6 +65,8 @@ final class SortieController extends AbstractController
         ]);
     }
 
+    // ================================== Route création d'une sortie ==================================
+
     #[IsGranted("ROLE_USER")]
     #[Route('/add', name: 'sortie_add')]
 
@@ -119,6 +121,8 @@ final class SortieController extends AbstractController
         ]);
     }
 
+    // ================================== Route détail d'une sortie ==================================
+
     #[IsGranted("ROLE_USER")]
     #[Route('/sortie/{id}', name: 'detail', requirements: ['id' => '\d+'])]
     public function detail(SortieRepository $sortieRepository, int $id, SortieEtatUpdater $etatUpdater): Response
@@ -135,6 +139,8 @@ final class SortieController extends AbstractController
             'sortie' => $sortie
         ]);
     }
+
+    // ================================== Route modification d'une sortie ==================================
 
     #[IsGranted("SORTIE_EDIT", subject: "sortie")]
     #[Route('/sortie/modification/{id}', name: 'update', requirements: ['id' => '\d+'])]
@@ -154,13 +160,25 @@ final class SortieController extends AbstractController
             $this->addFlash('success', 'Sortie modifiée !');
             return $this->redirectToRoute('sortie_detail', ['id' => $sortie->getId()]);
         }
+        // Formulaire d'ajout de lieu dans la modale
+        $lieu = new Lieu();
+        $lieuFormCreation = $this->createForm(LieuType::class, $lieu);
+
+        $lieuFormCreation->handleRequest($request);
+        if ($lieuFormCreation->isSubmitted() && $lieuFormCreation->isValid()) {
+            $em->persist($lieu);
+            $em->flush();
+
+            $this->addFlash('success', 'Nouveau lieu ajouté !');
+        }
 
         return $this->render('sortie/update.html.twig', [
             'sortieForm' => $sortieForm->createView(),
+            'lieuFormCreation' => $lieuFormCreation->createView(),
             ]);
         }
 
-
+    // ================================== Route inscription d'une sortie ==================================
     #[IsGranted("SORTIE_SUBSCRIBE", subject: "sortie")]
     #[Route('/sortie/{id}/sub', name: 'sub', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function sub(Sortie            $sortie,
@@ -177,6 +195,8 @@ final class SortieController extends AbstractController
         ]);
     }
 
+    // ================================== Route désinscription d'une sortie ==================================
+
     #[IsGranted("SORTIE_UNSUBSCRIBE", subject: "sortie")]
     #[Route('/sortie/{id}/unsub', name: 'unsub', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function unSub(Sortie           $sortie,
@@ -192,6 +212,8 @@ final class SortieController extends AbstractController
             'sortie' => $sortie,
         ]);
     }
+
+    // ================================== Route annulation d'une sortie ==================================
 
     #[IsGranted("SORTIE_CANCEL", subject: "sortie")]
     #[Route('/sortie/{id}/cancel', name: 'cancel', requirements: ['id' => '\d+'], methods: ['GET'])]

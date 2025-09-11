@@ -2,7 +2,9 @@
 
 
 {% block body %}
+
     <main class="w-full pt-15">
+
         <section>
             <div class="p-3 pt-8 bg-[#f1edeb] rounded-xl text-neutral-800 shadow-xl">
                 <h1 class="text-xl font-medium text-neutral-900 mb-3">Modification du profil</h1>
@@ -20,7 +22,9 @@
                     {{ form_widget(userUpdateForm) }}
                     {{ form_end(userUpdateForm) }}
                 </div>
+
                 <a class="flex justify-center transition w-full font-semibold text-neutral-800 border-2 bg-red-300 pt-2 pb-1.5 mt-1 rounded-full text-sm" href="{{ path('app_profil_details', { 'id' : app.user.id }) }}">
+
                     Annuler
                 </a>
             </div>

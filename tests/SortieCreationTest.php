@@ -7,7 +7,6 @@ use App\Repository\EtatRepository;
 use App\Repository\LieuRepository;
 use App\Repository\SortieRepository;
 use App\Repository\UserRepository;
-use ContainerVJK8ZEY\getEtatFixturesService;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class SortieCreationTest extends WebTestCase
@@ -43,7 +42,6 @@ class SortieCreationTest extends WebTestCase
             'sortie_creation[duree]' => 4,
             'sortie_creation[dateLimiteInscription]' => '2025-09-11T12:30',
             'sortie_creation[nbInscriptionMax]' => 10,
-            'sortie_creation[duree]' => 4,
             'sortie_creation[infosSortie]' => 'Sortie en plein air',
             'sortie_creation[etat]' => $etat->getId(),
             'sortie_creation[campus]' => $campus->getId(),
