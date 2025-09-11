@@ -1,13 +1,11 @@
 import {Elements} from "constantsSortie";
-import {refreshLieux} from "api";
+import {refreshLieux, displayRueCp} from "api";
 import {submitLieu} from 'modalLieu'
-import {displayRueCp} from "api";
-
-export {updateSelectLieu}
-export {initEventListeners}
 
 // A la selection d'une ville
 function updateSelectLieu() {
+    console.log("updateSelectLieu Start !")
+
     const { selectVille, selectLieu } = Elements;
     selectVille.addEventListener('change', function () {
         const villeId = selectVille.value;
@@ -22,6 +20,9 @@ function updateSelectLieu() {
     });
 }
 function displayLieuDetails() {
+
+    console.log("displayLieuDetails Start !")
+
     Elements.selectLieu.addEventListener('change', function () {
         if (this.value) {
             Elements.lieuDetails.style.display = 'flex';
@@ -32,7 +33,7 @@ function displayLieuDetails() {
     });
 }
 
-function initEventListeners() {
+export function initEventListeners() {
     updateSelectLieu();   // Écoute changement sélection ville pour mettre à jour lieux
     submitLieu();        // Soumission du formulaire nouveau lieu dans la modale
     displayLieuDetails()
