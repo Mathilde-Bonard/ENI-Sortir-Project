@@ -79,7 +79,6 @@ final class ProfilController extends AbstractController
     #[Route('/updatePwd', name: 'updatePwd')]
     public function updatePassword(
         Request $request,
-        EntityManagerInterface $entityManager,
         UserPasswordHasherInterface $passwordHasher
     ): Response
     {

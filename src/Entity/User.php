@@ -43,21 +43,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank(message:'Ce champ est obligatoire')]
     #[Assert\Length(min: 1, max: 50)]
     #[Assert\Regex(
-        pattern: '/^[\p{L}]+$/u',
-        message: 'Votre nom ne peut pas contenir de chiffres',
+///
+        pattern: '/^[A-Za-z]+(-[A-Za-z]+)*$/u',
+        message: 'Votre nom ne peut contenir que des lettres et un tiret de séparation.',
     )]
     #[ORM\Column(length: 50)]
     private ?string $nom = null;
 
     #[Assert\NotBlank(message:'Ce champ est obligatoire')]
     #[Assert\Regex(
-        pattern: '/^[\p{L}]+$/u',
-        message: 'Votre prénom ne peut contenir que des lettres'
+        pattern: '/^[A-Za-z]+(-[A-Za-z]+)*$/u',
+        message: 'Votre nom ne peut contenir que des lettres et un tiret de séparation.',
     )]
     #[ORM\Column(length: 50)]
     private ?string $prenom = null;
 
-    #[Assert\Regex('/^\+?[0-9 ]+$/')]
+    #[Assert\Regex(
+        pattern: '/^\+?[0-9 ]+$/',
+        message: 'Votre numéro de tél ne peut contenir que des chiffres.',
+    )]
     #[ORM\Column(length: 50)]
     private ?string $telephone = null;
 
