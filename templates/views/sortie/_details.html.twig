@@ -176,6 +176,10 @@
                         <div class="flex-none pe-5 ms-7 py-1.5 pb-0.5 rounded-full">
                             En cours
                         </div>
+                    {% elseif  sortie.etat == "PASSEE" %}
+                        <div class="flex-none pe-5 ms-7 py-1.5 pb-0.5 rounded-full">
+                            Sortie terminée
+                        </div>
                     {% elseif  sortie.etat == "CREEE" %}
                         {% if is_granted("SORTIE_PUBLISH", sortie) %}
                             <a href="{{ path('sortie_publish',  {'id' : sortie.id}) }}"

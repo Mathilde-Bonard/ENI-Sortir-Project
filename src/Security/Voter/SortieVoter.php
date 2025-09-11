@@ -75,7 +75,8 @@ final class SortieVoter extends Voter
             case self::READ_PARTICIPANTS:
                 return $this->security->isGranted('ROLE_USER')
                     && $subject->getParticipants()->contains($user)
-                    || $user === $subject->getOrganisateur();
+                    || $user === $subject->getOrganisateur()
+                    || $etat === 'PASSEE';
 
             case self::SUBSCRIBE:
                 return $this->security->isGranted('ROLE_USER')

@@ -56,20 +56,20 @@
                     <a href="{{ path('app_profil_details', { 'id' : sortie.organisateur.id }) }}">
                         <div class="me-1 flex-none rounded-full">
                             <img src="{{ asset("/img/user/" ~ sortie.organisateur.imageFileName) }}" alt="placeholder"
-                                 class="participant rounded-full border-2 w-9 h-9">
+                                 class="participant rounded-full border-2 w-10 h-10">
                         </div>
                     </a>
-                    <div class="sortie__btn flex items-center rounded-full h-full">
+                    <div class="flex items-center rounded-full h-full">
                         <div class="flex *:me-[-18px] relative">
                             {% for participant in sortie.participants[:3] %}
                                 <div class="rounded-full">
                                     <img src="{{ asset('/img/user/' ~ participant.imageFileName) }}"
                                          alt="placeholder"
-                                         class="participant rounded-full border-2 w-9 h-9">
+                                         class="participant rounded-full border-2 w-10 h-10">
                                 </div>
                             {% endfor %}
                             {% if (sortie.participants | length) > 3 %}
-                                <div class="rounded-full w-9 h-9 bg-neutral-900 participant border-2 flex items-center justify-center">
+                                <div class="rounded-full w-10 h-10 bg-neutral-900 participant border-2 flex items-center justify-center">
                                     <p class="participant text-xs font-medium mt-1 text-neutral-800">
                                         +{{ (sortie.participants | length) - 3 }}</p>
                                 </div>
@@ -78,17 +78,17 @@
 
                         {% if sortie.etat == "INSC_OUVERTE" %}
                             {% if app.user == sortie.organisateur %}
-                                <div class="flex-none pe-5 ms-7 py-1.5 pb-0.5 rounded-full">
+                                <div class="sortie__btn  h-full flex-none items-center pe-5 ps-7 py-3 pb-1.5 rounded-e-full">
                                     Inscription ouverte
                                 </div>
                             {% else %}
                                 {% if is_granted('SORTIE_UNSUBSCRIBE', sortie) %}
-                                    <div class="sub_btn flex-none pe-5 ms-7 py-1.5 pb-0.5 rounded-full cursor-pointer"
+                                    <div class="sub_btn sortie__btn h-full flex-none items-center pe-5 ps-7 py-3 pb-1.5 rounded-e-full cursor-pointer"
                                     data-url="{{ path('sortie_unsub', {id: sortie.id}) }}">
                                         Se désinscrire
                                     </div>
                                 {% elseif is_granted('SORTIE_SUBSCRIBE', sortie) %}
-                                    <div class="sub_btn flex-none pe-5 ms-7 py-1.5 pb-0.5 rounded-full cursor-pointer"
+                                    <div class="sub_btn sortie__btn h-full flex-none items-center pe-5 ps-7 py-3 pb-1.5 rounded-e-full cursor-pointer"
                                          data-url="{{ path('sortie_sub', {id: sortie.id}) }}">
                                         S'inscrire
                                     </div>
@@ -102,20 +102,20 @@
                                     Se désinscrire
                                 </div>
                             {% else %}
-                                <div class="flex-none pe-5 ms-7 py-1.5 pb-0.5 rounded-full">
+                                <div class="sortie__btn h-full flex-none items-center pe-5 ps-7 py-3 pb-1.5 rounded-e-full ">
                                     Clôturée
                                 </div>
                             {% endif %}
                         {% elseif  sortie.etat == "ANNULEE" %}
-                            <div class="flex-none pe-5 ms-7 py-1.5 pb-0.5 rounded-full">
+                            <div class="sortie__btn h-full flex-none items-center pe-5 ps-7 py-3 pb-1.5 rounded-e-full ">
                                 Annulée
                             </div>
                         {% elseif  sortie.etat == "ACTIVITE_EN_COURS" %}
-                            <div class="flex-none pe-5 ms-7 py-1.5 pb-0.5 rounded-full">
+                            <div class="sortie__btn h-full flex-none items-center pe-5 ps-7 py-3 pb-1.5 rounded-e-full ">
                                 En cours
                             </div>
                         {% elseif  sortie.etat == "PASSEE" %}
-                            <div class="flex-none pe-5 ms-7 py-1.5 pb-0.5 rounded-full">
+                            <div class="sortie__btn h-full flex-none items-center pe-5 ps-7 py-3 pb-1.5 rounded-e-full ">
                                 Passée
                             </div>
                         {% endif %}

@@ -41,7 +41,7 @@ input[type="checkbox"] {
 
 
     .sortie__users .participant {
-        border-color: #D1EB99;
+        border-color:  #f1edeb;
     }
 
     .sortie__btn {
@@ -57,15 +57,11 @@ input[type="checkbox"] {
         background-color: #aee5a9;
         color: oklch(26.9% 0 0);
     }
-    .sortie__users .participant {
-        border-color: #aee5a9;
-    }
+
 }
 
 .sortie.insc_cloturee {
-    .sortie__users .participant {
-        border-color: #F29D73;
-    }
+
 
     .sortie__btn {
         background-color: #F29D73;
@@ -75,9 +71,6 @@ input[type="checkbox"] {
 .sortie.activite_en_cours {
 
 
-    .sortie__users .participant {
-        border-color: #a5e3d0;
-    }
 
     .sortie__btn {
         background-color: #a5e3d0;
@@ -86,9 +79,7 @@ input[type="checkbox"] {
 
 .sortie.annulee {
 
-    .sortie__users .participant {
-        border-color: #f57f7f;
-    }
+
 
     .sortie__btn {
         background-color: #f57f7f;
@@ -98,9 +89,6 @@ input[type="checkbox"] {
 
 .sortie.passee {
 
-    .sortie__users .participant {
-        border-color: #a2a1de;
-    }
 
     .sortie__btn {
         background-color: #a2a1de;
