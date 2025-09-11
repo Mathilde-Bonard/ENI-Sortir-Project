@@ -6,13 +6,13 @@
     <main class="w-full ">
         <section>
             <div class="p-3 bg-[#D7EAA5] rounded-xl text-neutral-800 shadow-xl">
-                <h1 class="text-xl font-medium text-neutral-900 mb-3">Modification du profil</h1>
+                <h1 class="text-xl font-medium text-neutral-900 mb-3">Modification du mot de passe</h1>
 
-                {% form_theme userUpdateForm 'views/form/form-theme-profil.html.twig' %}
+                {% form_theme pwdUpdateForm 'views/form/form-theme-profil.html.twig' %}
                 <div class="w-full text-sm">
-                    {{ form_start(userUpdateForm) }}
-                    {{ form_widget(userUpdateForm) }}
-                    {{ form_end(userUpdateForm) }}
+                    {{ form_start(pwdUpdateForm) }}
+                    {{ form_widget(pwdUpdateForm) }}
+                    {{ form_end(pwdUpdateForm) }}
                 </div>
                 <a class="flex" href="{{ path('app_profil_details', { 'id' : app.user.id }) }}">
                     Annuler
@@ -23,5 +23,5 @@
 {% endblock %}
 
 {% block title %}
-    Modification du profil
+    Modification du mot de passe
 {% endblock %}
