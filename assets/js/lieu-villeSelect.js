@@ -3,7 +3,6 @@ import {refreshLieux} from "api";
 import {submitLieu} from 'modalLieu'
 import {displayRueCp} from "api";
 
-export {updateSelectLieu}
 export {initEventListeners}
 
 // A la selection d'une ville

@@ -41,6 +41,7 @@ final class ApiController extends AbstractController
         ): JsonResponse
     {
         $lieux = $repository->findBy(['ville' => $ville_id]);
+        dump($lieux);
         return $this->json($lieux, Response::HTTP_OK, [], ['groups' => ['lieux_par_ville']]);
 
     }

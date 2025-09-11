@@ -68,7 +68,6 @@ final class SortieController extends AbstractController
   
     // ================================== Route création d'une sortie ==================================
 
-
     #[IsGranted("ROLE_USER")]
     #[Route('/add', name: 'sortie_add')]
     public function add(
