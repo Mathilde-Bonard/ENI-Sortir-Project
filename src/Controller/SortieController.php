@@ -125,7 +125,11 @@ final class SortieController extends AbstractController
 
     #[IsGranted("ROLE_USER")]
     #[Route('/sortie/{id}', name: 'detail', requirements: ['id' => '\d+'])]
-    public function detail(SortieRepository $sortieRepository, int $id, SortieEtatUpdater $etatUpdater): Response
+    public function detail(
+        int $id,
+        SortieRepository $sortieRepository,
+        SortieEtatUpdater $etatUpdater
+    ): Response
     {
          try {
             $sortie = $sortieRepository->readById($id);
