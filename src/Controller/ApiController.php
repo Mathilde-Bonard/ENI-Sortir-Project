@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 #[Route('/api', name: 'api_')]
 final class ApiController extends AbstractController
 {
-    #[Route('/ville/{villeId}', name: 'ville_id', methods: ['GET'])]
+    #[Route(path:'/ville/{villeId}', name: 'ville_id', methods: ['GET'])]
     public function getVilleById(
         int $villeId,
         VilleRepository $villeRepository,
@@ -43,6 +43,23 @@ final class ApiController extends AbstractController
         $lieux = $repository->findBy(['ville' => $ville_id]);
         return $this->json($lieux, Response::HTTP_OK, [], ['groups' => ['lieux_par_ville']]);
 
+    }
+
+    #[Route(path: '/lieu/{lieu_id}/detail', name: 'lieu_rue_cp', methods: 'GET')]
+    public function getLieuRueCp(
+        int $lieu_id,
+        LieuRepository $repository,
+        ): JsonResponse
+    {
+        $lieu = $repository->find($lieu_id);
+        if (!$lieu) {
+            return $this->json(['error' => 'Lieu non trouvé'], 404);
+        }
+
+        return $this->json([
+            'rue' => $lieu->getRue(),
+            'codePostal' => $lieu->getVille()->getCp()
+        ]);
     }
 
     #[Route(path: '/lieu/create', name: 'create', methods: 'POST')]

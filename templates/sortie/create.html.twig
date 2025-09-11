@@ -2,7 +2,7 @@
 
 
 {% block body %}
-    <main class="w-full">
+    <main class="w-full pt-15">
         <section>
             <div class="p-3 pt-8 bg-[#f1edeb] rounded-xl text-neutral-800 shadow-xl">
 
@@ -20,16 +20,20 @@
                 {{ form_row(sortieFormCreation.ville) }}
 
                 <div class="sortie-lieu">
-                    <button id="addLieuButton" type="button" class="transition w-10 font-medium text-neutral-800 border-2 bg-yellow-100 pt-2 pb-1 mt-1 rounded-full text-smg">+</button>
                     {{ form_row(sortieFormCreation.lieu) }}
                     <section class="lieu_details">
-                        <p>Rue : </p>
-                        <p>Code Postal : </p>
+                        <p id="rue">Rue : </p>
+                        <p id="cp">Code Postal : </p>
                     </section>
+                    <button id="addLieuButton" type="button" class="transition w-full font-semibold text-neutral-800 border-2 bg-yellow-100 pt-2 pb-1.5 mt-1 rounded-full text-smg">
+                        + Ajouter un nouveau lieu
+                    </button>
                 </div>
 
                 {{ form_row(sortieFormCreation.campus) }}
-                {{ form_widget(sortieFormCreation.submit) }}
+                    <button class="transition w-full font-semibold text-neutral-800 border-2 bg-yellow-100 pt-2 pb-1.5 mt-1 rounded-full text-smg">
+                        Créer
+                    </button>
                 {{ form_end(sortieFormCreation) }}
 
                 </div>
@@ -54,151 +58,11 @@
 
     {% block extraJs %}
         <script>
-
-////////////// CONSTANTES
-
-            const selectVille = document.getElementById('sortie_ville');
-            const selectLieuVille = document.getElementById('lieu_ville');
-            const selectLieu = document.getElementById('sortie_lieu');
-            const lieuModal = document.querySelector('.modal-lieu');
-            const lieuForm = document.querySelector('#lieu_form');
-            const buttonAddLieu = document.querySelector('#addLieuButton');
-
-
-  //////////// FONCTIONS
-
-        function openLieuModal() {
-            // Présélection de la ville
-            if (selectVille.value) {
-                refreshVille(selectVille.value);
-            }
-            buttonAddLieu.addEventListener('click', function () {
-                selectLieuVille.value = selectVille.value;
-                if (selectLieuVille.value) {
-                    refreshLieux(selectLieuVille.value);
-                }
-                lieuModal.style.display = 'flex';
-            })
-        }
-        function closeModal() {
-            // Sortie de la modale quand click en dehors
-            lieuModal.addEventListener('click', function (event) {
-                if (event.target === lieuModal) {
-                    selectLieu.value = lieu.id;
-                    lieuModal.style.display = 'none';
-                }
-            });
-        }
-
-            // Appel API pour renouvellement du select lieux
-            function refreshLieux(villeId) {
-                const apiBaseUrl = '{{ path('sortie_list') }}';
-                fetch(apiBaseUrl + 'api/lieux/' + villeId)
-                    .then(response => response.json())
-                    .then(data => {
-                        // Affichage du nom du lieu dans le select
-                        for (const lieu of data) {
-                            const option = document.createElement('option');
-                            option.value = lieu.id;
-                            option.textContent = lieu.nom;
-                            selectLieu.appendChild(option);
-                        }
-                    });
-            }
-            // Appel API pour récupérer la ville sélectionnée
-            function refreshVille(villeId) {
-                const apiBaseUrl = '{{ path('sortie_list') }}';
-                fetch(apiBaseUrl + 'api/ville/' + villeId)
-                    .then(response=>response.json())
-                    .then(data => {
-                        selectLieuVille.value = data.id
-                    })
-            }
-
-            // A la selection d'une ville
-            function updateSelectLieu() {
-                selectVille.addEventListener('change', function () {
-                    const villeId = selectVille.value;
-                    console.log(villeId)
-
-                    // Vider le select lieu
-                    selectLieu.innerHTML = '<option value="">Choisissez un lieu...</option>';
-
-                    if (villeId) { // Si une ville est sélectionnée
-                        refreshLieux(villeId)
-                    }
-                });
-            }
-            // Traitement du formulaire d'un nouveau lieu dans la modale
-            function submitLieu(){
-                        lieuForm.addEventListener('submit', function (event){
-
-                            event.preventDefault();
-                            // Récupération des données du formulaire
-                            const formData = new FormData(lieuForm);
-                            const data = {
-                                nom: formData.get('lieu[nom]'),
-                                rue: formData.get('lieu[rue]'),
-                                ville: formData.get('lieu[ville]'),
-                            };
-                            // Envoie les données en JSON
-                            fetch('{{ path('api_create') }}', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type':'application/json'
-                                },
-                                body: JSON.stringify(data)
-                            })
-                                .then(response=>response.json())
-                                // Traitement après succès
-                                .then(data=>{
-                                    // Fermeture de la modale
-                                    const lieu = document.querySelector('.modal-lieu');
-                                    lieu.style.display = 'none';
-
-                                    // Création d'une nouvelle option avec le lieu créé
-                                    const lieuCree = document.createElement('option');
-                                    lieuCree.value = data.id;
-                                    lieuCree.textContent = data.nom;
-                                    const selectLieu = document.getElementById('sortie_lieu');
-                                    selectLieu.appendChild(lieuCree);
-
-                                    selectLieu.value = data.id;
-
-                                })
-                            lieuForm.reset();
-                            // Préselection nouveau lieu
-                            refreshLieux();
-
-                        })
-                    }
-                    function initEventListeners(){
-                        updateSelectLieu();
-                        submitLieu();
-                    }
-
-                    function initModal(){
-                        openLieuModal();
-                        closeModal();
-                    }
-
-            // Affichage des lieux correspondant à la ville sélectionnée
-
-            document.addEventListener('DOMContentLoaded', function() {
-
-                initEventListeners();
-                initModal();
-
-                // Affichage de la rue et du cp quand le lieu est renseigné
-                // const lieuDetails = document.querySelector('.lieu_details');
-                // selectLieu.addEventListener('input', function (){
-                //     lieuDetails.style.display = 'flex';
-                // })
-
-            });
-
-
+            window.apiBaseUrl = '{{ path('sortie_list') }}';
+            window.apiCreateBaseUrl = '{{ path('api_create') }}'
         </script>
+        {{ importmap() }}
+        <script type="module" src="{{ asset('js/mainSortie.js') }}"></script>
     {% endblock %}
 
 {% endblock %}
