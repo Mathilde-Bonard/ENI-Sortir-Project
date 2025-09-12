@@ -30,12 +30,12 @@
                     </button>
                 </div>
 
-                {{ form_row(sortieFormCreation.campus) }}
-{#                    <button class="transition w-full font-semibold text-neutral-800 border-2 bg-yellow-100 pt-2 pb-1.5 mt-1 rounded-full text-smg">#}
-{#                        Créer#}
-{#                    </button>#}
-                    {{ form_widget(sortieFormCreation.submit) }}
-                {{ form_end(sortieFormCreation) }}
+                    {{ form_row(sortieFormCreation.campus) }}
+{#                    {{ form_widget(sortieFormCreation.submit) }}#}
+                    <button class="transition w-full font-semibold text-neutral-800 border-2 bg-yellow-100 pt-2 pb-1.5 mt-1 rounded-full text-smg">
+                        Enregistrer
+                    </button>
+                    {{ form_end(sortieFormCreation) }}
 
                 </div>
             </div>

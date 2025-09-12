@@ -8,7 +8,7 @@ function refreshLieux(villeId) {
     fetch(apiBaseUrl + 'api/lieux/' + villeId)
         .then(response => response.json())
         .then(data => {
-            selectLieu.innerHTML = ''
+            // selectLieu.innerHTML = ''
             // Affichage du nom du lieu dans le select
             for (const lieu of data) {
                 const option = document.createElement('option');
