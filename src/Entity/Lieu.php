@@ -14,6 +14,7 @@ class Lieu
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('lieux_par_ville')]
     private ?int $id = null;
 
     #[Assert\NotBlank(message:'Ce champ est obligatoire')]
