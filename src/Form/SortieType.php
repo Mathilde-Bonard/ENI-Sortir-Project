@@ -64,6 +64,9 @@ class SortieType extends AbstractType
                 'class' => Campus::class,
                 'choice_label' => 'nom',
             ]);
+//           ->add('submit', SubmitType::class, [
+//               'label' => 'Créer',
+//           ]);
 
     }
 

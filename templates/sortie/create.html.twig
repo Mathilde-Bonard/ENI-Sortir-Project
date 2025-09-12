@@ -30,11 +30,12 @@
                     </button>
                 </div>
 
-                {{ form_row(sortieFormCreation.campus) }}
+                    {{ form_row(sortieFormCreation.campus) }}
+{#                    {{ form_widget(sortieFormCreation.submit) }}#}
                     <button class="transition w-full font-semibold text-neutral-800 border-2 bg-yellow-100 pt-2 pb-1.5 mt-1 rounded-full text-smg">
-                        Créer
+                        Enregistrer
                     </button>
-                {{ form_end(sortieFormCreation) }}
+                    {{ form_end(sortieFormCreation) }}
 
                 </div>
             </div>
@@ -61,7 +62,6 @@
             window.apiBaseUrl = '{{ path('sortie_list') }}';
             window.apiCreateBaseUrl = '{{ path('api_create') }}'
         </script>
-        {{ importmap() }}
         <script type="module" src="{{ asset('js/mainSortie.js') }}"></script>
     {% endblock %}
 

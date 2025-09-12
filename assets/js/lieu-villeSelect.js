@@ -2,6 +2,7 @@ import {Elements} from "constantsSortie";
 import {refreshLieux, displayRueCp} from "api";
 import {submitLieu} from 'modalLieu'
 
+
 // A la selection d'une ville
 function updateSelectLieu() {
     console.log("updateSelectLieu Start !")
